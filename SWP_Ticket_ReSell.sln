@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP_Ticket_ReSell_DAO", "SWP_Ticket_ReSell_DAO\SWP_Ticket_ReSell_DAO.csproj", "{8525A043-93B9-40E7-9127-B09B719F3591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP_Ticket_ReSell_Repository", "SWP_Ticket_ReSell_Repository\SWP_Ticket_ReSell_Repository.csproj", "{D8D58D4D-0774-4A47-A677-2F74B0E19FE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP_Ticket_ReSell_API", "SWP_Ticket_ReSell_API\SWP_Ticket_ReSell_API.csproj", "{AF1BE59D-7DC7-4AEF-BDC4-EB88AC191A51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8525A043-93B9-40E7-9127-B09B719F3591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8525A043-93B9-40E7-9127-B09B719F3591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8525A043-93B9-40E7-9127-B09B719F3591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8525A043-93B9-40E7-9127-B09B719F3591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D58D4D-0774-4A47-A677-2F74B0E19FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D58D4D-0774-4A47-A677-2F74B0E19FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D58D4D-0774-4A47-A677-2F74B0E19FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D58D4D-0774-4A47-A677-2F74B0E19FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF1BE59D-7DC7-4AEF-BDC4-EB88AC191A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF1BE59D-7DC7-4AEF-BDC4-EB88AC191A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF1BE59D-7DC7-4AEF-BDC4-EB88AC191A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF1BE59D-7DC7-4AEF-BDC4-EB88AC191A51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF67A464-9AF5-4066-9779-95B9E50AF589}
+	EndGlobalSection
+EndGlobal
