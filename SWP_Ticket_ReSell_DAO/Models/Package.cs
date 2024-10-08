@@ -13,7 +13,7 @@ public partial class Package
 
     public decimal? Price { get; set; }
 
-    public int Time_package { get; set; }
+    public int? Time_package { get; set; }
 
     public int? Ticket_can_post { get; set; }
 

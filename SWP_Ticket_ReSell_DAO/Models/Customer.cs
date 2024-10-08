@@ -23,13 +23,13 @@ public partial class Customer
 
     public int? ID_Package { get; set; }
 
-    public DateTime? HSD_package { get; set; }
-
-    public int? Number_of_tickets_posted_for_sale { get; set; }
-
     public DateTime? Package_registration_time { get; set; }
 
-    public string Image { get; set; }
+    public DateTime? Package_expiration_date { get; set; }
+
+    public int? Number_of_tickets_can_posted { get; set; }
+
+    public string Avata { get; set; }
 
     public virtual Package ID_PackageNavigation { get; set; }
 
@@ -39,5 +39,7 @@ public partial class Customer
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+    public virtual ICollection<Ticket> TicketBuyerNavigations { get; set; } = new List<Ticket>();
+
+    public virtual ICollection<Ticket> TicketSellerNavigations { get; set; } = new List<Ticket>();
 }
