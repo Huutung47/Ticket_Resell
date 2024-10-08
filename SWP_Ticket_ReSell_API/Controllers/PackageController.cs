@@ -58,11 +58,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _servicePackage.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
         }
-
-        //Update Package Customer
-        //Customer chon goi 
-        //[Authorize(Roles = "2")]
-        
         //Done
         //Create package 
         [HttpPost]
