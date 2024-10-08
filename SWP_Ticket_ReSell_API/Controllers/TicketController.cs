@@ -39,6 +39,36 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entity.Adapt<TicketResponseDTO>());
         }
 
+
+        [HttpGet("seller/{sellerId}")]
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicketsBySellerId(int sellerId)
+        {
+            var tickets = await _service.GetByIdCustomer(sellerId);
+            if (tickets == null || !tickets.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(tickets.Select(t => new Ticket
+            {
+                ID_Ticket = t.ID_Ticket,
+                Buyer = t.Buyer,
+                Price = t.Price,
+                Ticket_category = t.Ticket_category,
+                Ticket_type = t.Ticket_type,
+                Quantity = t.Quantity,
+                Ticket_History = t.Ticket_History,
+                Status = t.Status,
+                Event_Date = t.Event_Date,
+                Show_Name = t.Show_Name,
+                Location = t.Location,
+                Description = t.Description,
+                Seat = t.Seat,
+                Ticketsold = t.Ticketsold,
+                Image = t.Image,
+            }));
+        }
+
         [HttpPut]
         public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
         {
@@ -62,7 +92,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Ticket_History = DateTime.Now,
                 Status = "Available"
             };
-            ticketRequest.Adapt(ticket); // chuyển data vào request checking regex
+            ticketRequest.Adapt(ticket);
             await _service.CreateAsync(ticket);
             return Ok("Create ticket successfull.");
         }

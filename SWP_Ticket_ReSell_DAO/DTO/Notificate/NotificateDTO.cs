@@ -14,9 +14,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Notificate
 
         public string Event { get; set; }
 
-        public DateTime? Organization_day { get; set; }
-
-        public TimeSpan? Organizing_time { get; set; }
+        public DateTime? Organizing_time { get; set; }
 
         public int? ID_Ticket { get; set; }
 

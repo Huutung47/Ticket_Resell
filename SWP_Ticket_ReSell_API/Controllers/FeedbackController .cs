@@ -39,7 +39,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var entity = await _serviceFeedback.FindByAsync(p => p.ID_Feedback.ToString() == id);
             if (entity == null)
             {
-                return Problem(detail: $"Ticket id {id} cannot found", statusCode: 404);
+                return Problem(detail: $"Feedback id {id} cannot found", statusCode: 404);
             }
             return Ok(entity.Adapt<FeedbackReponseDTO>());
         }
