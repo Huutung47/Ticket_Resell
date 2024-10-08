@@ -22,7 +22,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<TicketResponseDTO>>> GetCustomer()
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicket()
         {
             var entities = await _service.FindListAsync<TicketResponseDTO>();
             return Ok(entities);
@@ -42,17 +42,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPut]
         public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
         {
-            var entity = await _service.FindByAsync(p => p.ID_Customer == ticketRequest.ID_Customer);
+            var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
             {
-                return Problem(detail: $"Customer_id {ticketRequest.ID_Customer} cannot found", statusCode: 404);
+                return Problem(detail: $"Customer_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
             }
-
-            if (!await _servicePackage.ExistsByAsync(p => p.ID_Package == ticketRequest.ID_Ticket))
-            {
-                return Problem(detail: $"Ticket_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
-            }
-
             ticketRequest.Adapt(entity);
             await _service.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
@@ -65,8 +59,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             var ticket = new Ticket()
             {
-                ID_Customer = ticketRequest.ID_Customer,
-                Buyer = "",
                 Ticket_History = DateTime.Now,
                 Status = "Available"
             };

@@ -7,6 +7,8 @@ namespace SWP_Ticket_ReSell_DAO.Models;
 
 public partial class Request
 {
+    public int ID_Request { get; set; }
+
     public int ID_Ticket { get; set; }
 
     public int ID_Customer { get; set; }

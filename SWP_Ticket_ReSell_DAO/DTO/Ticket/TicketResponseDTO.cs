@@ -10,7 +10,9 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
     {
         public int ID_Ticket { get; set; }
 
-        public int? ID_Customer { get; set; }
+        public int? Seller { get; set; }
+
+        public int? Buyer { get; set; }
 
         public decimal? Price { get; set; }
 
@@ -18,11 +20,9 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public bool? Ticket_type { get; set; }
 
-        public string Buyer { get; set; }
-
         public int? Quantity { get; set; }
 
-        public string Ticket_History { get; set; }
+        public DateTime? Ticket_History { get; set; }
 
         public string Status { get; set; }
 
@@ -30,6 +30,14 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public string Show_Name { get; set; }
 
+        public string Location { get; set; }
+
         public string Description { get; set; }
+
+        public int? Seat { get; set; }
+
+        public int? Ticketsold { get; set; }
+
+        public string Image { get; set; }
     }
 }   

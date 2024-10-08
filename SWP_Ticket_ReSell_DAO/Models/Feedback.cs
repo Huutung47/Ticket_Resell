@@ -15,5 +15,7 @@ public partial class Feedback
 
     public int? Stars { get; set; }
 
+    public DateTime? History { get; set; }
+
     public virtual Order ID_OrderNavigation { get; set; }
 }

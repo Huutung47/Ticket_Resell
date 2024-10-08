@@ -9,7 +9,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 {
     public class TicketCreateDTO
     {
-        public int ID_Customer { get; set; }
 
         [RegularExpression(@"^[0-9]+(\.\d{1,2})?$", ErrorMessage = "Giá vé chỉ được chứa số và phần thập phân.")]
         public decimal? Price { get; set; }
@@ -24,5 +23,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
         public string Show_Name { get; set; }
 
         public string Description { get; set; }
+
     }
 }
