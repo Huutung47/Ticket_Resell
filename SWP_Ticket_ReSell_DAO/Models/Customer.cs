@@ -29,17 +29,21 @@ public partial class Customer
 
     public int? Number_of_tickets_can_posted { get; set; }
 
-    public string Avata { get; set; }
+    public string Avatar { get; set; }
+
+    public virtual ICollection<Boxchat> BoxchatBuyers { get; set; } = new List<Boxchat>();
+
+    public virtual ICollection<Boxchat> BoxchatSellers { get; set; } = new List<Boxchat>();
 
     public virtual Package ID_PackageNavigation { get; set; }
 
     public virtual Role ID_RoleNavigation { get; set; }
 
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual ICollection<Ticket> TicketBuyerNavigations { get; set; } = new List<Ticket>();
-
-    public virtual ICollection<Ticket> TicketSellerNavigations { get; set; } = new List<Ticket>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }
