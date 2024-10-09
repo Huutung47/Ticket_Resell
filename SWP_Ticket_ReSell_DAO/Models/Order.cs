@@ -9,11 +9,11 @@ public partial class Order
 {
     public int ID_Order { get; set; }
 
+    public int? ID_OrderDetail { get; set; }
+
     public int? ID_Customer { get; set; }
 
     public string Payment_method { get; set; }
-
-    public decimal? Total_price { get; set; }
 
     public string Status { get; set; }
 
@@ -28,4 +28,6 @@ public partial class Order
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

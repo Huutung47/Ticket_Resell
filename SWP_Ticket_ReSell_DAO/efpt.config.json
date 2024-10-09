@@ -43,6 +43,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Payment]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Report]",
          "ObjectType": 0
       },
@@ -56,6 +60,10 @@
       },
       {
          "Name": "[dbo].[Ticket]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Transaction]",
          "ObjectType": 0
       }
    ],
