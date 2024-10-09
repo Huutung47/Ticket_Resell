@@ -91,10 +91,5 @@ public class GenericRepository<T> where T : class
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<T>> GetByIdCustomer(int sellerId)
-    {
-        return await _context.Set<T>()
-            .Where(t => EF.Property<int>(t, "Seller") == sellerId)
-            .ToListAsync();
-    }
+    
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
+using System.Linq;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -11,6 +12,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
     public class TicketController : Controller
     {
         private readonly ServiceBase<Ticket> _service;
+        private readonly ServiceBase<Customer> _customerService;
         private readonly ServiceBase<Role> _serviceRole;
         private readonly ServiceBase<Package> _servicePackage;
 
@@ -40,35 +42,59 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
 
-        [HttpGet("seller/{sellerId}")]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicketsBySellerId(int sellerId)
+        [HttpGet("ticket/{sellerId:int}")]
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsBySellerId(int sellerId)
         {
-            var tickets = await _service.GetByIdCustomer(sellerId);
-            if (tickets == null || !tickets.Any())
+            var tickets = await _service.FindListAsync<TicketResponseDTO>();
+            List<TicketResponseDTO> listTicketBySeller = new List<TicketResponseDTO>();
+            foreach (var item in tickets)
             {
-                return NotFound();
+                if (item.Seller == sellerId)
+                {
+                    listTicketBySeller.Add(item);
+                }
             }
-
-            return Ok(tickets.Select(t => new Ticket
-            {
-                ID_Ticket = t.ID_Ticket,
-                Buyer = t.Buyer,
-                Price = t.Price,
-                Ticket_category = t.Ticket_category,
-                Ticket_type = t.Ticket_type,
-                Quantity = t.Quantity,
-                Ticket_History = t.Ticket_History,
-                Status = t.Status,
-                Event_Date = t.Event_Date,
-                Show_Name = t.Show_Name,
-                Location = t.Location,
-                Description = t.Description,
-                Seat = t.Seat,
-                Ticketsold = t.Ticketsold,
-                Image = t.Image,
-            }));
+            return Ok(listTicketBySeller);
         }
+        [HttpGet("filter")]
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string key, string value)
+        {
+            var tickets = await _service.FindListAsync<TicketResponseDTO>();
+            List<TicketResponseDTO> listTicketByLocation = new List<TicketResponseDTO>();
 
+            foreach (var item in tickets)
+            {
+                switch (key)
+                {
+                    case "location":
+                        if (item.Location.ToLower().Contains(value.ToLower()))
+                        {
+                            listTicketByLocation.Add(item);
+                        }
+                        break;
+
+                    case "ticketCategory":
+                        if (item.Ticket_category.ToLower().Equals(value.ToLower()))
+                        {
+                            listTicketByLocation.Add(item);
+                        }
+                        break;
+                    //case "all":
+                    //    if (item.Ticket_category.ToLower().Equals(value.ToLower()) &&
+                    //        item.Location.ToLower().Contains(value.ToLower()))
+                    //    {
+                    //        listTicketByLocation.Add(item);
+                    //    }
+                    //    break;
+                }
+
+            }
+            if (listTicketByLocation == null)
+            {
+                return Problem(detail: $"ticket cannot found", statusCode: 404);
+            }
+            return Ok(listTicketByLocation);
+        }
         [HttpPut]
         public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
         {
