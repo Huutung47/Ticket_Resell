@@ -9,27 +9,23 @@ public partial class Order
 {
     public int ID_Order { get; set; }
 
-    public int? ID_Ticket { get; set; }
+    public int? ID_Customer { get; set; }
 
     public string Payment_method { get; set; }
 
-    public string Seller { get; set; }
-
-    public string Buyer { get; set; }
-
-    public decimal? Price { get; set; }
-
-    public int? Quantity { get; set; }
+    public decimal? Total_price { get; set; }
 
     public string Status { get; set; }
 
     public DateTime? Shipping_time { get; set; }
 
-    public DateTime? Order_time { get; set; }
+    public DateTime? Create_At { get; set; }
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
-    public virtual Ticket ID_TicketNavigation { get; set; }
+    public virtual Customer ID_CustomerNavigation { get; set; }
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 }
