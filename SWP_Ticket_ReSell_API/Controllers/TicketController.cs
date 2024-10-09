@@ -49,7 +49,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             List<TicketResponseDTO> listTicketBySeller = new List<TicketResponseDTO>();
             foreach (var item in tickets)
             {
-                if (item.Seller == sellerId)
+                if (item.ID_Customer == sellerId)
                 {
                     listTicketBySeller.Add(item);
                 }
@@ -79,13 +79,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
                             listTicketByLocation.Add(item);
                         }
                         break;
-                    //case "all":
-                    //    if (item.Ticket_category.ToLower().Equals(value.ToLower()) &&
-                    //        item.Location.ToLower().Contains(value.ToLower()))
-                    //    {
-                    //        listTicketByLocation.Add(item);
-                    //    }
-                    //    break;
+                        //case "all":
+                        //    if (item.Ticket_category.ToLower().Equals(value.ToLower()) &&
+                        //        item.Location.ToLower().Contains(value.ToLower()))
+                        //    {
+                        //        listTicketByLocation.Add(item);
+                        //    }
+                        //    break;
                 }
 
             }
@@ -101,26 +101,29 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
             {
-                return Problem(detail: $"Customer_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
+                return Problem(detail: $"Ticket_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
             }
             ticketRequest.Adapt(entity);
             await _service.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
         }
 
-        [HttpPost]
-        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest)
+        [HttpPost("ticket/{customerID:int}")]
+        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest,int customerID)
         {
             //Validation
 
             var ticket = new Ticket()
             {
+                ID_Customer = customerID,
                 Ticket_History = DateTime.Now,
-                Status = "Available"
+                Status = "Available",
+                Ticketsold = 0
             };
             ticketRequest.Adapt(ticket);
             await _service.CreateAsync(ticket);
-            return Ok("Create ticket successfull.");
+            return Ok("Create ticket successfull.\n" +
+                $"ID_Ticket: {ticket.ID_Ticket}");
         }
 
         [HttpDelete("{id}")]

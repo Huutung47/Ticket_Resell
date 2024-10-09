@@ -1,6 +1,4 @@
-﻿using SWP_Ticket_ReSell_DAO.DTO.Customer;
-using SWP_Ticket_ReSell_DAO.DTO.Role;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 {
-    public class TicketResponseDTO
+    public class TicketDTO
     {
         public int ID_Ticket { get; set; }
 
@@ -39,12 +37,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
         public int? Ticketsold { get; set; }
 
         public string Image { get; set; }
-        public virtual CustomerDTO ID_CustomerNavigation { get; set; }
-        
-
-        
-
-
 
     }
-}   
+}
