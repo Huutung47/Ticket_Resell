@@ -79,6 +79,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                             listTicketByLocation.Add(item);
                         }
                         break;
+                    
                         //case "all":
                         //    if (item.Ticket_category.ToLower().Equals(value.ToLower()) &&
                         //        item.Location.ToLower().Contains(value.ToLower()))
