@@ -15,14 +15,16 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Order
 
         public string Payment_method { get; set; }
 
-        public decimal? Total_price { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         public string Status { get; set; }
 
         public DateTime? Shipping_time { get; set; }
 
         public DateTime? Create_At { get; set; }
+
         public virtual ICollection<OrderDetailDTO> OrderDetails { get; set; }
+
         public virtual CustomerDTO ID_CustomerNavigation { get; set; }
 
 

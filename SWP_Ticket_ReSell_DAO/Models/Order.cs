@@ -9,8 +9,6 @@ public partial class Order
 {
     public int ID_Order { get; set; }
 
-    public int? ID_OrderDetail { get; set; }
-
     public int? ID_Customer { get; set; }
 
     public string Payment_method { get; set; }
@@ -20,6 +18,8 @@ public partial class Order
     public DateTime? Shipping_time { get; set; }
 
     public DateTime? Create_At { get; set; }
+
+    public decimal? TotalPrice { get; set; }
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 

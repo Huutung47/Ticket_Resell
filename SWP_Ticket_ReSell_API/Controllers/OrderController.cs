@@ -14,11 +14,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
     public class OrderController : Controller
     {
         private readonly ServiceBase<Order> _service;
+        private readonly ServiceBase<OrderDetail> _orderDetailService;
+        private readonly ServiceBase<Ticket> _ticketService;
 
-        public OrderController(ServiceBase<Order> service)
+        public OrderController(ServiceBase<Order> service, ServiceBase<OrderDetail> orderDetailService, ServiceBase<Ticket> ticketService)
         {
+            _ticketService = ticketService;
+            _orderDetailService = orderDetailService;
             _service = service;
         }
+
         [HttpGet]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrder()
         {
@@ -26,7 +31,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/{id}")]
         public async Task<ActionResult<OrderResponseDTO>> GetOrder(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_Order.ToString() == id);
@@ -49,23 +54,43 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _service.UpdateAsync(entity);
             return Ok("Update Order successfull.");
         }
-        
-        [HttpPost("")]
+
+        [HttpPost("/create")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
-            //Validation
-            
+            var order = new Order();
 
-            var order = new Order()
-            {
-                
-
-                
-            };
+            TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            order.Status = "PENDING";
+            order.Create_At = TimeZoneInfo.ConvertTime(DateTime.Now, vietnamTimeZone);
+            order.Shipping_time = TimeZoneInfo.ConvertTime(DateTime.Now.AddDays(3), vietnamTimeZone);
             orderRequest.Adapt(order);
             await _service.CreateAsync(order);
-            return Ok("Create order successfull.\n" +
-                $"ID_Order: {order.ID_Order}");
+
+            if (orderRequest.ticketIds.Count() <= 0)
+            {
+                return Problem(detail: "Ticket not selected.", statusCode: 400);
+            }
+
+
+            foreach (var item in orderRequest.ticketIds)
+            {
+                var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
+
+                var orderDetail = new OrderDetail
+                {
+                    ID_Order = order.ID_Order,
+                    ID_Ticket = item.ID_Ticket,
+                    Price = ticket.Price,
+                    Quantity = item.Quantity,
+                    Total_price = ticket.Price * item.Quantity
+                };
+
+                order.Adapt(orderDetail);
+                await _orderDetailService.CreateAsync(orderDetail);
+            }
+
+            return Ok("Order [" + $"{order.ID_Order}" + "] create successfully.");
         }
 
         [HttpDelete("{id}")]

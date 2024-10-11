@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
+{
+    public class CreateTicketOrderDTO
+    {
+        public int ID_Ticket { get; set; }
+        public int? Quantity { get; set; }
+    }
+}
