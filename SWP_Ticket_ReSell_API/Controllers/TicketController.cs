@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
+using Swashbuckle.AspNetCore.Annotations;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Linq;
@@ -109,7 +110,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        [HttpPost("ticket/{customerID:int}")]
+        [HttpPost("/{customerID}")]
         public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest,int customerID)
         {
             //Validation
@@ -138,6 +139,22 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             await _service.DeleteAsync(ticket);
             return Ok("Delete ticket successfull.");
+        }
+
+        [HttpPut("/customer")]
+        [SwaggerOperation(Summary = "Update Customer On Ticket ")]
+
+        public async Task<IActionResult> PutTicketByCustomer(TicketUpdateCustomerDTO ticketUpdate)
+        {
+            var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketUpdate.ID_Ticket);
+            if (entity == null)
+            {
+                return Problem(detail: $"Ticket_id {ticketUpdate.ID_Ticket} cannot found", statusCode: 404);
+            }
+
+            ticketUpdate.Adapt(entity);
+            await _service.UpdateAsync(entity);
+            return Ok("Update ticket successfull.");
         }
     }
 }

@@ -18,7 +18,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
         public bool? Ticket_type { get; set; }
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Số lượng chỉ được chứa số.")]
         public int? Quantity { get; set; }
-        public DateTime? Ticket_History { get; set; }
         public DateTime? Event_Date { get; set; }
         public string Show_Name { get; set; }
         public string Location { get; set; }
