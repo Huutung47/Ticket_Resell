@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,8 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
 {
     public class RequestResponseDTO
     {
+        public int ID_Request { get; set; }
+
         public int ID_Ticket { get; set; }
 
         public int ID_Customer { get; set; }

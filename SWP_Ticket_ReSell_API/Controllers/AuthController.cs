@@ -1,8 +1,11 @@
-﻿using Mapster;
+﻿using Azure.Core;
+using Castle.Core.Smtp;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
+using SWP_Ticket_ReSell_API.Helper;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.Models;
@@ -18,23 +21,28 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly IConfiguration _configuration;
         private readonly ServiceBase<Customer> _serviceCustomer;
         private readonly ServiceBase<Role> _serviceRole;
+        //private readonly SendMail _emailSender;
         public AuthController(IConfiguration configuration, ServiceBase<Customer> serviceCustomer, ServiceBase<Role> serviceRole)
         {
             _configuration = configuration;
             _serviceCustomer = serviceCustomer;
             _serviceRole = serviceRole;
+            //_emailSender = emailSender;
+
         }
-
-
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginRequestDTO login)
         {
             var user = await _serviceCustomer
-                .FindByAsync(x => x.Email == login.Email &&
-                                  x.Password == login.Password);
+                .FindByAsync(x => x.Email == login.Email);
             if (user == null)
             {
-                return Unauthorized();
+                return Unauthorized("Email not find");
+            }
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
+            if (!isPasswordValid)
+            {
+                return Unauthorized("Password wrong");
             }
             List<Claim> claims = new List<Claim>
                 {
@@ -44,6 +52,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
                     //role 
                     new Claim(ClaimTypes.Role, user.ID_Role.ToString()!)
+
                 };
             var key = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:SerectKey").Value!));
@@ -61,6 +70,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
 
+
+
+
         [HttpPost("Register")]
         public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO request)
         {
@@ -74,10 +86,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 {
                     return Problem(detail: $"Password and Confirm Password different", statusCode: 400);
                 }
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 var customer = new Customer()
                 {
+                    Name = request.Name,
                     Email = request.Email,
-                    Password = request.Password,
+                    Password = hashedPassword,
                     //Feed Back Avg
                     Average_feedback = 0,
                     //Customer Role = 2
@@ -87,12 +101,25 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 //Email
                 //string code = await UserManager.GenerateEmailConfirmationTokenAsync(customer.ID_Customer);
                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { customer.ID_Customer, code = code }, protocol: Request.Scheme);
-                //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email","Please Confirm Email");
-                request.Adapt(customer);
+                //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
+                //request.Adapt(customer);
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> ForgetPassword(string email)
+        //{
+        //    var user = await _serviceCustomer.FindByAsync(x => x.Email == email);
+        //    if (user == null)
+        //    {
+        //        return BadRequest("Email is not exist");
+        //    }
+        //    var token = GenerateReset
+        //    return Ok();
+        //}
+
     }
 }
 
