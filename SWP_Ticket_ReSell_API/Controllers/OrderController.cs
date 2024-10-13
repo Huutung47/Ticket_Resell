@@ -32,7 +32,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("/{id}")]
-        public async Task<ActionResult<OrderResponseDTO>> GetOrder(string id)
+        public async Task<ActionResult<OrderResponseDTO>> GetOrderDetail(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_Order.ToString() == id);
             if (entity == null)

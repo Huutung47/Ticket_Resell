@@ -11,9 +11,11 @@ namespace SWP_Ticket_ReSell_DAO.DTO.OrderDetail
     {
         public int ID_OrderDetail { get; set; }
 
-        public int? ID_Order { get; set; }
+        //public int? ID_Order { get; set; }
 
-        public int? ID_Ticket { get; set; }
+        //public int? ID_Ticket { get; set; }
+
+        public virtual TicketNavigationDTO ID_TicketNavigation { get; set; }
 
         public decimal? Price { get; set; }
 

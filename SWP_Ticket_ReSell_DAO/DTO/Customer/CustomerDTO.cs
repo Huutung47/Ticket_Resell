@@ -19,6 +19,8 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
         //public string? Email { get; set; }
 
         public decimal? Average_feedback { get; set; }
+        public DateTime? Package_registration_time { get; set; }
+        public DateTime? Package_expiration_date { get; set; }
 
         //public int? ID_Role { get; set; }
 
