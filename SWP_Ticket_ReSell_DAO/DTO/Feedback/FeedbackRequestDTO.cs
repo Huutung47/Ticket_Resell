@@ -8,11 +8,11 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Package
 {
     public class FeedbackRequestDTO
     {
+        public int? ID_Order { get; set; }
 
         public string Comment { get; set; }
 
         public int? Stars { get; set; }
-
 
     }
 }
