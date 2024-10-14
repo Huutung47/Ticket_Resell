@@ -25,5 +25,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Authentication
         public int? ID_Package { get; set; }
 
         public DateTime? HSD_package { get; set; }
+        public string Method_login { get; set; }
     }
 }

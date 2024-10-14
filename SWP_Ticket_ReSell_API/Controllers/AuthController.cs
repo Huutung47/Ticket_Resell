@@ -1,16 +1,19 @@
 ﻿using Azure.Core;
 using Castle.Core.Smtp;
 using Mapster;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
-using SWP_Ticket_ReSell_API.Helper;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -21,13 +24,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly IConfiguration _configuration;
         private readonly ServiceBase<Customer> _serviceCustomer;
         private readonly ServiceBase<Role> _serviceRole;
-        //private readonly SendMail _emailSender;
+        //private readonly ResetPassword _emailSender;
+
         public AuthController(IConfiguration configuration, ServiceBase<Customer> serviceCustomer, ServiceBase<Role> serviceRole)
         {
             _configuration = configuration;
             _serviceCustomer = serviceCustomer;
             _serviceRole = serviceRole;
-            //_emailSender = emailSender;
+            // _emailSender = emailSender;
 
         }
         [HttpPost("Login")]
@@ -44,6 +48,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Unauthorized("Password wrong");
             }
+            
             List<Claim> claims = new List<Claim>
                 {
                     //Name
@@ -69,10 +74,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(new AccessTokenResponse { ID = user.ID_Customer, AccessToken = jwt, ExpiresIn = expiredToken });
         }
 
-
-
-
-
         [HttpPost("Register")]
         public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO request)
         {
@@ -97,29 +98,76 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     //Customer Role = 2
                     ID_Role = 2,
                     //Basic Backet = 1 
+                    Method_login = "local"
                 };
                 //Email
                 //string code = await UserManager.GenerateEmailConfirmationTokenAsync(customer.ID_Customer);
                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { customer.ID_Customer, code = code }, protocol: Request.Scheme);
                 //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
+
                 //request.Adapt(customer);
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> ForgetPassword(string email)
-        //{
-        //    var user = await _serviceCustomer.FindByAsync(x => x.Email == email);
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Email is not exist");
-        //    }
-        //    var token = GenerateReset
-        //    return Ok();
-        //}
+        //Login Google
+        [HttpGet("login-google")]
+        public async Task Login()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
+            {
+                RedirectUri = "https://localhost:7216/api/auth/google-response" //chuyen sang trang nay neu dang nhap thanh cong
+            });
+        }
 
+        [HttpGet("google-response")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Authentication failed.");
+            }
+
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                //claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            }).ToList();
+            var googleName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var googleEmail = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var issuer = claims.FirstOrDefault()?.Issuer;
+            var customer = new Customer()
+            {
+                Name = googleName,
+                Email = googleEmail,
+                Method_login = issuer,
+                Average_feedback = 0,
+                ID_Role = 2,
+            };
+            await _serviceCustomer.CreateAsync(customer);
+            return Ok("Create customer successfull.");
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                await HttpContext.SignOutAsync();
+                // Nếu đăng xuất thành công
+                return Ok(new { message = "Logout successful" });
+            }
+            catch (Exception ex)
+            {
+                // Nếu đăng xuất thất bại
+                return StatusCode(500, new { message = "Logout failed ", error = ex.Message });
+            }
+        }
     }
 }
 
