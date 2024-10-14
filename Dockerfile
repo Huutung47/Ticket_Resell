@@ -44,8 +44,11 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 # or SHA (e.g., mcr.microsoft.com/dotnet/aspnet@sha256:f3d99f54d504a21d38e4cc2f13ff47d67235efeeb85c109d3d1ff1808b38d034).
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS final
 WORKDIR /app
-RUN apk add icu-libs
+RUN apk add --no-cache tzdata
+RUN apk add --no-cache icu-data-full icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /app .
 
