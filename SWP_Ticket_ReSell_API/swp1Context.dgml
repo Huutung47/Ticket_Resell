@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+<Node Id="IModel" Label="swp1Context" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" PropertyAccessMode="PropertyAccessMode.Default" ProductVersion="7.0.16" Annotations="BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
+Proxies:ChangeTracking: False
+Proxies:CheckEquality: False
+Proxies:LazyLoading: True
+Relational:MaxIdentifierLength: 128
+RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
+SqlServer:ValueGenerationStrategy: IdentityColumn" Category="Model" Group="Expanded" />
+<Node Id = "Boxchat" Label="Boxchat" Name="Boxchat" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Boxchat
+RelationshipDiscoveryConvention:AmbiguousNavigations: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.MemberInfo,System.Type]
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Customer" Label="Customer" Name="Customer" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Customer
+RelationshipDiscoveryConvention:AmbiguousNavigations: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.MemberInfo,System.Type]
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Boxchat.ID_Boxchat" Label="ID_Boxchat (int)" Name="ID_Boxchat" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Boxchat.Buyer" Label="Buyer (1)" Name="Buyer" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="BoxchatBuyers" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Boxchat.ID_TicketNavigation" Label="ID_TicketNavigation (1)" Name="ID_TicketNavigation" Category="Navigation Property" Type="Ticket"  Field="" Dependent="" Principal="Ticket" Inverse="Boxchats" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Boxchat.Seller" Label="Seller (1)" Name="Seller" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="BoxchatSellers" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Boxchat.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Boxchat.Buyer_ID" Label="Buyer_ID (int?)" Name="Buyer_ID" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Boxchat.Chat_content" Label="Chat_content (string)" Name="Chat_content" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: text" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Boxchat.ID_Ticket" Label="ID_Ticket (int?)" Name="ID_Ticket" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Boxchat.Seller_ID" Label="Seller_ID (int?)" Name="Seller_ID" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Feedback" Label="Feedback" Name="Feedback" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Feedback
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Customer.ID_Customer" Label="ID_Customer (int)" Name="ID_Customer" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Customer.BoxchatBuyers" Label="BoxchatBuyers (*)" Name="BoxchatBuyers" Category="Navigation Collection" Type="ICollection&lt;Boxchat&gt;"  Field="" Dependent="Boxchat" Principal="" Inverse="Buyer" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.BoxchatSellers" Label="BoxchatSellers (*)" Name="BoxchatSellers" Category="Navigation Collection" Type="ICollection&lt;Boxchat&gt;"  Field="" Dependent="Boxchat" Principal="" Inverse="Seller" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.ID_PackageNavigation" Label="ID_PackageNavigation (1)" Name="ID_PackageNavigation" Category="Navigation Property" Type="Package"  Field="" Dependent="" Principal="Package" Inverse="Customers" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.ID_RoleNavigation" Label="ID_RoleNavigation (1)" Name="ID_RoleNavigation" Category="Navigation Property" Type="Role"  Field="" Dependent="" Principal="Role" Inverse="Customers" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.Orders" Label="Orders (*)" Name="Orders" Category="Navigation Collection" Type="ICollection&lt;Order&gt;"  Field="" Dependent="Order" Principal="" Inverse="ID_CustomerNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.Reports" Label="Reports (*)" Name="Reports" Category="Navigation Collection" Type="ICollection&lt;Report&gt;"  Field="" Dependent="Report" Principal="" Inverse="ID_CustomerNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.Requests" Label="Requests (*)" Name="Requests" Category="Navigation Collection" Type="ICollection&lt;Request&gt;"  Field="" Dependent="Request" Principal="" Inverse="ID_CustomerNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.Tickets" Label="Tickets (*)" Name="Tickets" Category="Navigation Collection" Type="ICollection&lt;Ticket&gt;"  Field="" Dependent="Ticket" Principal="" Inverse="ID_CustomerNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.Transactions" Label="Transactions (*)" Name="Transactions" Category="Navigation Collection" Type="ICollection&lt;Transaction&gt;"  Field="" Dependent="Transaction" Principal="" Inverse="ID_CustomerNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Customer.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Customer.Avatar" Label="Avatar (string)" Name="Avatar" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Customer.Average_feedback" Label="Average_feedback (decimal?)" Name="Average_feedback" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(3, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.Contact" Label="Contact (string)" Name="Contact" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Customer.Email" Label="Email (string)" Name="Email" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Customer.ID_Package" Label="ID_Package (int?)" Name="ID_Package" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.ID_Role" Label="ID_Role (int?)" Name="ID_Role" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.Method_login" Label="Method_login (string)" Name="Method_login" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Customer.Name" Label="Name (string)" Name="Name" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Customer.Number_of_tickets_can_posted" Label="Number_of_tickets_can_posted (int?)" Name="Number_of_tickets_can_posted" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.Package_expiration_date" Label="Package_expiration_date (DateTime?)" Name="Package_expiration_date" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.Package_registration_time" Label="Package_registration_time (DateTime?)" Name="Package_registration_time" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Customer.Password" Label="Password (string)" Name="Password" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Notification" Label="Notification" Name="Notification" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Notification
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Feedback.ID_Feedback" Label="ID_Feedback (int)" Name="ID_Feedback" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Feedback.ID_OrderNavigation" Label="ID_OrderNavigation (1)" Name="ID_OrderNavigation" Category="Navigation Property" Type="Order"  Field="" Dependent="" Principal="Order" Inverse="Feedbacks" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Feedback.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Feedback.Comment" Label="Comment (string)" Name="Comment" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: text" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Feedback.History" Label="History (DateTime?)" Name="History" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Feedback.ID_Order" Label="ID_Order (int?)" Name="ID_Order" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Feedback.Stars" Label="Stars (int?)" Name="Stars" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Order" Label="Order" Name="Order" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Order
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Notification.ID_Notification" Label="ID_Notification (int)" Name="ID_Notification" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Notification.ID_TicketNavigation" Label="ID_TicketNavigation (1)" Name="ID_TicketNavigation" Category="Navigation Property" Type="Ticket"  Field="" Dependent="" Principal="Ticket" Inverse="Notifications" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Notification.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Notification.Event" Label="Event (string)" Name="Event" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Notification.ID_Ticket" Label="ID_Ticket (int?)" Name="ID_Ticket" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Notification.Organizing_time" Label="Organizing_time (DateTime?)" Name="Organizing_time" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Notification.Title" Label="Title (string)" Name="Title" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "OrderDetail" Label="OrderDetail" Name="OrderDetail" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: OrderDetail
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Order.ID_Order" Label="ID_Order (int)" Name="ID_Order" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Order.Feedbacks" Label="Feedbacks (*)" Name="Feedbacks" Category="Navigation Collection" Type="ICollection&lt;Feedback&gt;"  Field="" Dependent="Feedback" Principal="" Inverse="ID_OrderNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Order.ID_CustomerNavigation" Label="ID_CustomerNavigation (1)" Name="ID_CustomerNavigation" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="Orders" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Order.OrderDetails" Label="OrderDetails (*)" Name="OrderDetails" Category="Navigation Collection" Type="ICollection&lt;OrderDetail&gt;"  Field="" Dependent="OrderDetail" Principal="" Inverse="ID_OrderNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Order.Reports" Label="Reports (*)" Name="Reports" Category="Navigation Collection" Type="ICollection&lt;Report&gt;"  Field="" Dependent="Report" Principal="" Inverse="ID_OrderNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Order.Transactions" Label="Transactions (*)" Name="Transactions" Category="Navigation Collection" Type="ICollection&lt;Transaction&gt;"  Field="" Dependent="Transaction" Principal="" Inverse="ID_OrderNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Order.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Order.Create_At" Label="Create_At (DateTime?)" Name="Create_At" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Order.ID_Customer" Label="ID_Customer (int?)" Name="ID_Customer" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Order.Payment_method" Label="Payment_method (string)" Name="Payment_method" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Order.Shipping_time" Label="Shipping_time (DateTime?)" Name="Shipping_time" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Order.Status" Label="Status (string)" Name="Status" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Order.TotalPrice" Label="TotalPrice (decimal?)" Name="TotalPrice" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Package" Label="Package" Name="Package" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Package
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "OrderDetail.ID_OrderDetail" Label="ID_OrderDetail (int)" Name="ID_OrderDetail" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "OrderDetail.ID_OrderNavigation" Label="ID_OrderNavigation (1)" Name="ID_OrderNavigation" Category="Navigation Property" Type="Order"  Field="" Dependent="" Principal="Order" Inverse="OrderDetails" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "OrderDetail.ID_TicketNavigation" Label="ID_TicketNavigation (1)" Name="ID_TicketNavigation" Category="Navigation Property" Type="Ticket"  Field="" Dependent="" Principal="Ticket" Inverse="OrderDetails" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "OrderDetail.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "OrderDetail.ID_Order" Label="ID_Order (int?)" Name="ID_Order" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "OrderDetail.ID_Ticket" Label="ID_Ticket (int?)" Name="ID_Ticket" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "OrderDetail.Price" Label="Price (decimal?)" Name="Price" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "OrderDetail.Quantity" Label="Quantity (int?)" Name="Quantity" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "OrderDetail.Total_price" Label="Total_price (decimal?)" Name="Total_price" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Payment" Label="Payment" Name="Payment" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Payment
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Package.ID_Package" Label="ID_Package (int)" Name="ID_Package" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Package.Customers" Label="Customers (*)" Name="Customers" Category="Navigation Collection" Type="ICollection&lt;Customer&gt;"  Field="" Dependent="Customer" Principal="" Inverse="ID_PackageNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Package.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Package.Description" Label="Description (string)" Name="Description" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Package.Name_Package" Label="Name_Package (string)" Name="Name_Package" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Package.Price" Label="Price (decimal?)" Name="Price" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Package.Ticket_can_post" Label="Ticket_can_post (int?)" Name="Ticket_can_post" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Package.Time_package" Label="Time_package (int?)" Name="Time_package" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Report" Label="Report" Name="Report" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Report
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Payment.ID_Payment" Label="ID_Payment (int)" Name="ID_Payment" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Payment.Transactions" Label="Transactions (*)" Name="Transactions" Category="Navigation Collection" Type="ICollection&lt;Transaction&gt;"  Field="" Dependent="Transaction" Principal="" Inverse="ID_PaymentNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Payment.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Payment.Name" Label="Name (string)" Name="Name" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Payment.Payment_Provider" Label="Payment_Provider (string)" Name="Payment_Provider" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Request" Label="Request" Name="Request" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Request
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Report.ID_Report" Label="ID_Report (int)" Name="ID_Report" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Report.ID_CustomerNavigation" Label="ID_CustomerNavigation (1)" Name="ID_CustomerNavigation" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="Reports" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Report.ID_OrderNavigation" Label="ID_OrderNavigation (1)" Name="ID_OrderNavigation" Category="Navigation Property" Type="Order"  Field="" Dependent="" Principal="Order" Inverse="Reports" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Report.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Report.Comment" Label="Comment (string)" Name="Comment" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: text" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Report.History" Label="History (DateTime?)" Name="History" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Report.ID_Customer" Label="ID_Customer (int)" Name="ID_Customer" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Report.ID_Order" Label="ID_Order (int)" Name="ID_Order" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Role" Label="Role" Name="Role" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Role
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Request.ID_Request" Label="ID_Request (int)" Name="ID_Request" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Request.ID_CustomerNavigation" Label="ID_CustomerNavigation (1)" Name="ID_CustomerNavigation" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="Requests" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Request.ID_TicketNavigation" Label="ID_TicketNavigation (1)" Name="ID_TicketNavigation" Category="Navigation Property" Type="Ticket"  Field="" Dependent="" Principal="Ticket" Inverse="Requests" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Request.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Request.History" Label="History (DateTime?)" Name="History" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Request.ID_Customer" Label="ID_Customer (int)" Name="ID_Customer" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Request.ID_Ticket" Label="ID_Ticket (int)" Name="ID_Ticket" Category="Property Foreign" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="True" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Request.Price_want" Label="Price_want (decimal?)" Name="Price_want" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket" Label="Ticket" Name="Ticket" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Ticket
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Role.ID_Role" Label="ID_Role (int)" Name="ID_Role" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Role.Customers" Label="Customers (*)" Name="Customers" Category="Navigation Collection" Type="ICollection&lt;Customer&gt;"  Field="" Dependent="Customer" Principal="" Inverse="ID_RoleNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Role.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Role.Name_role" Label="Name_role (string)" Name="Name_role" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Transaction" Label="Transaction" Name="Transaction" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="NavigationAccessMode: Field
+Relational:Schema:
+Relational:TableName: Transaction
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Ticket.ID_Ticket" Label="ID_Ticket (int)" Name="ID_Ticket" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Ticket.Boxchats" Label="Boxchats (*)" Name="Boxchats" Category="Navigation Collection" Type="ICollection&lt;Boxchat&gt;"  Field="" Dependent="Boxchat" Principal="" Inverse="ID_TicketNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Ticket.ID_CustomerNavigation" Label="ID_CustomerNavigation (1)" Name="ID_CustomerNavigation" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="Tickets" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Ticket.Notifications" Label="Notifications (*)" Name="Notifications" Category="Navigation Collection" Type="ICollection&lt;Notification&gt;"  Field="" Dependent="Notification" Principal="" Inverse="ID_TicketNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Ticket.OrderDetails" Label="OrderDetails (*)" Name="OrderDetails" Category="Navigation Collection" Type="ICollection&lt;OrderDetail&gt;"  Field="" Dependent="OrderDetail" Principal="" Inverse="ID_TicketNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Ticket.Requests" Label="Requests (*)" Name="Requests" Category="Navigation Collection" Type="ICollection&lt;Request&gt;"  Field="" Dependent="Request" Principal="" Inverse="ID_TicketNavigation" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Ticket.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Ticket.Description" Label="Description (string)" Name="Description" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: text" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Event_Date" Label="Event_Date (DateTime?)" Name="Event_Date" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.ID_Customer" Label="ID_Customer (int?)" Name="ID_Customer" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Image" Label="Image (string)" Name="Image" Category="Property Optional" Type="string" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Ticket.Location" Label="Location (string)" Name="Location" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Ticket.Price" Label="Price (decimal?)" Name="Price" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Quantity" Label="Quantity (int?)" Name="Quantity" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Seat" Label="Seat (int?)" Name="Seat" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Show_Name" Label="Show_Name (string)" Name="Show_Name" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Ticket.Status" Label="Status (string)" Name="Status" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Ticket.Ticket_History" Label="Ticket_History (DateTime?)" Name="Ticket_History" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Ticket_category" Label="Ticket_category (string)" Name="Ticket_category" Category="Property Optional" Type="string" MaxLength="(255)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 255
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Ticket.Ticket_type" Label="Ticket_type (bool?)" Name="Ticket_type" Category="Property Optional" Type="bool?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Ticket.Ticketsold" Label="Ticketsold (int?)" Name="Ticketsold" Category="Property Optional" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction" Label="Transaction" Name="Transaction" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="" Category="EntityType" Group="Expanded" />
+<Node Id = "Transaction.ID_Transaction" Label="ID_Transaction (int)" Name="ID_Transaction" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Transaction.ID_CustomerNavigation" Label="ID_CustomerNavigation (1)" Name="ID_CustomerNavigation" Category="Navigation Property" Type="Customer"  Field="" Dependent="" Principal="Customer" Inverse="Transactions" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Transaction.ID_OrderNavigation" Label="ID_OrderNavigation (1)" Name="ID_OrderNavigation" Category="Navigation Property" Type="Order"  Field="" Dependent="" Principal="Order" Inverse="Transactions" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Transaction.ID_PaymentNavigation" Label="ID_PaymentNavigation (1)" Name="ID_PaymentNavigation" Category="Navigation Property" Type="Payment"  Field="" Dependent="" Principal="Payment" Inverse="Transactions" PropertyAccessMode="PropertyAccessMode.Field" />
+<Node Id = "Transaction.LazyLoader" Label="LazyLoader (1)" Name="LazyLoader" Category="Navigation Property" Type="n"  Field="" Dependent="" Principal="" Inverse="" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Transaction.Created_At" Label="Created_At (DateTime?)" Name="Created_At" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction.FinalPrice" Label="FinalPrice (decimal?)" Name="FinalPrice" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction.ID_Customer" Label="ID_Customer (int?)" Name="ID_Customer" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction.ID_Order" Label="ID_Order (int?)" Name="ID_Order" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction.ID_Payment" Label="ID_Payment (int?)" Name="ID_Payment" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transaction.Status" Label="Status (string)" Name="Status" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Transaction.TransactionCode" Label="TransactionCode (string)" Name="TransactionCode" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Transaction.Updated_At" Label="Updated_At (DateTime?)" Name="Updated_At" Category="Property Optional" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+  </Nodes>
+  <Links>
+<Link Source = "IModel" Target="Boxchat" Category="Contains" />
+<Link Source = "IModel" Target="Customer" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.Buyer" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.ID_TicketNavigation" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.Seller" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.LazyLoader" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.ID_Boxchat" Category="Contains" />
+<Link Source="Boxchat" Target="Customer" From="Boxchat.Buyer_ID" To="Customer.ID_Customer" Name="Boxchat -> Customer" Annotations="Relational:Name: FK__Boxchat__Buyer_I__4AB81AF0" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Boxchat" Target="Ticket" From="Boxchat.ID_Ticket" To="Ticket.ID_Ticket" Name="Boxchat -> Ticket" Annotations="Relational:Name: FK__Boxchat__ID_Tick__48CFD27E" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Boxchat" Target="Customer" From="Boxchat.Seller_ID" To="Customer.ID_Customer" Name="Boxchat -> Customer" Annotations="Relational:Name: FK__Boxchat__Seller___49C3F6B7" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Boxchat" Target="Boxchat.Buyer_ID" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.Chat_content" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.ID_Ticket" Category="Contains" />
+<Link Source = "Boxchat" Target="Boxchat.Seller_ID" Category="Contains" />
+<Link Source = "IModel" Target="Feedback" Category="Contains" />
+<Link Source = "Customer" Target="Customer.BoxchatBuyers" Category="Contains" />
+<Link Source = "Customer" Target="Customer.BoxchatSellers" Category="Contains" />
+<Link Source = "Customer" Target="Customer.ID_PackageNavigation" Category="Contains" />
+<Link Source = "Customer" Target="Customer.ID_RoleNavigation" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Orders" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Reports" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Requests" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Tickets" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Transactions" Category="Contains" />
+<Link Source = "Customer" Target="Customer.LazyLoader" Category="Contains" />
+<Link Source = "Customer" Target="Customer.ID_Customer" Category="Contains" />
+<Link Source="Customer" Target="Package" From="Customer.ID_Package" To="Package.ID_Package" Name="Customer -> Package" Annotations="Relational:Name: FK__Customer__ID_Pac__3C69FB99" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Customer" Target="Role" From="Customer.ID_Role" To="Role.ID_Role" Name="Customer -> Role" Annotations="Relational:Name: FK__Customer__ID_Rol__3B75D760" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Customer" Target="Customer.Avatar" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Average_feedback" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Contact" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Email" Category="Contains" />
+<Link Source = "Customer" Target="Customer.ID_Package" Category="Contains" />
+<Link Source = "Customer" Target="Customer.ID_Role" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Method_login" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Name" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Number_of_tickets_can_posted" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Package_expiration_date" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Package_registration_time" Category="Contains" />
+<Link Source = "Customer" Target="Customer.Password" Category="Contains" />
+<Link Source = "IModel" Target="Notification" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.ID_OrderNavigation" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.LazyLoader" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.ID_Feedback" Category="Contains" />
+<Link Source="Feedback" Target="Order" From="Feedback.ID_Order" To="Order.ID_Order" Name="Feedback -> Order" Annotations="Relational:Name: FK__Feedback__ID_Ord__5441852A" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Feedback" Target="Feedback.Comment" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.History" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.ID_Order" Category="Contains" />
+<Link Source = "Feedback" Target="Feedback.Stars" Category="Contains" />
+<Link Source = "IModel" Target="Order" Category="Contains" />
+<Link Source = "Notification" Target="Notification.ID_TicketNavigation" Category="Contains" />
+<Link Source = "Notification" Target="Notification.LazyLoader" Category="Contains" />
+<Link Source = "Notification" Target="Notification.ID_Notification" Category="Contains" />
+<Link Source="Notification" Target="Ticket" From="Notification.ID_Ticket" To="Ticket.ID_Ticket" Name="Notification -> Ticket" Annotations="Relational:Name: FK__Notificat__ID_Ti__571DF1D5" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Notification" Target="Notification.Event" Category="Contains" />
+<Link Source = "Notification" Target="Notification.ID_Ticket" Category="Contains" />
+<Link Source = "Notification" Target="Notification.Organizing_time" Category="Contains" />
+<Link Source = "Notification" Target="Notification.Title" Category="Contains" />
+<Link Source = "IModel" Target="OrderDetail" Category="Contains" />
+<Link Source = "Order" Target="Order.Feedbacks" Category="Contains" />
+<Link Source = "Order" Target="Order.ID_CustomerNavigation" Category="Contains" />
+<Link Source = "Order" Target="Order.OrderDetails" Category="Contains" />
+<Link Source = "Order" Target="Order.Reports" Category="Contains" />
+<Link Source = "Order" Target="Order.Transactions" Category="Contains" />
+<Link Source = "Order" Target="Order.LazyLoader" Category="Contains" />
+<Link Source = "Order" Target="Order.ID_Order" Category="Contains" />
+<Link Source="Order" Target="Customer" From="Order.ID_Customer" To="Customer.ID_Customer" Name="Order -> Customer" Annotations="Relational:Name: FK__Order__ID_Custom__4222D4EF" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Order" Target="Order.Create_At" Category="Contains" />
+<Link Source = "Order" Target="Order.ID_Customer" Category="Contains" />
+<Link Source = "Order" Target="Order.Payment_method" Category="Contains" />
+<Link Source = "Order" Target="Order.Shipping_time" Category="Contains" />
+<Link Source = "Order" Target="Order.Status" Category="Contains" />
+<Link Source = "Order" Target="Order.TotalPrice" Category="Contains" />
+<Link Source = "IModel" Target="Package" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.ID_OrderNavigation" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.ID_TicketNavigation" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.LazyLoader" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.ID_OrderDetail" Category="Contains" />
+<Link Source="OrderDetail" Target="Order" From="OrderDetail.ID_Order" To="Order.ID_Order" Name="OrderDetail -> Order" Annotations="Relational:Name: FK_OrderDetail_Order" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="OrderDetail" Target="Ticket" From="OrderDetail.ID_Ticket" To="Ticket.ID_Ticket" Name="OrderDetail -> Ticket" Annotations="Relational:Name: FK_OrderDetail_Ticket" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "OrderDetail" Target="OrderDetail.ID_Order" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.ID_Ticket" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.Price" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.Quantity" Category="Contains" />
+<Link Source = "OrderDetail" Target="OrderDetail.Total_price" Category="Contains" />
+<Link Source = "IModel" Target="Payment" Category="Contains" />
+<Link Source = "Package" Target="Package.Customers" Category="Contains" />
+<Link Source = "Package" Target="Package.LazyLoader" Category="Contains" />
+<Link Source = "Package" Target="Package.ID_Package" Category="Contains" />
+<Link Source = "Package" Target="Package.Description" Category="Contains" />
+<Link Source = "Package" Target="Package.Name_Package" Category="Contains" />
+<Link Source = "Package" Target="Package.Price" Category="Contains" />
+<Link Source = "Package" Target="Package.Ticket_can_post" Category="Contains" />
+<Link Source = "Package" Target="Package.Time_package" Category="Contains" />
+<Link Source = "IModel" Target="Report" Category="Contains" />
+<Link Source = "Payment" Target="Payment.Transactions" Category="Contains" />
+<Link Source = "Payment" Target="Payment.LazyLoader" Category="Contains" />
+<Link Source = "Payment" Target="Payment.ID_Payment" Category="Contains" />
+<Link Source = "Payment" Target="Payment.Name" Category="Contains" />
+<Link Source = "Payment" Target="Payment.Payment_Provider" Category="Contains" />
+<Link Source = "IModel" Target="Request" Category="Contains" />
+<Link Source = "Report" Target="Report.ID_CustomerNavigation" Category="Contains" />
+<Link Source = "Report" Target="Report.ID_OrderNavigation" Category="Contains" />
+<Link Source = "Report" Target="Report.LazyLoader" Category="Contains" />
+<Link Source = "Report" Target="Report.ID_Report" Category="Contains" />
+<Link Source="Report" Target="Customer" From="Report.ID_Customer" To="Customer.ID_Customer" Name="Report -> Customer" Annotations="Relational:Name: FK__Report__ID_Custo__59FA5E80" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Report" Target="Order" From="Report.ID_Order" To="Order.ID_Order" Name="Report -> Order" Annotations="Relational:Name: FK__Report__ID_Order__5AEE82B9" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Report" Target="Report.Comment" Category="Contains" />
+<Link Source = "Report" Target="Report.History" Category="Contains" />
+<Link Source = "Report" Target="Report.ID_Customer" Category="Contains" />
+<Link Source = "Report" Target="Report.ID_Order" Category="Contains" />
+<Link Source = "IModel" Target="Role" Category="Contains" />
+<Link Source = "Request" Target="Request.ID_CustomerNavigation" Category="Contains" />
+<Link Source = "Request" Target="Request.ID_TicketNavigation" Category="Contains" />
+<Link Source = "Request" Target="Request.LazyLoader" Category="Contains" />
+<Link Source = "Request" Target="Request.ID_Request" Category="Contains" />
+<Link Source="Request" Target="Customer" From="Request.ID_Customer" To="Customer.ID_Customer" Name="Request -> Customer" Annotations="Relational:Name: FK__Request__ID_Cust__5EBF139D" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Request" Target="Ticket" From="Request.ID_Ticket" To="Ticket.ID_Ticket" Name="Request -> Ticket" Annotations="Relational:Name: FK__Request__ID_Tick__5DCAEF64" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Request" Target="Request.History" Category="Contains" />
+<Link Source = "Request" Target="Request.ID_Customer" Category="Contains" />
+<Link Source = "Request" Target="Request.ID_Ticket" Category="Contains" />
+<Link Source = "Request" Target="Request.Price_want" Category="Contains" />
+<Link Source = "IModel" Target="Ticket" Category="Contains" />
+<Link Source = "Role" Target="Role.Customers" Category="Contains" />
+<Link Source = "Role" Target="Role.LazyLoader" Category="Contains" />
+<Link Source = "Role" Target="Role.ID_Role" Category="Contains" />
+<Link Source = "Role" Target="Role.Name_role" Category="Contains" />
+<Link Source = "IModel" Target="Transaction" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Boxchats" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.ID_CustomerNavigation" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Notifications" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.OrderDetails" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Requests" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.LazyLoader" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.ID_Ticket" Category="Contains" />
+<Link Source="Ticket" Target="Customer" From="Ticket.ID_Customer" To="Customer.ID_Customer" Name="Ticket -> Customer" Annotations="Relational:Name: FK__Ticket__ID_Custo__3F466844" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Ticket" Target="Ticket.Description" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Event_Date" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.ID_Customer" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Image" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Location" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Price" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Quantity" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Seat" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Show_Name" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Status" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Ticket_History" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Ticket_category" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Ticket_type" Category="Contains" />
+<Link Source = "Ticket" Target="Ticket.Ticketsold" Category="Contains" />
+<Link Source = "IModel" Target="Transaction" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_CustomerNavigation" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_OrderNavigation" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_PaymentNavigation" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.LazyLoader" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_Transaction" Category="Contains" />
+<Link Source="Transaction" Target="Customer" From="Transaction.ID_Customer" To="Customer.ID_Customer" Name="Transaction -> Customer" Annotations="Relational:Name: FK__Transacti__ID_Cu__5070F446" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Transaction" Target="Order" From="Transaction.ID_Order" To="Order.ID_Order" Name="Transaction -> Order" Annotations="Relational:Name: FK__Transacti__ID_Or__4F7CD00D" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Transaction" Target="Payment" From="Transaction.ID_Payment" To="Payment.ID_Payment" Name="Transaction -> Payment" Annotations="Relational:Name: FK__Transacti__ID_Pa__5165187F" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Transaction" Target="Transaction.Created_At" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.FinalPrice" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_Customer" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_Order" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.ID_Payment" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.Status" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.TransactionCode" Category="Contains" />
+<Link Source = "Transaction" Target="Transaction.Updated_At" Category="Contains" />
+  </Links>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="EntityType" ValueLabel="True">
+      <Condition Expression="HasCategory('EntityType')" />
+      <Setter Property="Background" Value="#FFC0C0C0" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Primary" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Primary')" />
+      <Setter Property="Background" Value="#FF008000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Optional" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Optional')" />
+      <Setter Property="Background" Value="#FF808040" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Foreign" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Foreign')" />
+      <Setter Property="Background" Value="#FF8080FF" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Required" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Required')" />
+      <Setter Property="Background" Value="#FFC0A000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Property" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Property')" />
+      <Setter Property="Background" Value="#FF990000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Collection" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Collection')" />
+      <Setter Property="Background" Value="#FFFF3232" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Model" ValueLabel="True">
+      <Condition Expression="HasCategory('Model')" />
+      <Setter Property="Background" Value="#FFFFFFFF" />
+    </Style>
+  </Styles>
+  <Properties>
+    <Property Id="Name" Group="Model Properties" DataType="System.String" />
+    <Property Id="Field"  Description="Backing field" Group="Model Properties" DataType="System.String" />
+    <Property Id="Type"  Description="CLR data type" Group="Model Properties" DataType="System.String" />
+    <Property Id="To" Description="Source property" Group="Model Properties" DataType="System.String" />
+    <Property Id="From" Description="Target property" Group="Model Properties" DataType="System.String" />
+    <Property Id="Dependent" Description="Dependent entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Inverse" Description="Inverse entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Principal" Description="Principal entity" Group="Model Properties" DataType="System.String" />    
+    <Property Id="Annotations" Description="Annotations" Group="Model Properties" DataType="System.String" />
+    <Property Id="BaseClass"  Description="Base class" Group="Model Properties" DataType="System.String" />
+    <Property Id="ChangeTrackingStrategy" Description="Change tracking strategy" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsUnique" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="IsAbstract" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="ProductVersion" Label="Product Version" Description="EF Core product version" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsRequired" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsPrimaryKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsForeignKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsShadow" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsAlternateKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsConcurrencyToken" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsUnicode" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="ValueGenerated" Group="Property Flags" DataType="System.String" />
+    <Property Id="BeforeSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="AfterSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="PropertyAccessMode" Group="Property Flags" DataType="System.String" />
+  </Properties>
+</DirectedGraph>

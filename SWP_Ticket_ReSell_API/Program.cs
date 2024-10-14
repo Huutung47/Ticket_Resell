@@ -47,6 +47,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddScoped(typeof(ServiceBase<>));
 builder.Services.AddScoped(typeof(GenericRepository<>));
+
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {

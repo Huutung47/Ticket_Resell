@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
+using SWP_Ticket_ReSell_API.Utils;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -57,46 +59,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             return Ok(listTicketBySeller);
         }
-        [HttpGet("filter")]
-        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string key, string value)
+
+        [HttpGet("/filter")]
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
         {
-            var tickets = await _service.FindListAsync<TicketResponseDTO>();
-            List<TicketResponseDTO> listTicketByLocation = new List<TicketResponseDTO>();
+            var tickets = await _service.FindListAsync<TicketResponseDTO>(expression: BuildGetPartnersQuery(ticketCategory, location));
 
-            foreach (var item in tickets)
-            {
-                switch (key)
-                {
-                    case "location":
-                        if (item.Location.ToLower().Contains(value.ToLower()))
-                        {
-                            listTicketByLocation.Add(item);
-                        }
-                        break;
-
-                    case "ticketCategory":
-                        if (item.Ticket_category.ToLower().Equals(value.ToLower()))
-                        {
-                            listTicketByLocation.Add(item);
-                        }
-                        break;
-                    
-                        //case "all":
-                        //    if (item.Ticket_category.ToLower().Equals(value.ToLower()) &&
-                        //        item.Location.ToLower().Contains(value.ToLower()))
-                        //    {
-                        //        listTicketByLocation.Add(item);
-                        //    }
-                        //    break;
-                }
-
-            }
-            if (listTicketByLocation == null)
-            {
-                return Problem(detail: $"ticket cannot found", statusCode: 404);
-            }
-            return Ok(listTicketByLocation);
+            return Ok(tickets);
         }
+
         [HttpPut]
         public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
         {
@@ -111,10 +82,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("/{customerID}")]
-        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest,int customerID)
+        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
-            //Validation
-
             var ticket = new Ticket()
             {
                 ID_Customer = customerID,
@@ -143,7 +112,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut("/customer")]
         [SwaggerOperation(Summary = "Update Customer On Ticket ")]
-
         public async Task<IActionResult> PutTicketByCustomer(TicketUpdateCustomerDTO ticketUpdate)
         {
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketUpdate.ID_Ticket);
@@ -155,6 +123,23 @@ namespace SWP_Ticket_ReSell_API.Controllers
             ticketUpdate.Adapt(entity);
             await _service.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
+        }
+
+        private static Expression<Func<Ticket, bool>> BuildGetPartnersQuery(string? ticketCategory, string? location)
+        {
+            Expression<Func<Ticket, bool>> filterQuery = x => true;
+
+            if (!string.IsNullOrEmpty(ticketCategory))
+            {
+                filterQuery = filterQuery.AndAlso(p => p.Ticket_category.Contains(ticketCategory));
+            }
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                filterQuery = filterQuery.AndAlso(p => p.Location.Contains(location));
+            }
+
+            return filterQuery;
         }
     }
 }

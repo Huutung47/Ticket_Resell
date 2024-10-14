@@ -8,6 +8,8 @@ using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.DTO.Transaction;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System.Net.Sockets;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -16,15 +18,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
     public class TransactionController : Controller
     {
         private readonly ServiceBase<Transaction> _serviceTransaction;
+        private readonly ServiceBase<Order> _orderService;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionController(ServiceBase<Transaction> serviceTransaction,
+        public TransactionController(ServiceBase<Transaction> serviceTransaction, ServiceBase<Order> orderService,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _serviceTransaction = serviceTransaction;
-            _httpContextAccessor = httpContextAccessor;
+            _orderService = orderService;
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         [HttpGet]
@@ -70,7 +74,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Order = requests.ID_Order,
                 ID_Customer = requests.ID_Customer,
                 ID_Payment = requests.ID_Payment,
-                Status = "Payment in progress",
+                Created_At = TimeUtils.GetCurrentSEATime(),
+                Status = "PENDING",
             };
             requests.Adapt(transaction);
             await _serviceTransaction.CreateAsync(transaction);
@@ -92,7 +97,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("/create/payment")]
-        public async Task<IActionResult> CreatePayment(TransactionRequestDTO transactionRequest, double amount)
+        public async Task<IActionResult> CreatePayment(TransactionRequestDTO transactionRequest)
         {
             var currentTime = TimeUtils.GetCurrentSEATime();
             var currentTimeStamp = TimeUtils.GetTimestamp(currentTime);
@@ -103,7 +108,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
             //pay.AddRequestData("vnp_Amount", ((int)amount * 100).ToString());
-            pay.AddRequestData("vnp_Amount", (amount * 100).ToString());
+            pay.AddRequestData("vnp_Amount", (transactionRequest.FinalPrice * 100).ToString());
             pay.AddRequestData("vnp_CreateDate", currentTime.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(_httpContextAccessor.HttpContext));
@@ -122,19 +127,71 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 DisplayType = "URL"
             };
 
+            var orderExist = await _orderService.FindByAsync(x => x.ID_Order == transactionRequest.ID_Order);
+
+            if (orderExist == null)
+            {
+                return Problem(detail: "Order id cannot found", statusCode: 404);
+            }
+
             // thêm Transaction vs status là pending
             var transaction = new Transaction()
             {
                 ID_Order = transactionRequest.ID_Order,
                 ID_Customer = transactionRequest.ID_Customer,
                 ID_Payment = transactionRequest.ID_Payment,
+                FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice),
+                Created_At = TimeUtils.GetCurrentSEATime(),
                 Status = "PENDING",
+                TransactionCode = txnRef
             };
-            
-            transactionRequest.Adapt(transaction);
+
+            //transactionRequest.Adapt(transaction);
             await _serviceTransaction.CreateAsync(transaction);
 
-            return Ok("Create payment successfull.");
+            return Ok(paymentResponse);
+        }
+
+        [HttpGet("/callback/payment")]
+        public async Task<IActionResult> VnPayCallBack(string? vnp_Amount, string? vnp_BankCode,
+            string? vnp_BankTranNo, string? vnp_CardType, string? vnp_OrderInfo, string? vnp_PayDate,
+            string? vnp_ResponseCode, string? vnp_TmnCode, string? vnp_TransactionNo, string? vnp_TxnRef,
+            string? vnp_SecureHashType, string? vnp_SecureHash)
+        {
+            bool isSuccessful = await ExecuteVnPayCallBack(vnp_Amount, vnp_BankCode, vnp_BankTranNo,
+                vnp_CardType, vnp_OrderInfo, vnp_PayDate, vnp_ResponseCode, vnp_TmnCode, vnp_TransactionNo, vnp_TxnRef,
+                vnp_SecureHashType, vnp_SecureHash);
+            if (isSuccessful && vnp_ResponseCode.Equals("00"))
+            {
+                return RedirectPermanent("https://www.google.com.vn/");
+            }
+            else
+            {
+                return RedirectPermanent("vlxx.mx");
+            }
+        }
+
+        private async Task<bool> ExecuteVnPayCallBack(string? vnp_Amount, string? vnp_BankCode, string? vnp_BankTranNo,
+            string? vnp_CardType, string? vnp_OrderInfo,
+            string? vnp_PayDate, string? vnp_ResponseCode, string? vnp_TmnCode,
+            string? vnp_TransactionNo, string? vnp_TxnRef, string? vnp_SecureHashType, string? vnp_SecureHash)
+        {
+            var currentTime = TimeUtils.GetCurrentSEATime();
+
+            var transaction = await _serviceTransaction.FindByAsync(x => x.TransactionCode.Equals(vnp_TxnRef));
+            if (vnp_ResponseCode.Equals("00"))
+            {
+                transaction.Status = "SUCCESS";
+                transaction.Updated_At = currentTime;
+            }
+            else
+            {
+                transaction.Status = "FAILED";
+                transaction.Updated_At = currentTime;
+            }
+            await _serviceTransaction.UpdateAsync(transaction);
+
+            return !false;
         }
     }
 }

@@ -283,9 +283,14 @@ public partial class swp1Context : DbContext
             entity.ToTable("Transaction");
 
             entity.Property(e => e.Created_At).HasColumnType("datetime");
+            entity.Property(e => e.FinalPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.TransactionCode)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Updated_At).HasColumnType("datetime");
 
             entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.ID_Customer)

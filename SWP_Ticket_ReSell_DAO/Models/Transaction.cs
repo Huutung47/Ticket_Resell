@@ -19,6 +19,12 @@ public partial class Transaction
 
     public string Status { get; set; }
 
+    public decimal? FinalPrice { get; set; }
+
+    public string TransactionCode { get; set; }
+
+    public DateTime? Updated_At { get; set; }
+
     public virtual Customer ID_CustomerNavigation { get; set; }
 
     public virtual Order ID_OrderNavigation { get; set; }
