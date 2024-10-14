@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,16 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped(typeof(ServiceBase<>));
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 //--
 builder.Services.AddDbContext<swp1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
@@ -59,9 +70,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
