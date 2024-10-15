@@ -82,22 +82,14 @@ builder.Services.AddDbContext<swp1Context>(options =>
            .EnableDetailedErrors());
 
 // Thêm UserService
-
 var app = builder.Build();
-
-
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
-
 // enable authentication
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

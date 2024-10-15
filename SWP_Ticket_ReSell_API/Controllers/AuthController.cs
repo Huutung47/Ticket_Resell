@@ -150,7 +150,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Email = googleEmail,
                 Method_login = issuer,
                 Average_feedback = 0,
-                ID_Role = 2,
+                ID_Role = 2
             };
             await _serviceCustomer.CreateAsync(customer);
             return Ok("Create customer successfull.");
