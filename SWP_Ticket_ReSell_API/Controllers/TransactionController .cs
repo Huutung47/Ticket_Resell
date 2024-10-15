@@ -107,7 +107,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
-            //pay.AddRequestData("vnp_Amount", ((int)amount * 100).ToString());
             pay.AddRequestData("vnp_Amount", (transactionRequest.FinalPrice * 100).ToString());
             pay.AddRequestData("vnp_CreateDate", currentTime.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
@@ -134,7 +133,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return Problem(detail: "Order id cannot found", statusCode: 404);
             }
 
-            // thêm Transaction vs status là pending
             var transaction = new Transaction()
             {
                 ID_Order = transactionRequest.ID_Order,
@@ -146,7 +144,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 TransactionCode = txnRef
             };
 
-            //transactionRequest.Adapt(transaction);
             await _serviceTransaction.CreateAsync(transaction);
 
             return Ok(paymentResponse);
@@ -167,7 +164,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             else
             {
-                return RedirectPermanent("vlxx.mx");
+                return RedirectPermanent("https://www.facebook.com");
             }
         }
 
