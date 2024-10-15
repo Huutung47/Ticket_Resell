@@ -125,7 +125,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
             if (!result.Succeeded)
             {
                 return BadRequest("Authentication failed.");
@@ -134,13 +133,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
             {
                 claim.Issuer,
-                //claim.OriginalIssuer,
                 claim.Type,
                 claim.Value
             }).ToList();
             var googleName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var googleEmail = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var issuer = claims.FirstOrDefault()?.Issuer;
+            var existingCustomer = await _serviceCustomer.FindByAsync(x => x.Email == googleEmail);
+            if (existingCustomer != null) 
+            {
+                return Ok("Customer already exists. Information updated.");
+            }
             var customer = new Customer()
             {
                 Name = googleName,
