@@ -62,6 +62,19 @@ builder.Services.AddCors(options =>
         });
 });
 //--
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+        options.BackchannelTimeout = TimeSpan.FromSeconds(120);
+    });
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddDbContext<swp1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
            .UseLazyLoadingProxies()
