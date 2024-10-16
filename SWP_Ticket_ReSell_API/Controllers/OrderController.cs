@@ -55,7 +55,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update Order successfull.");
         }
 
-        [HttpPost("/create")]
+        [HttpPost("/create/order")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
             var order = new Order();
