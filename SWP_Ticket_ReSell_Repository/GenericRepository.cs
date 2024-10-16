@@ -84,12 +84,6 @@ public class GenericRepository<T> where T : class
 
         return await query.AnyAsync();
     }
-    public async Task<IEnumerable<Notification>> GetNotificationsByTicketIdAsync(int ticketID)
-    {
-        return await _context.Set<Notification>()
-            .Where(n => n.ID_Ticket == ticketID)
-            .ToListAsync();
-    }
 
     
 }
