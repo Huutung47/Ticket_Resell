@@ -63,7 +63,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("/filter")]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
         {
-            var tickets = await _service.FindListAsync<TicketResponseDTO>(expression: BuildGetPartnersQuery(ticketCategory, location));
+            var tickets = await _service.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location));
 
             return Ok(tickets);
         }
@@ -125,7 +125,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        private static Expression<Func<Ticket, bool>> BuildGetPartnersQuery(string? ticketCategory, string? location)
+        private static Expression<Func<Ticket, bool>> GetTicketByQuery(string? ticketCategory, string? location)
         {
             Expression<Func<Ticket, bool>> filterQuery = x => true;
 

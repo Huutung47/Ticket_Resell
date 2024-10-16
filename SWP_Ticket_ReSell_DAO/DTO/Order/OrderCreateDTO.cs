@@ -14,8 +14,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Order
 
         public string Payment_method { get; set; }
 
-        public string Status { get; set; }
-
         public List<CreateTicketOrderDTO> ticketIds { get; set; }
 
     }
