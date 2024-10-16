@@ -160,11 +160,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 vnp_SecureHashType, vnp_SecureHash);
             if (isSuccessful && vnp_ResponseCode.Equals("00"))
             {
-                return RedirectPermanent("https://www.google.com.vn/");
+                return RedirectPermanent("http://localhost:3000/success-payment");
             }
             else
             {
-                return RedirectPermanent("https://www.facebook.com");
+                return RedirectPermanent("http://localhost:3000/fail-payment");
             }
         }
 
