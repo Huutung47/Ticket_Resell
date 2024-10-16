@@ -44,7 +44,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entity.Adapt<FeedbackReponseDTO>());
         }
         //Chinh sua feedback 
-        [HttpPut]
+        [HttpPut] 
         public async Task<IActionResult> PutFeedBack(FeedbackReponseDTO feedbackRequest)
         {
             var feedback = await _serviceFeedback.FindByAsync(p => p.ID_Feedback == feedbackRequest.ID_Feedback);

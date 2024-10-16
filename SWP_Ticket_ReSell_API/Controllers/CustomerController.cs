@@ -60,28 +60,18 @@ namespace SWP_Ticket_ReSell_API.Controllers
             //{
             //    return Problem(detail: $"Package_id {customerRequest.ID_Package} cannot be found", statusCode: 404);
             //}
-            if (customerRequest.Name != null) // Giả sử có trường Name
+            if (customerRequest.Name != null) 
             {
                 entity.Name = customerRequest.Name;
             }
-            //if (customerRequest.Email != null) // Giả sử có trường Email
-            //{
-            //    entity.Email = customerRequest.Email;
-            //}
-            if (customerRequest.Contact != null) // Giả sử có trường Email
+            if (customerRequest.Contact != null) 
             {
                 entity.Contact = customerRequest.Contact;
             }
-            if (!string.IsNullOrWhiteSpace(customerRequest.Password)) // Kiểm tra mật khẩu
+            if (!string.IsNullOrWhiteSpace(customerRequest.Password))
             {
                 entity.Password = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);
             }
-            //else
-            //{
-            //    // Nếu mật khẩu không có giá trị, giữ nguyên giá trị hiện tại
-            //    entity.Password = entity.Password; // Hoặc có thể không cần dòng này, chỉ cần không thay đổi
-            //}
-            // Nếu có avatar mới, upload lên Firebase
             if (customerRequest.Avatar != null && customerRequest.Avatar.Length > 0)
             {
                 using (var stream = customerRequest.Avatar.OpenReadStream())

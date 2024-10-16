@@ -142,7 +142,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var existingCustomer = await _serviceCustomer.FindByAsync(x => x.Email == googleEmail);
             if (existingCustomer != null) 
             {
-                return Ok("Customer already exists. Information updated.");
+                return Ok("Customer already exists.");
             }
             var customer = new Customer()
             {

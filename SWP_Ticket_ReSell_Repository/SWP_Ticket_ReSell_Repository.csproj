@@ -10,4 +10,8 @@
     <ProjectReference Include="..\SWP_Ticket_ReSell_DAO\SWP_Ticket_ReSell_DAO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Firebase.Auth" Version="1.0.0" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+  </ItemGroup>
 </Project>

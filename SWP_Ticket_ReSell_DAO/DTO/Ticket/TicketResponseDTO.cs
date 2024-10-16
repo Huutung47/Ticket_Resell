@@ -1,4 +1,5 @@
-﻿using SWP_Ticket_ReSell_DAO.DTO.Customer;
+﻿using Microsoft.AspNetCore.Http;
+using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Role;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,19 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public int? ID_Customer { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public string Ticket_category { get; set; }
 
-        public bool? Ticket_type { get; set; }
+        public bool Ticket_type { get; set; }
 
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
 
-        public DateTime? Ticket_History { get; set; }
+        public DateTime Ticket_History { get; set; }
 
         public string Status { get; set; }
 
-        public DateTime? Event_Date { get; set; }
+        public DateTime Event_Date { get; set; }
 
         public string Show_Name { get; set; }
 
@@ -38,7 +39,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public int? Ticketsold { get; set; }
 
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
         public virtual CustomerDTO ID_CustomerNavigation { get; set; }
         
 

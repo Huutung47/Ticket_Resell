@@ -1,10 +1,13 @@
-﻿using Mapster;
+﻿using Castle.Core.Resource;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
 using SWP_Ticket_ReSell_API.Utils;
+using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -18,12 +21,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Customer> _customerService;
         private readonly ServiceBase<Role> _serviceRole;
         private readonly ServiceBase<Package> _servicePackage;
-
-        public TicketController(ServiceBase<Ticket> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage)
+        private readonly FirebaseStorageService _firebaseStorageService;
+        public TicketController(ServiceBase<Ticket> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService)
         {
             _service = service;
             _serviceRole = serviceRole;
             _servicePackage = servicePackage;
+            _firebaseStorageService = firebaseStorageService;
         }
 
         [HttpGet]
@@ -69,29 +73,104 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
+        public async Task<IActionResult> PutTicket([FromForm] TicketDTO ticketRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
             {
                 return Problem(detail: $"Ticket_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
             }
-            ticketRequest.Adapt(entity);
+            if (ticketRequest.ID_Customer != null)
+            {
+                entity.ID_Customer = ticketRequest.ID_Customer;
+            }
+            if (ticketRequest.Price != null)
+            {
+                entity.Price = ticketRequest.Price;
+            }
+            if (ticketRequest.Ticket_category != null)
+            {
+                entity.Ticket_category = ticketRequest.Ticket_category;
+            }
+            if (ticketRequest.Ticket_type != null)
+            {
+                entity.Ticket_type = ticketRequest.Ticket_type;
+            }
+            if (ticketRequest.Quantity != null)
+            {
+                entity.Quantity = ticketRequest.Quantity;
+            }
+            if (ticketRequest.Status != null)
+            {
+                entity.Status = ticketRequest.Status;
+            }
+            if (ticketRequest.Event_Date != null)
+            {
+                entity.Event_Date = ticketRequest.Event_Date;
+            }
+            if (ticketRequest.Show_Name != null)
+            {
+                entity.Show_Name = ticketRequest.Show_Name;
+            }
+            if (ticketRequest.Location != null)
+            {
+                entity.Location = ticketRequest.Location;
+            }
+            if (ticketRequest.Description != null)
+            {
+                entity.Description = ticketRequest.Description;
+            }
+            if (ticketRequest.Seat != null)
+            {
+                entity.Seat = ticketRequest.Seat;
+            }
+            if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
+            {
+                using (var stream = ticketRequest.Image.OpenReadStream())
+                {
+                    var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
+                    entity.Image = imageUrl;  // Cập nhật đường dẫn ảnh
+                }
+            }
+            //ticketRequest.Adapt(entity);
             await _service.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
         }
 
         [HttpPost("/{customerID}")]
-        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
+
+        public async Task<ActionResult<TicketResponseDTO>> PostTicket([FromForm] TicketCreateDTO ticketRequest, int customerID)
         {
             var ticket = new Ticket()
             {
                 ID_Customer = customerID,
                 Ticket_History = DateTime.Now,
                 Status = "Available",
-                Ticketsold = 0
+                Ticketsold = 0,
+                Price = ticketRequest.Price,
+                Ticket_category = ticketRequest.Ticket_category,
+                Ticket_type = ticketRequest.Ticket_type,
+                Quantity = ticketRequest.Quantity,
+                Event_Date = ticketRequest.Event_Date,
+                Show_Name = ticketRequest.Show_Name,
+                Location = ticketRequest.Location,
+                Description = ticketRequest.Description,
+                Seat = ticketRequest.Seat,
             };
-            ticketRequest.Adapt(ticket);
+            if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
+            {
+                // Tải ảnh lên Firebase
+                using (var stream = ticketRequest.Image.OpenReadStream())
+                {
+                    var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
+                    ticket.Image = imageUrl;  // Cập nhật đường dẫn ảnh
+                }
+            }
+            else
+            {
+                return BadRequest("Add image ticket pls");
+            }
+            //ticketRequest.Adapt(ticket);
             await _service.CreateAsync(ticket);
             return Ok("Create ticket successfull.\n" +
                 $"ID_Ticket: {ticket.ID_Ticket}");
