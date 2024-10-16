@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Azure.Core;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -16,12 +17,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Customer> _service;
         private readonly ServiceBase<Role> _serviceRole;
         private readonly ServiceBase<Package> _servicePackage;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
-        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage)
+        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService)
         {
             _service = service;
             _serviceRole = serviceRole;
             _servicePackage = servicePackage;
+            _firebaseStorageService = firebaseStorageService;
         }
 
         [HttpGet]
@@ -43,23 +46,52 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> PutCustomer(CustomerRequestDTO customerRequest)
+        //[Authorize]
+        public async Task<IActionResult> PutCustomer([FromForm] CustomerRequestDTO customerRequest)
         {
+            // Tìm kiếm entity khách hàng theo ID
             var entity = await _service.FindByAsync(p => p.ID_Customer == customerRequest.ID_Customer);
             if (entity == null)
             {
-                return Problem(detail: $"Customer_id {customerRequest.ID_Customer} cannot found", statusCode: 404);
+                return Problem(detail: $"Customer_id {customerRequest.ID_Customer} cannot be found", statusCode: 404);
             }
-
-            if (!await _servicePackage.ExistsByAsync(p => p.ID_Package == customerRequest.ID_Package))
+            // Kiểm tra xem package có tồn tại không
+            //if (!await _servicePackage.ExistsByAsync(p => p.ID_Package == customerRequest.ID_Package))
+            //{
+            //    return Problem(detail: $"Package_id {customerRequest.ID_Package} cannot be found", statusCode: 404);
+            //}
+            if (customerRequest.Name != null) // Giả sử có trường Name
             {
-                return Problem(detail: $"Package_id {customerRequest.ID_Package} cannot found", statusCode: 404);
+                entity.Name = customerRequest.Name;
             }
-
-            customerRequest.Adapt(entity);
+            //if (customerRequest.Email != null) // Giả sử có trường Email
+            //{
+            //    entity.Email = customerRequest.Email;
+            //}
+            if (customerRequest.Contact != null) // Giả sử có trường Email
+            {
+                entity.Contact = customerRequest.Contact;
+            }
+            if (!string.IsNullOrWhiteSpace(customerRequest.Password)) // Kiểm tra mật khẩu
+            {
+                entity.Password = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);
+            }
+            //else
+            //{
+            //    // Nếu mật khẩu không có giá trị, giữ nguyên giá trị hiện tại
+            //    entity.Password = entity.Password; // Hoặc có thể không cần dòng này, chỉ cần không thay đổi
+            //}
+            // Nếu có avatar mới, upload lên Firebase
+            if (customerRequest.Avatar != null && customerRequest.Avatar.Length > 0)
+            {
+                using (var stream = customerRequest.Avatar.OpenReadStream())
+                {
+                    var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, customerRequest.Avatar.FileName);
+                    entity.Avatar = imageUrl;  // Cập nhật đường dẫn ảnh
+                }
+            }
             await _service.UpdateAsync(entity);
-            return Ok("Update customer successfull.");
+            return Ok("Update customer successful.");
         }
 
         [HttpPost]

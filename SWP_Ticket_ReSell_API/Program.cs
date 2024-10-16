@@ -61,6 +61,10 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
+//Khỏi tạo FireBase
+builder.Services.AddScoped<FirebaseStorageService>();
+//Lấy cấu hình tử appsetting
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 //--
 builder.Services.AddAuthentication(options =>
 {
