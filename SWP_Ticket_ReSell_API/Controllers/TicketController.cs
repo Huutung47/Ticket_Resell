@@ -73,7 +73,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTicket([FromForm] TicketDTO ticketRequest)
+        public async Task<IActionResult> PutTicket(TicketDTO ticketRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
@@ -139,7 +139,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPost("{customerID}")]
 
-        public async Task<ActionResult<TicketResponseDTO>> PostTicket([FromForm] TicketCreateDTO ticketRequest, int customerID)
+        public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
             var ticket = new Ticket()
             {
