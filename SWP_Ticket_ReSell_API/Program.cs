@@ -89,16 +89,12 @@ app.UseSwaggerUI();
 app.UseCors("AllowAll");
 // Enable HTTPS redirection
 app.UseHttpsRedirection();
-
 // Apply CORS policy before Authentication and Authorization middleware
 app.UseRouting();
-
 // Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
 // Map controllers
 app.MapControllers();
-
 // Run the application
 app.Run();
