@@ -86,13 +86,12 @@ var app = builder.Build();
 // Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseCors("AllowAll");
 // Enable HTTPS redirection
 app.UseHttpsRedirection();
 
 // Apply CORS policy before Authentication and Authorization middleware
 app.UseRouting();
-app.UseCors("AllowAll");
 
 // Enable authentication and authorization
 app.UseAuthentication();
