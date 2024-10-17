@@ -12,97 +12,96 @@ using Swashbuckle.AspNetCore.Filters;
 using SWP_Ticket_ReSell_API.Constant;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger and API Explorer configuration
 builder.Services.AddEndpointsApiExplorer();
-// config swagger
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                             builder.Configuration.GetSection("AppSettings:SerectKey").Value!)),
-                        ValidateIssuerSigningKey = true,
-                        ClockSkew = TimeSpan.Zero,
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                    };
-                    options.RequireHttpsMetadata = false;
-                });
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new()
+    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme.",
         Type = SecuritySchemeType.Http,
         Scheme = JwtBearerDefaults.AuthenticationScheme
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>(JwtBearerDefaults.AuthenticationScheme);
-
 });
-builder.Services.AddScoped(typeof(ServiceBase<>));
-builder.Services.AddScoped(typeof(GenericRepository<>));
-builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: CorsConstant.PolicyName,
-        policy =>
+// Add Authentication for JWT and Google
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            policy.WithOrigins("*")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        });
-});
-
-// -----------------------------------
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAll",
-//        builder =>
-//        {
-//            builder.AllowAnyOrigin()
-//                   .AllowAnyMethod()
-//                   .AllowAnyHeader();
-//        });
-//});
-// -----------------------------------
-//Khỏi tạo FireBase
-builder.Services.AddScoped<FirebaseStorageService>();
-//Lấy cấu hình tử appsetting
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-//--
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-})
-    .AddCookie()
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration.GetSection("AppSettings:SerectKey").Value!)),
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+        options.RequireHttpsMetadata = false;
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
     {
         options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
         options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
         options.BackchannelTimeout = TimeSpan.FromSeconds(120);
     });
-builder.Services.AddDistributedMemoryCache();
+
+// Add CORS policy to allow all origins, headers, and methods
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// Add Firebase Storage service
+builder.Services.AddScoped<FirebaseStorageService>();
+
+// Add DBContext for SQL Server
 builder.Services.AddDbContext<swp1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
            .UseLazyLoadingProxies()
            .EnableSensitiveDataLogging()
            .EnableDetailedErrors());
 
-// Thêm UserService
+// Add repositories and services
+builder.Services.AddScoped(typeof(ServiceBase<>));
+builder.Services.AddScoped(typeof(GenericRepository<>));
+
+// Add caching
+builder.Services.AddDistributedMemoryCache();
+
+// Build the application
 var app = builder.Build();
+
+// Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
+
+// Enable HTTPS redirection
 app.UseHttpsRedirection();
+
+// Apply CORS policy before Authentication and Authorization middleware
+app.UseRouting();
 app.UseCors("AllowAll");
 
-// enable authentication
+// Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Map controllers
 app.MapControllers();
+
+// Run the application
 app.Run();
