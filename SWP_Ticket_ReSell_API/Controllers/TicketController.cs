@@ -159,6 +159,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Location = ticketRequest.Location,
                 Description = ticketRequest.Description,
                 Seat = ticketRequest.Seat,
+                Image = null,
             };
             //if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
             //{
