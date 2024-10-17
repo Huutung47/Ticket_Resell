@@ -10,6 +10,7 @@ using SWP_Ticket_ReSell_DAO.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Net.Sockets;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -97,6 +98,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("/create/payment")]
+        [SwaggerOperation(Summary = "Create transaction to payment")]
         public async Task<IActionResult> CreatePayment(TransactionRequestDTO transactionRequest)
         {
             var currentTime = TimeUtils.GetCurrentSEATime();
@@ -150,6 +152,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("/callback/payment")]
+        [SwaggerOperation(Summary = "Callback transaction to payment sucess")]
         public async Task<IActionResult> VnPayCallBack(string? vnp_Amount, string? vnp_BankCode,
             string? vnp_BankTranNo, string? vnp_CardType, string? vnp_OrderInfo, string? vnp_PayDate,
             string? vnp_ResponseCode, string? vnp_TmnCode, string? vnp_TransactionNo, string? vnp_TxnRef,
@@ -176,17 +179,29 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var currentTime = TimeUtils.GetCurrentSEATime();
 
             var transaction = await _serviceTransaction.FindByAsync(x => x.TransactionCode.Equals(vnp_TxnRef));
+
+            var order = await _orderService.FindByAsync(x => x.ID_Order == transaction.ID_Order);
+
             if (vnp_ResponseCode.Equals("00"))
             {
                 transaction.Status = "SUCCESS";
                 transaction.Updated_At = currentTime;
+
+                order.Status = "COMPLETED";
+                order.Update_At = currentTime;
+
             }
             else
             {
                 transaction.Status = "FAILED";
                 transaction.Updated_At = currentTime;
+
+                order.Status = "FAILED";
+                order.Update_At = currentTime;
             }
+
             await _serviceTransaction.UpdateAsync(transaction);
+            await _orderService.UpdateAsync(order);
 
             return !false;
         }

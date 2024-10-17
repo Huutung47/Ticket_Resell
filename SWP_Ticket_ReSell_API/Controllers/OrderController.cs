@@ -1,6 +1,7 @@
-﻿using Mapster;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
+using Swashbuckle.AspNetCore.Annotations;
 using SWP_Ticket_ReSell_DAO.DTO.Order;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
@@ -43,6 +44,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [SwaggerOperation(Summary = "Update order")]
         public async Task<IActionResult> PutOrder(OrderResponseDTO orderRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Order == orderRequest.ID_Order);
@@ -55,7 +57,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update Order successfull.");
         }
 
-        [HttpPost("create/order")]
+        [HttpPost("/create/order")]
+        [SwaggerOperation(Summary = "Create order")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
             var order = new Order();
@@ -64,16 +67,24 @@ namespace SWP_Ticket_ReSell_API.Controllers
             order.Status = "PENDING";
             order.Create_At = TimeZoneInfo.ConvertTime(DateTime.Now, vietnamTimeZone);
             order.Shipping_time = TimeZoneInfo.ConvertTime(DateTime.Now.AddDays(3), vietnamTimeZone);
+
+            var TicketItems = orderRequest.TicketItems;
+            decimal totalPriceOrder = 0;
+            foreach (var item in TicketItems)
+            {
+                var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
+                totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
+            }
+            order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
             orderRequest.Adapt(order);
             await _service.CreateAsync(order);
 
-            if (orderRequest.ticketIds.Count() <= 0)
+            if (orderRequest.TicketItems.Count() <= 0)
             {
                 return Problem(detail: "Ticket not selected.", statusCode: 400);
             }
 
-
-            foreach (var item in orderRequest.ticketIds)
+            foreach (var item in orderRequest.TicketItems)
             {
                 var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
 

@@ -145,6 +145,7 @@ public partial class swp1Context : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Update_At).HasColumnType("datetime");
 
             entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.ID_Customer)

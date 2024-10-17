@@ -21,6 +21,8 @@ public partial class Order
 
     public decimal? TotalPrice { get; set; }
 
+    public DateTime? Update_At { get; set; }
+
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     public virtual Customer ID_CustomerNavigation { get; set; }

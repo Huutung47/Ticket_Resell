@@ -1,8 +1,10 @@
-﻿using Castle.Core.Resource;
+using Castle.Core.Resource;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
+using SWP_Ticket_ReSell_API.Paginated;
 using SWP_Ticket_ReSell_API.Utils;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
@@ -64,16 +66,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(listTicketBySeller);
         }
 
-        [HttpGet("filter")]
+        [HttpGet("/filter")]
+        [SwaggerOperation(Summary = "Get list ticket filter")]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
         {
             var tickets = await _service.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location));
-
             return Ok(tickets);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutTicket(TicketDTO ticketRequest)
+        [SwaggerOperation(Summary = "Update Ticket ")]
+        public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
@@ -137,8 +140,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        [HttpPost("{customerID}")]
-
+        [HttpPost("/{customerID}")]
+        [SwaggerOperation(Summary = "Create Ticket ")]
         public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
             var ticket = new Ticket()
@@ -177,6 +180,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete Ticket ")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
             var ticket = await _service.FindByAsync(p => p.ID_Ticket == id);
@@ -209,12 +213,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             if (!string.IsNullOrEmpty(ticketCategory))
             {
-                filterQuery = filterQuery.AndAlso(p => p.Ticket_category.Contains(ticketCategory));
+                var categories = ticketCategory.ToLower().Split(',').Select(c => c.Trim().ToLower()).ToList();
+                filterQuery = filterQuery.AndAlso(p => categories.Any(cate => p.Ticket_category.Equals(cate)));
             }
 
             if (!string.IsNullOrEmpty(location))
             {
-                filterQuery = filterQuery.AndAlso(p => p.Location.Contains(location));
+                var locations = location.ToLower().Split(',').Select(l => l.Trim().ToLower()).ToList();
+                filterQuery = filterQuery.AndAlso(p => locations.Any(loc => p.Location.Equals(loc)));
             }
 
             return filterQuery;
