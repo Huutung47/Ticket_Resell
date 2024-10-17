@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository;
 using Swashbuckle.AspNetCore.Filters;
+using SWP_Ticket_ReSell_API.Constant;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
@@ -45,16 +46,30 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped(typeof(ServiceBase<>));
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
+    options.AddPolicy(name: CorsConstant.PolicyName,
+        policy =>
         {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+            policy.WithOrigins("*")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
 });
+
+// -----------------------------------
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll",
+//        builder =>
+//        {
+//            builder.AllowAnyOrigin()
+//                   .AllowAnyMethod()
+//                   .AllowAnyHeader();
+//        });
+//});
+// -----------------------------------
 //Khỏi tạo FireBase
 builder.Services.AddScoped<FirebaseStorageService>();
 //Lấy cấu hình tử appsetting
