@@ -20,6 +20,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.OrderDetail
 
         public int? Quantity { get; set; }
 
-        public virtual TicketDTO ID_TicketNavigation { get; set; }
+        public virtual TicketRequestDTO ID_TicketNavigation { get; set; }
     }
 }

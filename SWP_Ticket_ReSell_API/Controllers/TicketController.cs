@@ -76,7 +76,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut]
         [SwaggerOperation(Summary = "Update Ticket ")]
-        public async Task<IActionResult> PutTicket(TicketResponseDTO ticketRequest)
+        public async Task<IActionResult> PutTicket(TicketRequestDTO ticketRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Ticket == ticketRequest.ID_Ticket);
             if (entity == null)
