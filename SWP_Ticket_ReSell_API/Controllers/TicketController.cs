@@ -64,7 +64,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(listTicketBySeller);
         }
 
-        [HttpGet("/filter")]
+        [HttpGet("filter")]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
         {
             var tickets = await _service.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location));
@@ -137,7 +137,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        [HttpPost("/{customerID}")]
+        [HttpPost("{customerID}")]
 
         public async Task<ActionResult<TicketResponseDTO>> PostTicket([FromForm] TicketCreateDTO ticketRequest, int customerID)
         {
@@ -189,7 +189,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Delete ticket successfull.");
         }
 
-        [HttpPut("/customer")]
+        [HttpPut("customer")]
         [SwaggerOperation(Summary = "Update Customer On Ticket ")]
         public async Task<IActionResult> PutTicketByCustomer(TicketUpdateCustomerDTO ticketUpdate)
         {
@@ -198,7 +198,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Ticket_id {ticketUpdate.ID_Ticket} cannot found", statusCode: 404);
             }
-
             ticketUpdate.Adapt(entity);
             await _service.UpdateAsync(entity);
             return Ok("Update ticket successfull.");

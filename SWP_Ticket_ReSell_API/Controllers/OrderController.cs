@@ -31,7 +31,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<OrderResponseDTO>> GetOrderDetail(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_Order.ToString() == id);
@@ -55,7 +55,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update Order successfull.");
         }
 
-        [HttpPost("/create/order")]
+        [HttpPost("create/order")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
             var order = new Order();

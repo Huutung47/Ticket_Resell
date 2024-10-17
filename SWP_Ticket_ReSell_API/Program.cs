@@ -9,14 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository;
 using Swashbuckle.AspNetCore.Filters;
-
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,13 +40,11 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = JwtBearerDefaults.AuthenticationScheme
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>(JwtBearerDefaults.AuthenticationScheme);
+
 });
 builder.Services.AddScoped(typeof(ServiceBase<>));
 builder.Services.AddScoped(typeof(GenericRepository<>));
-
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -88,7 +82,6 @@ builder.Services.AddDbContext<swp1Context>(options =>
 // Thêm UserService
 var app = builder.Build();
 app.UseCors("AllowAll");
-// Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
