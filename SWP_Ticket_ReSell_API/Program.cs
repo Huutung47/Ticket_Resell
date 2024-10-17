@@ -81,10 +81,11 @@ builder.Services.AddDbContext<swp1Context>(options =>
 
 // Thêm UserService
 var app = builder.Build();
-app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+
 // enable authentication
 app.UseAuthentication();
 app.UseAuthorization();
