@@ -19,31 +19,24 @@ public class FirebaseController : ControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<ActionResult<TicketResponseDTO>> UploadImage([FromForm]TicketImageDTO ticketRequest)
+    public async Task<ActionResult<string>> UploadImage([FromForm] TicketImageDTO ticketRequest)
     {
-        var imageTicket = new Ticket()
-        {
-            //ID_Customer = customerID,
-            //Image = null,
-        };
         if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
         {
             // Tải ảnh lên Firebase
             using (var stream = ticketRequest.Image.OpenReadStream())
             {
+                // Tải file lên Firebase và nhận URL của ảnh
                 var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
-                var ticket = new Ticket
-                {
-                    Image = imageUrl,  
-                };
-                await _serviceTicket.CreateAsync(ticket);
-                return Ok("Create ticket image successfull.\n");
+
+                // Trả về URL của ảnh mà không lưu vào database
+                return Ok(imageUrl);
             }
         }
         else
         {
-            return BadRequest("Add image ticket pls");
+            return BadRequest("Please add an image.");
         }
-       
     }
+
 }
