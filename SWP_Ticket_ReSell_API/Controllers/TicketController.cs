@@ -66,7 +66,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(listTicketBySeller);
         }
 
-        [HttpGet("/filter")]
+        [HttpGet("filter")]
         [SwaggerOperation(Summary = "Get list ticket filter")]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
         {
@@ -140,7 +140,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        [HttpPost("/{customerID}")]
+        [HttpPost("{customerID}")]
         [SwaggerOperation(Summary = "Create Ticket ")]
         public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
@@ -160,19 +160,19 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Description = ticketRequest.Description,
                 Seat = ticketRequest.Seat,
             };
-            if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
-            {
-                // Tải ảnh lên Firebase
-                using (var stream = ticketRequest.Image.OpenReadStream())
-                {
-                    var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
-                    ticket.Image = imageUrl;  // Cập nhật đường dẫn ảnh
-                }
-            }
-            else
-            {
-                return BadRequest("Add image ticket pls");
-            }
+            //if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
+            //{
+            //    // Tải ảnh lên Firebase
+            //    using (var stream = ticketRequest.Image.OpenReadStream())
+            //    {
+            //        var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
+            //        ticket.Image = imageUrl;  // Cập nhật đường dẫn ảnh
+            //    }
+            //}
+            //else
+            //{
+            //    return BadRequest("Add image ticket pls");
+            //}
             //ticketRequest.Adapt(ticket);
             await _service.CreateAsync(ticket);
             return Ok("Create ticket successfull.\n" +
