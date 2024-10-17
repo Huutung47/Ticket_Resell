@@ -25,7 +25,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         //public DateTime Ticket_History { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         public DateTime Event_Date { get; set; }
 
