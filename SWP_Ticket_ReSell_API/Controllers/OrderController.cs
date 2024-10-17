@@ -1,4 +1,4 @@
-using Mapster;
+﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
@@ -61,6 +61,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [SwaggerOperation(Summary = "Create order")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
+
+            if (orderRequest.TicketItems.Count() <= 0)
+            {
+                return Problem(detail: "Ticket not selected.", statusCode: 400);
+            }
+
             var order = new Order();
 
             TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
@@ -73,16 +79,25 @@ namespace SWP_Ticket_ReSell_API.Controllers
             foreach (var item in TicketItems)
             {
                 var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
+
+                if (item.Quantity < 1)
+                {
+                    return Problem(detail: "The number of tickets cannot be 0", statusCode: 400);
+                }
+
+                if (item.Quantity > ticket.Quantity)
+                {
+                    return Problem(detail: "Ticket is not enough. " + $"[{ticket.Quantity}] tickets left", statusCode: 400);
+                }
+
                 totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
+
+                ticket.Quantity -= item.Quantity;
+                await _ticketService.UpdateAsync(ticket);
             }
             order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
             orderRequest.Adapt(order);
             await _service.CreateAsync(order);
-
-            if (orderRequest.TicketItems.Count() <= 0)
-            {
-                return Problem(detail: "Ticket not selected.", statusCode: 400);
-            }
 
             foreach (var item in orderRequest.TicketItems)
             {
