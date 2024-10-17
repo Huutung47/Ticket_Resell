@@ -64,10 +64,8 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-
 // Add Firebase Storage service
 builder.Services.AddScoped<FirebaseStorageService>();
-
 // Add DBContext for SQL Server
 builder.Services.AddDbContext<swp1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"))
