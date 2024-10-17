@@ -8,7 +8,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
 {
     public class CustomerDTO
     {
-        //public int ID_Customer { get; set; }
+        public int ID_Customer { get; set; }
 
         public string? Name { get; set; }
 
