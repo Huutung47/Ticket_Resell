@@ -9,7 +9,10 @@ namespace SWP_Ticket_ReSell_API.Helper
         {
             try
             {
-                MailMessage msg = new MailMessage(ConstantHelper.emailSender, to, subject, body);
+                MailMessage msg = new MailMessage(ConstantHelper.emailSender, to, subject, body)
+                {
+                    IsBodyHtml = true
+                };
                 using (var client = new SmtpClient(ConstantHelper.hostEmail, ConstantHelper.portEmail))
                 {
                     client.EnableSsl = true;

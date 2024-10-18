@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using SWP_Ticket_ReSell_API.Helper;
+using Firebase.Auth;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -113,7 +114,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
 
                 //request.Adapt(customer);
-                SendMail.SendEMail(request.Email, "Confirm your account", "Please confirm your account here ", "");
+                var frontendUrl = "https://resell-ticket-fe.vercel.app/";
+                //var confirmationLink = $"{frontendUrl}/confirm?userId={Request.}";
+                var emailBody = $"Please confirm your account by click: <a href=\"{frontendUrl}\">To here</a></a>";
+                SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
+
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
