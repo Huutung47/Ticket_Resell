@@ -33,6 +33,8 @@ public partial class Customer
 
     public string Method_login { get; set; }
 
+    public string EmailConfirm { get; set; }
+
     public virtual ICollection<Boxchat> BoxchatBuyers { get; set; } = new List<Boxchat>();
 
     public virtual ICollection<Boxchat> BoxchatSellers { get; set; } = new List<Boxchat>();

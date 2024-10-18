@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SWP_Ticket_ReSell_API.Helper;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -37,8 +38,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginRequestDTO login)
         {
-            var user = await _serviceCustomer
-                .FindByAsync(x => x.Email == login.Email);
+            var user = await _serviceCustomer.FindByAsync(x => x.Email == login.Email); 
             if (user == null)
             {
                 return Unauthorized("Email not find");
@@ -48,7 +48,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Unauthorized("Password wrong");
             }
-            
+            //
+            if (user.EmailConfirm != "True")
+            {
+                await HttpContext.SignOutAsync("Cookies");
+                return StatusCode(403, "You need to confirm your email address.");
+            }
+
             List<Claim> claims = new List<Claim>
                 {
                     //Name
@@ -97,6 +103,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Average_feedback = 0,
                     //Customer Role = 2
                     ID_Role = 2,
+                    EmailConfirm = "false",
                     //Basic Backet = 1 
                     Method_login = "local"
                 };
@@ -106,6 +113,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
 
                 //request.Adapt(customer);
+                SendMail.SendEMail(request.Email, "Confirm your account", "Please confirm your account here ", "");
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
@@ -171,6 +179,27 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return StatusCode(500, new { message = "Logout failed ", error = ex.Message });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(String emailUser, string token)
+        {
+            // Kiểm tra người dùng có tồn tại hay không
+            var user = await _serviceCustomer.FindByAsync(x => x.EmailConfirm == emailUser);
+            if (user == null)
+                return BadRequest("Invalid user");
+
+            // Giả sử token ở đây là đúng (bạn có thể kiểm tra token ở đây)
+            if (token != null)
+            {
+                // Cập nhật ConfirmEmail thành true
+                user.EmailConfirm = "true";
+                await _serviceCustomer.UpdateAsync(user);
+                return Ok("Email confirmed successfully. You can now log in.");
+            }
+            return BadRequest("Invalid token.");
+        }
+
+
     }
 }
 
