@@ -47,7 +47,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut]
         //[Authorize]
-        public async Task<IActionResult> PutCustomer([FromForm] CustomerRequestDTO customerRequest)
+        public async Task<IActionResult> PutCustomer(CustomerRequestDTO customerRequest)
         {
             // Tìm kiếm entity khách hàng theo ID
             var entity = await _service.FindByAsync(p => p.ID_Customer == customerRequest.ID_Customer);
