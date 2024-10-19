@@ -104,9 +104,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Average_feedback = 0,
                     //Customer Role = 2
                     ID_Role = 2,
-                    EmailConfirm = "false",
+                    EmailConfirm = "False",
+                    Number_of_tickets_can_posted = 0,
                     //Basic Backet = 1 
-                    Method_login = "local"
+                    Method_login = "Local"
                 };
                 //Email
                 //string code = await UserManager.GenerateEmailConfirmationTokenAsync(customer.ID_Customer);
@@ -162,7 +163,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Name = googleName,
                 Email = googleEmail,
                 Method_login = issuer,
+                EmailConfirm = "True",
                 Average_feedback = 0,
+                Number_of_tickets_can_posted = 0,
                 ID_Role = 2
             };
             await _serviceCustomer.CreateAsync(customer);

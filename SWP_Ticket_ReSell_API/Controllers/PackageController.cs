@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Castle.Core.Resource;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -80,6 +81,56 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             await _servicePackage.DeleteAsync(package);
             return Ok("Delete package successfull.");
+        }
+
+
+        //Cho nguoi dung chon Package
+        [HttpPost("registerPackage")]
+        [Authorize]
+        public async Task<IActionResult> RegisterPackage([FromBody] PackageChoose request)
+        {
+            // Lấy CustomerId từ token đã xác thực
+            var customerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID_Customer");
+            if (customerIdClaim == null)
+            {
+                return Unauthorized(new { message = "Không tìm thấy thông tin người dùng." });
+            }
+
+            var customerId = int.Parse(customerIdClaim.Value); // customerId bây giờ là int
+
+            // Tìm thông tin người dùng bằng CustomerId
+            var customer = await _serviceCustomer.FindByAsync(x => x.ID_Customer == customerId);
+            if (customer == null)
+            {
+                return BadRequest(new { message = "Người dùng không tồn tại." });
+            }
+            // Kiểm tra package có hợp lệ không
+            var package = await _servicePackage.FindByAsync(x => x.ID_Package == request.ID_Package);
+            if (package == null)
+            {
+                return BadRequest(new { message = "Package không hợp lệ." });
+            }
+
+            // Cập nhật thông tin package cho người dùng
+            //var expirationDate = customer.Package_expiration_date ?? DateTime.Now;
+            if (customer.Package_expiration_date.HasValue && customer.Package_expiration_date > DateTime.Now)
+            {
+                // Cộng thêm thời gian của package mới vào thời gian hết hạn hiện tại
+                customer.Package_expiration_date = customer.Package_expiration_date.Value.AddMonths((int)package.Time_package); // Cộng số tháng
+                customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+            }
+            else
+            {
+                // Nếu người dùng không có package hoặc đã hết hạn, đăng ký package mới
+                customer.ID_Package = package.ID_Package;
+                customer.Package_expiration_date = DateTime.Now.AddMonths((int)package.Time_package);
+                customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+            }
+            // Cập nhật thời gian đăng ký package
+            customer.Package_registration_time = DateTime.Now;
+            // Lưu thông tin vào cơ sở dữ liệu
+            await _serviceCustomer.UpdateAsync(customer);
+            return Ok(new { message = "Đăng ký package thành công." });
         }
     }
 }
