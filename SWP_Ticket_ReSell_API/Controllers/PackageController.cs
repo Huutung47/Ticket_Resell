@@ -6,6 +6,7 @@ using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Package;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
+using System.Security.Claims;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -90,16 +91,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<IActionResult> RegisterPackage([FromBody] PackageChoose request)
         {
             // Lấy CustomerId từ token đã xác thực
-            var customerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID_Customer");
-            if (customerIdClaim == null)
+            var customerEmailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            if (customerEmailClaim == null)
             {
                 return Unauthorized(new { message = "Không tìm thấy thông tin người dùng." });
             }
 
-            var customerId = int.Parse(customerIdClaim.Value); // customerId bây giờ là int
+            string customerEmail = customerEmailClaim.Value;
 
             // Tìm thông tin người dùng bằng CustomerId
-            var customer = await _serviceCustomer.FindByAsync(x => x.ID_Customer == customerId);
+            var customer = await _serviceCustomer.FindByAsync(x => x.Email == customerEmail);
             if (customer == null)
             {
                 return BadRequest(new { message = "Người dùng không tồn tại." });
@@ -118,6 +119,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 // Cộng thêm thời gian của package mới vào thời gian hết hạn hiện tại
                 customer.Package_expiration_date = customer.Package_expiration_date.Value.AddMonths((int)package.Time_package); // Cộng số tháng
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                customer.Package_registration_time = DateTime.Now;
             }
             else
             {
@@ -125,6 +127,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 customer.ID_Package = package.ID_Package;
                 customer.Package_expiration_date = DateTime.Now.AddMonths((int)package.Time_package);
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                customer.Package_registration_time = DateTime.Now;
             }
             // Cập nhật thời gian đăng ký package
             customer.Package_registration_time = DateTime.Now;
