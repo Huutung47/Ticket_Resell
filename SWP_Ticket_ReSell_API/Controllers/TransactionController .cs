@@ -193,9 +193,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         private async Task<bool> ExecuteVnPayCallBack(string? vnp_Amount, string? vnp_BankCode, string? vnp_BankTranNo,
-            string? vnp_CardType, string? vnp_OrderInfo,
-            string? vnp_PayDate, string? vnp_ResponseCode, string? vnp_TmnCode,
-            string? vnp_TransactionNo, string? vnp_TxnRef, string? vnp_SecureHashType, string? vnp_SecureHash)
+    string? vnp_CardType, string? vnp_OrderInfo,
+    string? vnp_PayDate, string? vnp_ResponseCode, string? vnp_TmnCode,
+    string? vnp_TransactionNo, string? vnp_TxnRef, string? vnp_SecureHashType, string? vnp_SecureHash)
         {
             var currentTime = TimeUtils.GetCurrentSEATime();
 
@@ -209,29 +209,32 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 transaction.Status = "SUCCESS";
                 transaction.Updated_At = currentTime;
 
-                if (order != null)
+                if (transaction.Transaction_Type.Equals("Ticket"))
                 {
                     order.Status = "COMPLETED";
                     order.Update_At = currentTime;
                 }
 
-                // update customer theo package
-                customer.ID_Package = transaction.ID_Package;
-
-                // update ngày đăng ký gói
-                if (customer.Package_registration_time == null)
+                if (transaction.Transaction_Type.Equals("Package"))
                 {
-                    customer.Package_registration_time = transaction.Created_At;
-                }
+                    // update customer theo package
+                    customer.ID_Package = transaction.ID_Package;
 
-                // update expirate date  
-                if (package != null)
-                {
-                    int? numOfDayExpirate = package.Time_package; // 30 60 90 120 240 365
-                    customer.Package_expiration_date = customer.Package_registration_time?.AddDays((double)numOfDayExpirate);
+                    // update ngày đăng ký gói
+                    if (customer.Package_registration_time == null)
+                    {
+                        customer.Package_registration_time = transaction.Created_At;
+                    }
 
-                    // update số lượng bài đăng
-                    customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                    // update expirate date  
+                    if (package != null)
+                    {
+                        int? numOfDayExpirate = package.Time_package; // 30 60 90 120 240 365
+                        customer.Package_expiration_date = customer.Package_registration_time?.AddDays((double)numOfDayExpirate);
+
+                        // update số lượng bài đăng
+                        customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                    }
                 }
 
             }
@@ -244,19 +247,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 {
                     order.Status = "FAILED";
                     order.Update_At = currentTime;
-
-                    // update customer theo package
-                    customer.ID_Package = transaction.ID_Package;
                 }
 
             }
 
             await _serviceTransaction.UpdateAsync(transaction);
             await _customerService.UpdateAsync(customer);
-            if (order != null)
-            {
-                await _orderService.UpdateAsync(order);
-            }
+            await _orderService.UpdateAsync(order);
 
             return !false;
         }

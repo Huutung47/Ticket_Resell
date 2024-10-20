@@ -99,6 +99,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             var customer = new Customer();
             customer.Number_of_tickets_can_posted = 0;
+            customer.EmailConfirm = "False";
 
             customerRequest.Adapt(customer); // chuyển data vào request checking regex
 
