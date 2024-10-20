@@ -225,11 +225,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 }
 
                 // update expirate date  
-                int? numOfDayExpirate = package.Time_package; // 30 60 90 120 240 365
-                customer.Package_expiration_date = customer.Package_registration_time?.AddDays((double)numOfDayExpirate);
+                if (package != null)
+                {
+                    int? numOfDayExpirate = package.Time_package; // 30 60 90 120 240 365
+                    customer.Package_expiration_date = customer.Package_registration_time?.AddDays((double)numOfDayExpirate);
 
-                // update số lượng bài đăng
-                customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                    // update số lượng bài đăng
+                    customer.Number_of_tickets_can_posted += package.Ticket_can_post;
+                }
+
             }
             else
             {
@@ -240,10 +244,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 {
                     order.Status = "FAILED";
                     order.Update_At = currentTime;
+
+                    // update customer theo package
+                    customer.ID_Package = transaction.ID_Package;
                 }
 
-                // update customer theo package
-                customer.ID_Package = transaction.ID_Package;
             }
 
             await _serviceTransaction.UpdateAsync(transaction);
