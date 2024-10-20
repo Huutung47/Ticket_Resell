@@ -114,10 +114,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { customer.ID_Customer, code = code }, protocol: Request.Scheme);
                 //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
                 //request.Adapt(customer);
-                var frontendUrl = "https://resell-ticket-fe.vercel.app/";
-                var emailBody = $"Please confirm your account by click: <a href=\"{frontendUrl}\">To here</a></a>";
+                var customerId = customer.ID_Customer;
+                var frontendUrl = " http://localhost:3000/confirm-success";
+                var confirmationLink = $"{frontendUrl}/confirm?userId={customerId}";
+                var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
-                //var confirmationLink = $"{frontendUrl}/confirm?userId={Request.}";
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
@@ -187,24 +188,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmail(String emailUser, string token)
+        public async Task<IActionResult> ConfirmEmail(int userId)
         {
-            // Kiểm tra người dùng có tồn tại hay không
-            var user = await _serviceCustomer.FindByAsync(x => x.EmailConfirm == emailUser);
+            // Kiểm tra người dùng có tồn tại không
+            var user = await _serviceCustomer.FindByAsync(x => x.ID_Customer == userId);
             if (user == null)
                 return BadRequest("Invalid user");
-            // Giả sử token ở đây là đúng (bạn có thể kiểm tra token ở đây)
-            if (token != null)
-            {
-                // Cập nhật ConfirmEmail thành true
-                user.EmailConfirm = "True";
-                await _serviceCustomer.UpdateAsync(user);
-                return Ok("Email confirmed successfully. Thank you.");
-            }
-            return BadRequest("Invalid token.");
+            // Nếu người dùng tồn tại, cập nhật trạng thái email xác nhận
+            user.EmailConfirm = "True";
+            await _serviceCustomer.UpdateAsync(user);
+            return Ok("Email confirmed successfully. Thank you.");
         }
-
-
     }
 }
 

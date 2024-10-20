@@ -146,7 +146,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
             var customer = await _serviceCustomer.FindByAsync(x => x.ID_Customer == customerID);
-            if (customer.Package_expiration_date > DateTime.UtcNow || customer.Number_of_tickets_can_posted == 0)
+            if (customer.Package_expiration_date < DateTime.UtcNow || customer.Number_of_tickets_can_posted == 0)
             {
                 return BadRequest("You need register Package pls");
             }
