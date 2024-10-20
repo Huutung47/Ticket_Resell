@@ -96,30 +96,23 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Unauthorized(new { message = "Không tìm thấy thông tin người dùng." });
             }
-
             string customerEmail = customerEmailClaim.Value;
-
-            // Tìm thông tin người dùng bằng CustomerId
             var customer = await _serviceCustomer.FindByAsync(x => x.Email == customerEmail);
             if (customer == null)
             {
                 return BadRequest(new { message = "Người dùng không tồn tại." });
             }
-            // Kiểm tra package có hợp lệ không
             var package = await _servicePackage.FindByAsync(x => x.ID_Package == request.ID_Package);
             if (package == null)
             {
                 return BadRequest(new { message = "Package không hợp lệ." });
             }
-
-            // Cập nhật thông tin package cho người dùng
-            //var expirationDate = customer.Package_expiration_date ?? DateTime.Now;
             if (customer.Package_expiration_date.HasValue && customer.Package_expiration_date > DateTime.Now)
             {
                 // Cộng thêm thời gian của package mới vào thời gian hết hạn hiện tại
                 customer.Package_expiration_date = customer.Package_expiration_date.Value.AddMonths((int)package.Time_package); // Cộng số tháng
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
-                customer.Package_registration_time = DateTime.Now;
+                //customer.Package_registration_time = DateTime.Now;
             }
             else
             {
@@ -127,7 +120,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 customer.ID_Package = package.ID_Package;
                 customer.Package_expiration_date = DateTime.Now.AddMonths((int)package.Time_package);
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
-                customer.Package_registration_time = DateTime.Now;
+                //customer.Package_registration_time = DateTime.Now;
             }
             // Cập nhật thời gian đăng ký package
             customer.Package_registration_time = DateTime.Now;

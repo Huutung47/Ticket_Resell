@@ -61,8 +61,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost]
         public async Task<ActionResult<RequestResponseDTO>> PostRequest(RequestRequestDTO requests)
         {
-            //Validation
-
             var request = new Request()
             {
                 History = DateTime.Now,

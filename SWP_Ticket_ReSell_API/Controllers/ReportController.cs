@@ -57,13 +57,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost]
         public async Task<ActionResult<TicketResponseDTO>> PostReport(ReportRequestDTO reportRequest)
         {
-            //Validation
-
             var ticket = new Report()
             {
                 History = DateTime.Now,
             };
-            reportRequest.Adapt(ticket); // chuyển data vào request checking regex
+            reportRequest.Adapt(ticket);
             await _serviceReport.CreateAsync(ticket);
             return Ok("Create Report successfull.");
         }
