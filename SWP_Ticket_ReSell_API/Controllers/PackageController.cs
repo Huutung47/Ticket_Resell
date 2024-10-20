@@ -88,7 +88,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         //Cho nguoi dung chon Package
         [HttpPost("registerPackage")]
         [Authorize]
-        public async Task<IActionResult> RegisterPackage([FromBody] PackageChoose request)
+        public async Task<IActionResult> RegisterPackage(PackageChoose request)
         {
             // Lấy CustomerId từ token đã xác thực
             var customerEmailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
