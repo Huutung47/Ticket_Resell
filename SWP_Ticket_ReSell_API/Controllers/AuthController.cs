@@ -195,14 +195,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var user = await _serviceCustomer.FindByAsync(x => x.EmailConfirm == emailUser);
             if (user == null)
                 return BadRequest("Invalid user");
-
             // Giả sử token ở đây là đúng (bạn có thể kiểm tra token ở đây)
             if (token != null)
             {
                 // Cập nhật ConfirmEmail thành true
-                user.EmailConfirm = "true";
+                user.EmailConfirm = "True";
                 await _serviceCustomer.UpdateAsync(user);
-                return Ok("Email confirmed successfully. You can now log in.");
+                return Ok("Email confirmed successfully. Thank you.");
             }
             return BadRequest("Invalid token.");
         }
