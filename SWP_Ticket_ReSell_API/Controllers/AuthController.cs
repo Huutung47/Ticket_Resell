@@ -113,13 +113,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 //string code = await UserManager.GenerateEmailConfirmationTokenAsync(customer.ID_Customer);
                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { customer.ID_Customer, code = code }, protocol: Request.Scheme);
                 //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
-
                 //request.Adapt(customer);
                 var frontendUrl = "https://resell-ticket-fe.vercel.app/";
-                //var confirmationLink = $"{frontendUrl}/confirm?userId={Request.}";
                 var emailBody = $"Please confirm your account by click: <a href=\"{frontendUrl}\">To here</a></a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
-
+                //var confirmationLink = $"{frontendUrl}/confirm?userId={Request.}";
                 await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
