@@ -11,13 +11,9 @@ public partial class Report
 
     public int ID_Customer { get; set; }
 
-    public int ID_Order { get; set; }
-
     public string Comment { get; set; }
 
     public DateTime? History { get; set; }
 
     public virtual Customer ID_CustomerNavigation { get; set; }
-
-    public virtual Order ID_OrderNavigation { get; set; }
 }

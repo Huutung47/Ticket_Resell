@@ -213,11 +213,6 @@ public partial class swp1Context : DbContext
                 .HasForeignKey(d => d.ID_Customer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Report__ID_Custo__59FA5E80");
-
-            entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Reports)
-                .HasForeignKey(d => d.ID_Order)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Report__ID_Order__5AEE82B9");
         });
 
         modelBuilder.Entity<Request>(entity =>
