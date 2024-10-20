@@ -84,22 +84,22 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Ticket_id {ticketRequest.ID_Ticket} cannot found", statusCode: 404);
             }
-            if (ticketRequest.ID_Customer != null)
-            {
-                entity.ID_Customer = ticketRequest.ID_Customer;
-            }
+            //if (ticketRequest.ID_Customer != null)
+            //{
+            //    entity.ID_Customer = ticketRequest.ID_Customer;
+            //}
             if (ticketRequest.Price != null)
             {
                 entity.Price = ticketRequest.Price;
             }
-            if (ticketRequest.Ticket_category != null)
-            {
-                entity.Ticket_category = ticketRequest.Ticket_category;
-            }
-            if (ticketRequest.Ticket_type != null)
-            {
-                entity.Ticket_type = ticketRequest.Ticket_type;
-            }
+            //if (ticketRequest.Ticket_category != null)
+            //{
+            //    entity.Ticket_category = ticketRequest.Ticket_category;
+            //}
+            //if (ticketRequest.Ticket_type != null)
+            //{
+            //    entity.Ticket_type = ticketRequest.Ticket_type;
+            //}
             if (ticketRequest.Quantity != null)
             {
                 entity.Quantity = ticketRequest.Quantity;
@@ -108,26 +108,26 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 entity.Status = ticketRequest.Status;
             }
-            if (ticketRequest.Event_Date != null)
-            {
-                entity.Event_Date = ticketRequest.Event_Date;
-            }
-            if (ticketRequest.Show_Name != null)
-            {
-                entity.Show_Name = ticketRequest.Show_Name;
-            }
-            if (ticketRequest.Location != null)
-            {
-                entity.Location = ticketRequest.Location;
-            }
-            if (ticketRequest.Description != null)
-            {
-                entity.Description = ticketRequest.Description;
-            }
-            if (ticketRequest.Seat != null)
-            {
-                entity.Seat = ticketRequest.Seat;
-            }
+            //if (ticketRequest.Event_Date != null)
+            //{
+            //    entity.Event_Date = ticketRequest.Event_Date;
+            //}
+            //if (ticketRequest.Show_Name != null)
+            //{
+            //    entity.Show_Name = ticketRequest.Show_Name;
+            //}
+            //if (ticketRequest.Location != null)
+            //{
+            //    entity.Location = ticketRequest.Location;
+            //}
+            //if (ticketRequest.Description != null)
+            //{
+            //    entity.Description = ticketRequest.Description;
+            //}
+            //if (ticketRequest.Seat != null)
+            //{
+            //    entity.Seat = ticketRequest.Seat;
+            //}
             if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
             {
                 using (var stream = ticketRequest.Image.OpenReadStream())
