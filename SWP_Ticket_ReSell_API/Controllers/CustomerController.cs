@@ -98,6 +98,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
 
             var customer = new Customer();
+            customer.Number_of_tickets_can_posted = 0;
 
             customerRequest.Adapt(customer); // chuyển data vào request checking regex
 
