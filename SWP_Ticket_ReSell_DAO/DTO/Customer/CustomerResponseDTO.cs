@@ -30,6 +30,10 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
         public DateTime? Package_registration_time { get; set; }
         public DateTime? Package_expiration_date { get; set; }
 
+        public int? Number_of_tickets_can_posted { get; set; }
+
+        public string Avatar { get; set; }
+
         public virtual PackageRequestDTO? ID_PackageNavigation { get; set; }
 
         public virtual RoleDTO? ID_RoleNavigation { get; set; }
