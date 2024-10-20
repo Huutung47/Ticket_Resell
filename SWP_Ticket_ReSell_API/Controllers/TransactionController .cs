@@ -20,15 +20,20 @@ namespace SWP_Ticket_ReSell_API.Controllers
     {
         private readonly ServiceBase<Transaction> _serviceTransaction;
         private readonly ServiceBase<Order> _orderService;
+        private readonly ServiceBase<Customer> _customerService;
+        private readonly ServiceBase<Package> _packageService;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransactionController(ServiceBase<Transaction> serviceTransaction, ServiceBase<Order> orderService,
+        public TransactionController(ServiceBase<Transaction> serviceTransaction,
+            ServiceBase<Package> packageService, ServiceBase<Order> orderService, ServiceBase<Customer> customerService,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _serviceTransaction = serviceTransaction;
             _orderService = orderService;
+            _customerService = customerService;
+            _packageService = packageService;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
@@ -128,23 +133,39 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 DisplayType = "URL"
             };
 
-            var orderExist = await _orderService.FindByAsync(x => x.ID_Order == transactionRequest.ID_Order);
+            var transaction = new Transaction();
 
-            if (orderExist == null)
+            switch (transactionRequest.Transaction_Type)
             {
-                return Problem(detail: "Order id cannot found", statusCode: 404);
+                case "Ticket":
+                    if (transactionRequest.ID_Order == null)
+                    {
+                        return Problem(detail: "Order id cannot found", statusCode: 404);
+                    }
+                    transaction.ID_Order = transactionRequest.ID_Order;
+                    transaction.ID_Customer = transactionRequest.ID_Customer;
+                    transaction.ID_Payment = transactionRequest.ID_Payment;
+                    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
+                    transaction.Created_At = TimeUtils.GetCurrentSEATime();
+                    transaction.Status = "PENDING";
+                    transaction.TransactionCode = txnRef;
+                    transaction.Transaction_Type = "Ticket";
+                    transaction.ID_Package = null;
+
+                    break;
+                case "Package":
+                    transaction.ID_Order = null;
+                    transaction.ID_Customer = transactionRequest.ID_Customer;
+                    transaction.ID_Payment = transactionRequest.ID_Payment;
+                    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
+                    transaction.Created_At = TimeUtils.GetCurrentSEATime();
+                    transaction.Status = "PENDING";
+                    transaction.TransactionCode = txnRef;
+                    transaction.Transaction_Type = "Package";
+                    transaction.ID_Package = transactionRequest.ID_Package;
+
+                    break;
             }
-
-            var transaction = new Transaction()
-            {
-                ID_Order = transactionRequest.ID_Order,
-                ID_Customer = transactionRequest.ID_Customer,
-                ID_Payment = transactionRequest.ID_Payment,
-                FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice),
-                Created_At = TimeUtils.GetCurrentSEATime(),
-                Status = "PENDING",
-                TransactionCode = txnRef
-            };
 
             await _serviceTransaction.CreateAsync(transaction);
 
@@ -179,29 +200,58 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var currentTime = TimeUtils.GetCurrentSEATime();
 
             var transaction = await _serviceTransaction.FindByAsync(x => x.TransactionCode.Equals(vnp_TxnRef));
-
             var order = await _orderService.FindByAsync(x => x.ID_Order == transaction.ID_Order);
+            var package = await _packageService.FindByAsync(p => p.ID_Package == transaction.ID_Package);
+            var customer = await _customerService.FindByAsync(x => x.ID_Customer == transaction.ID_Customer);
 
             if (vnp_ResponseCode.Equals("00"))
             {
                 transaction.Status = "SUCCESS";
                 transaction.Updated_At = currentTime;
 
-                order.Status = "COMPLETED";
-                order.Update_At = currentTime;
+                if (order != null)
+                {
+                    order.Status = "COMPLETED";
+                    order.Update_At = currentTime;
+                }
 
+                // update customer theo package
+                customer.ID_Package = transaction.ID_Package;
+
+                // update ngày đăng ký gói
+                if (customer.Package_registration_time == null)
+                {
+                    customer.Package_registration_time = transaction.Created_At;
+                }
+
+                // update expirate date  
+                int? numOfDayExpirate = package.Time_package; // 30 60 90 120 240 365
+                customer.Package_expiration_date = customer.Package_registration_time?.AddDays((double)numOfDayExpirate);
+
+                // update số lượng bài đăng
+                customer.Number_of_tickets_can_posted += package.Ticket_can_post;
             }
             else
             {
                 transaction.Status = "FAILED";
                 transaction.Updated_At = currentTime;
 
-                order.Status = "FAILED";
-                order.Update_At = currentTime;
+                if (order != null)
+                {
+                    order.Status = "FAILED";
+                    order.Update_At = currentTime;
+                }
+
+                // update customer theo package
+                customer.ID_Package = transaction.ID_Package;
             }
 
             await _serviceTransaction.UpdateAsync(transaction);
-            await _orderService.UpdateAsync(order);
+            await _customerService.UpdateAsync(customer);
+            if (order != null)
+            {
+                await _orderService.UpdateAsync(order);
+            }
 
             return !false;
         }

@@ -289,6 +289,7 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.TransactionCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Transaction_Type).HasMaxLength(50);
             entity.Property(e => e.Updated_At).HasColumnType("datetime");
 
             entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Transactions)

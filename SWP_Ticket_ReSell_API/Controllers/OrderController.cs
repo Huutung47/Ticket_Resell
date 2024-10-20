@@ -14,28 +14,31 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
     public class OrderController : Controller
     {
-        private readonly ServiceBase<Order> _service;
+        private readonly ServiceBase<Order> _orderService;
         private readonly ServiceBase<OrderDetail> _orderDetailService;
         private readonly ServiceBase<Ticket> _ticketService;
+        private readonly ServiceBase<Package> _packageService;
 
-        public OrderController(ServiceBase<Order> service, ServiceBase<OrderDetail> orderDetailService, ServiceBase<Ticket> ticketService)
+        public OrderController(ServiceBase<Order> orderService, ServiceBase<OrderDetail> orderDetailService,
+            ServiceBase<Package> packageService, ServiceBase<Ticket> ticketService)
         {
             _ticketService = ticketService;
             _orderDetailService = orderDetailService;
-            _service = service;
+            _orderService = orderService;
+            _packageService = packageService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrder()
         {
-            var entities = await _service.FindListAsync<OrderResponseDTO>();
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>();
             return Ok(entities);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderResponseDTO>> GetOrderDetail(string id)
         {
-            var entity = await _service.FindByAsync(p => p.ID_Order.ToString() == id);
+            var entity = await _orderService.FindByAsync(p => p.ID_Order.ToString() == id);
             if (entity == null)
             {
                 return Problem(detail: $"Order id {id} cannot found", statusCode: 404);
@@ -47,15 +50,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [SwaggerOperation(Summary = "Update order")]
         public async Task<IActionResult> PutOrder(OrderResponseDTO orderRequest)
         {
-            var entity = await _service.FindByAsync(p => p.ID_Order == orderRequest.ID_Order);
+            var entity = await _orderService.FindByAsync(p => p.ID_Order == orderRequest.ID_Order);
             if (entity == null)
             {
                 return Problem(detail: $"Order_id {orderRequest.ID_Order} cannot found", statusCode: 404);
             }
             orderRequest.Adapt(entity);
-            await _service.UpdateAsync(entity);
+            await _orderService.UpdateAsync(entity);
             return Ok("Update Order successfull.");
         }
+        
 
         [HttpPost()]
         [SwaggerOperation(Summary = "Create order")]
@@ -97,7 +101,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
             orderRequest.Adapt(order);
-            await _service.CreateAsync(order);
+            await _orderService.CreateAsync(order);
 
             foreach (var item in orderRequest.TicketItems)
             {
@@ -122,13 +126,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
-            var order = await _service.FindByAsync(p => p.ID_Order == id);
+            var order = await _orderService.FindByAsync(p => p.ID_Order == id);
             if (order == null)
             {
                 return Problem(detail: $"Order_id {id} cannot found", statusCode: 404);
             }
 
-            await _service.DeleteAsync(order);
+            await _orderService.DeleteAsync(order);
             return Ok("Delete order successfull.");
         }
     }
