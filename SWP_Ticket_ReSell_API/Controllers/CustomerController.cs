@@ -96,11 +96,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Package_id {customerRequest.ID_Package} cannot found", statusCode: 404);
             }
-
             var customer = new Customer();
             customer.Number_of_tickets_can_posted = 0;
             customer.EmailConfirm = "False";
-
+            customer.Method_login = "Local";
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);
+            customer.Password = hashedPassword;
             customerRequest.Adapt(customer); // chuyển data vào request checking regex
 
             await _service.CreateAsync(customer);
