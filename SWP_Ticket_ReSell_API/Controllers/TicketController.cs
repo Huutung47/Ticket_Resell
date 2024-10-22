@@ -49,6 +49,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Ticket id {id} cannot found", statusCode: 404);
             }
+            if (entity.Status == "Avaiable")
+            {
+                return NoContent();
+            }
             return Ok(entity.Adapt<TicketResponseDTO>());
         }
 

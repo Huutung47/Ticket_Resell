@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -33,6 +34,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<FeedbackReponseDTO>> GetFeedback(string id)
         {
@@ -58,11 +60,26 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<FeedbackReponseDTO>> PostFeedback(FeedbackRequestDTO feedbackRequest)
         {
             var feedBack = new Feedback();
             feedbackRequest.Adapt(feedBack);
             await _serviceFeedback.CreateAsync(feedBack);
+            //var feedbacks = await _serviceFeedback.FindByAsync(f => f. == feedback.CustomerId);
+            //if (feedbacks.Count > 0)
+            //{
+            //    // Tính toán điểm trung bình mới
+            //    var averageFeedback = feedbacks.Average(f => f.Rating);
+
+            //    // Bước 3: Cập nhật giá trị Average_feedback cho người dùng
+            //    var customer = await _serviceCustomer.FindByAsync(c => c.ID_Customer == feedback.CustomerId);
+            //    if (customer != null)
+            //    {
+            //        customer.Average_feedback = averageFeedback;
+            //        await _serviceCustomer.UpdateAsync(customer);
+            //    }
+            //}
             return Ok("Thank you for your feedback.");
         }
 

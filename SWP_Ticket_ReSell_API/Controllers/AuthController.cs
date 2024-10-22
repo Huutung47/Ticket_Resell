@@ -58,13 +58,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             List<Claim> claims = new List<Claim>
                 {
-                    
+                    //ID_Customer 
+                    new Claim("ID_Customer", user.ID_Customer.ToString()),
                     //Name
                     new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
                     //Email 
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
                     //role 
-                    new Claim(ClaimTypes.Role, user.ID_Role.ToString()!),
+                    new Claim(ClaimTypes.Role, user.ID_Role.ToString()!)
                 };
             var key = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:SerectKey").Value!));
