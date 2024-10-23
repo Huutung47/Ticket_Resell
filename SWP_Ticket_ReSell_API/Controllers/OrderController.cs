@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
+using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
 using SWP_Ticket_ReSell_DAO.DTO.Order;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
@@ -144,12 +145,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
         {
             // Tìm tất cả các order của khách hàng thông qua ID_Customer
-            var orders = await _orderService.FindListAsync<Order>(
-                o => o.ID_Customer == request.ID_Customer,
-                null,
-                null
-            );
-
+            var orders = await _orderService.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer,null,null);
             if (orders == null || !orders.Any())
             {
                 return NotFound("No orders found for this customer.");
@@ -166,6 +162,30 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(averageFeedback);
         }
 
+        [HttpGet("count-order-successfull")]
+        public async Task<ActionResult<DashboardOrder>> GetOrderCompleted()
+        {
+            // Lấy tất cả các order có trạng thái "COMPLETED"
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED", null, null);
+            var totalSuccess = successOrders.Count();
+            return Ok(totalSuccess);
+        }
 
+        [HttpGet("count-order-processing")]
+        public async Task<ActionResult<DashboardOrder>> GetOrderProcessing()
+        {
+            // Lấy tất cả các order có trạng thái "PROCESSING"
+            var processingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING", null, null);
+            var totalProcessing = processingOrders.Count();
+            return Ok(totalProcessing);
+        }
+
+        [HttpGet("count-order-pending")]
+        public async Task<ActionResult<DashboardOrder>> GetOrderPending()
+        {
+            var pendingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING", null, null);
+            var totalPending = pendingOrders.Count();
+            return Ok(totalPending);
+        }
     }
 }

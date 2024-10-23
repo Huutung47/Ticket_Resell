@@ -94,9 +94,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Price_want = requests.Price_want
             };
             await _serviceRequest.CreateAsync(request);
-            var t = ticket;
-            var sellerId = tickets.ID_Customer;
-            return Ok($"Send request successful to {sellerId} with {t} ");
+            return Ok($"Send request successful to {tickets.ID_Customer} with {ticket} ");
         }
 
         [HttpDelete("{id}")]
@@ -111,9 +109,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceRequest.DeleteAsync(ticket);
             return Ok("Delete request successfull.");
         }
-
-
-
     }
 }
 
