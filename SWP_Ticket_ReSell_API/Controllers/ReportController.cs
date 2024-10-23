@@ -21,7 +21,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _serviceReport = serviceReport;
         }
 
-
         [HttpGet]
         public async Task<ActionResult<IList<ReportResponseDTO[]>>> GetReport()
         {
@@ -48,8 +47,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Report_id {ticketRequest.ID_Report} cannot found", statusCode: 404);
             }
-
-
             ticketRequest.Adapt(entity);
             await _serviceReport.UpdateAsync(entity);
             return Ok("Update Report successfull.");

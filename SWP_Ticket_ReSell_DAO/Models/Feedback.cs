@@ -9,7 +9,7 @@ public partial class Feedback
 {
     public int ID_Feedback { get; set; }
 
-    public int ID_Order { get; set; }
+    public int? ID_Order { get; set; }
 
     public string Comment { get; set; }
 

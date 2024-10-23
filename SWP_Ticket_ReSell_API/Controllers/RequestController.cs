@@ -58,8 +58,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Request id {request.ID_Request} cannot found", statusCode: 404);
             }
-
-
             request.Adapt(entity);
             await _serviceRequest.UpdateAsync(entity);
             return Ok("Update request successfull.");
@@ -91,10 +89,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 History = DateTime.Now,
                 ID_Customer = requests.ID_Customer, // Người mua 
                 ID_Ticket = ticket, //Vé muon gui yeu cau 
-                Price_want = requests.Price_want
+                Price_want = requests.Price_want,
+                Quantity = requests.Quantity,
             };
             await _serviceRequest.CreateAsync(request);
-            return Ok($"Send request successful to {tickets.ID_Customer} with {ticket} ");
+            return Ok($"Send request successful to {tickets.ID_Customer} with {ticket}, {tickets.Quantity} ");
         }
 
         [HttpDelete("{id}")]

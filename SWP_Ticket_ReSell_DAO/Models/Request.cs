@@ -11,11 +11,13 @@ public partial class Request
 
     public int ID_Ticket { get; set; }
 
-    public int ID_Customer { get; set; } //người mua 
+    public int ID_Customer { get; set; }
 
     public decimal? Price_want { get; set; }
 
     public DateTime? History { get; set; }
+
+    public int? Quantity { get; set; }
 
     public virtual Customer ID_CustomerNavigation { get; set; }
 
