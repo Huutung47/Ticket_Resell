@@ -37,7 +37,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicket()
         {
             var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>();
-            
             return Ok(entities);
         }
 
