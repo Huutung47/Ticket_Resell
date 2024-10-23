@@ -102,8 +102,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             customer.Method_login = "Local";
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);
             customer.Password = hashedPassword;
-            customerRequest.Adapt(customer); // chuyển data vào request checking regex
-
+            customerRequest.Adapt(customer); 
             await _service.CreateAsync(customer);
             return Ok("Create customer successfull.");
         }
