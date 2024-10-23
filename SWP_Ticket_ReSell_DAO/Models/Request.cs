@@ -11,7 +11,7 @@ public partial class Request
 
     public int ID_Ticket { get; set; }
 
-    public int ID_Customer { get; set; }
+    public int ID_Customer { get; set; } //người mua 
 
     public decimal? Price_want { get; set; }
 

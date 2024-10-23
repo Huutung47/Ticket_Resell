@@ -63,40 +63,20 @@ namespace SWP_Ticket_ReSell_API.Controllers
         //[Authorize]
         public async Task<ActionResult<FeedbackReponseDTO>> PostFeedback(FeedbackRequestDTO feedbackRequest)
         {
-            // Tìm Order theo ID_Order
             var order = await _serviceOrder.FindByAsync(o => o.ID_Order == feedbackRequest.ID_Order);
             if (order == null)
             {
                 return NotFound("Order not found.");
             }
-            var customerId = order.ID_Customer;
+            if(order.Status != "COMPLETED")
+            {
+                return NotFound("Order incomplete");
+            }
             var feedback = new Feedback();
-            feedbackRequest.Adapt(feedback); // Gán thông tin từ DTO vào Feedback
-            feedback.ID_Order = feedbackRequest.ID_Order; // Gán ID_Order cho Feedback
+            feedbackRequest.Adapt(feedback);
             await _serviceFeedback.CreateAsync(feedback);
-
-            // Bước 5: Tìm tất cả các phản hồi thông qua ID_Order và lấy ID_Customer tương ứng
-            //var feedbacks = await _serviceFeedback.FindByAsync(f => f.ID_Order == feedback.ID_Order);
-            //if (feedbacks != null && feedbacks.Count() > 0)
-            //{
-            //    // Tính toán điểm trung bình mới từ tất cả các phản hồi
-            //    var averageFeedback = feedbacks.Average(f => f.Stars ?? 0); // 'f.Stars ?? 0' để xử lý giá trị null
-
-            //    // Bước 6: Cập nhật giá trị Average_feedback cho người dùng
-            //    var customer = await _serviceCustomer.FindByAsync(c => c.ID_Customer == customerId);
-
-            //    if (customer != null)
-            //    {
-            //        // Cập nhật điểm trung bình
-            //        customer.Average_feedback = averageFeedback;
-
-            //        // Lưu thay đổi cho Customer
-            //        await _serviceCustomer.UpdateAsync(customer);
-            //    }
-            //}
             return Ok("Thank you for your feedback.");
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeedback(int id)

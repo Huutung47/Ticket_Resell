@@ -9,7 +9,7 @@ public partial class Ticket
 {
     public int ID_Ticket { get; set; }
 
-    public int? ID_Customer { get; set; }
+    public int? ID_Customer { get; set; } //ng bán 
 
     public decimal? Price { get; set; }
 

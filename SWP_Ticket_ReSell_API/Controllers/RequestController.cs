@@ -77,12 +77,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Create request successfull.");
         }
 
-        [HttpPost("{SellerID}")]
-        public async Task<ActionResult<RequestResponseDTO>> PostRequestID(RequestRequestDTO requests)
+        [HttpPost("TicketID")]
+        public async Task<ActionResult<RequestResponseDTO>> PostRequestID(int ticket,RequestRequestDTO requests)
         {
             // Lấy thông tin Ticket từ ID_Ticket để lấy thông tin người bán (SellerId)
-            var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == requests.ID_Ticket);
-            if (ticket == null)
+            var tickets = await _serviceTicket.FindByAsync(t => t.ID_Ticket == ticket);
+            if (tickets == null)
             {
                 return NotFound("Ticket not found.");
             }
@@ -90,17 +90,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 History = DateTime.Now,
                 ID_Customer = requests.ID_Customer, // Người mua 
-                ID_Ticket = requests.ID_Ticket, //Vé muon gui yeu cau 
+                ID_Ticket = ticket, //Vé muon gui yeu cau 
                 Price_want = requests.Price_want
             };
-            await _serviceRequest.CreateAsync(request); 
-            //var response = new
-            //{
-            //    SellerId = ticket.SellerId,
-            //    ID_Ticket = requests.ID_Ticket,
-            //    Price_want = requests.Price_want
-            //};
-            return Ok();
+            await _serviceRequest.CreateAsync(request);
+            var t = ticket;
+            var sellerId = tickets.ID_Customer;
+            return Ok($"Send request successful to {sellerId} with {t} ");
         }
 
         [HttpDelete("{id}")]

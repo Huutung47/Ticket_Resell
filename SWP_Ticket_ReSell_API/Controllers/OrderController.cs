@@ -18,14 +18,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<OrderDetail> _orderDetailService;
         private readonly ServiceBase<Ticket> _ticketService;
         private readonly ServiceBase<Package> _packageService;
+        private readonly ServiceBase<Feedback> _feedbackService;
 
         public OrderController(ServiceBase<Order> orderService, ServiceBase<OrderDetail> orderDetailService,
-            ServiceBase<Package> packageService, ServiceBase<Ticket> ticketService)
+            ServiceBase<Package> packageService, ServiceBase<Ticket> ticketService, ServiceBase<Feedback> feedbackService)
         {
             _ticketService = ticketService;
             _orderDetailService = orderDetailService;
             _orderService = orderService;
             _packageService = packageService;
+            _feedbackService = feedbackService;
         }
 
         [HttpGet]
@@ -135,5 +137,35 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _orderService.DeleteAsync(order);
             return Ok("Delete order successfull.");
         }
+
+
+        [HttpPost("average-feedback")]
+        //[Authorize]
+        public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
+        {
+            // Tìm tất cả các order của khách hàng thông qua ID_Customer
+            var orders = await _orderService.FindListAsync<Order>(
+                o => o.ID_Customer == request.ID_Customer,
+                null,
+                null
+            );
+
+            if (orders == null || !orders.Any())
+            {
+                return NotFound("No orders found for this customer.");
+            }
+            // Tìm tất cả các phản hồi liên quan đến các order đó
+            var orderIds = orders.Select(o => o.ID_Order).ToList(); // Chuyển thành danh sách
+            var feedbacks = await _feedbackService.FindListAsync<Feedback>(f => orderIds.Contains(f.ID_Order),null,null);
+            if (feedbacks == null || !feedbacks.Any())
+            {
+                return NotFound("No feedback found for these orders.");
+            }
+            var averageFeedback = feedbacks.Average(f => f.Stars ?? 0);
+
+            return Ok(averageFeedback);
+        }
+
+
     }
 }

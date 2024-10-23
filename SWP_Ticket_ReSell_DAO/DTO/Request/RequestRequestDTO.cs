@@ -9,7 +9,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
     public class RequestRequestDTO
     {
         public int ID_Customer { get; set; }
-        public int ID_Ticket { get; set; }
+        //public int ID_Ticket { get; set; }
 
         public decimal? Price_want { get; set; }
 
