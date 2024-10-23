@@ -35,7 +35,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public string Description { get; set; }
 
-        public int? Seat { get; set; }
+        public string? Seat { get; set; }
         public string Image { get; set; }
     }
 }

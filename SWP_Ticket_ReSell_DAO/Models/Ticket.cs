@@ -31,7 +31,7 @@ public partial class Ticket
 
     public string Description { get; set; }
 
-    public int? Seat { get; set; }
+    public string Seat { get; set; }
 
     public int? Ticketsold { get; set; }
 

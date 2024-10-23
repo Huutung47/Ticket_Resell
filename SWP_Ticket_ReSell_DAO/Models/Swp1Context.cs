@@ -259,6 +259,9 @@ public partial class swp1Context : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Seat)
+                .HasMaxLength(5)
+                .IsUnicode(false);
             entity.Property(e => e.Show_Name)
                 .HasMaxLength(255)
                 .IsUnicode(false);
