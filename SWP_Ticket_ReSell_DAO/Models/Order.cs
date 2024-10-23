@@ -17,11 +17,11 @@ public partial class Order
 
     public DateTime? Shipping_time { get; set; }
 
-    public DateTime? Create_At { get; set; }
+    public DateTime Create_At { get; set; }
 
-    public decimal? TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
-    public DateTime? Update_At { get; set; }
+    public DateTime Update_At { get; set; }
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 

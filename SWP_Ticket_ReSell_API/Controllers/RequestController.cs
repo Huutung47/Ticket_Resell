@@ -39,6 +39,32 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
 
+        [HttpGet("requests-by-seller/{sellerId}")]
+        public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
+        {
+            // Tìm tất cả các vé mà người bán là SellerId
+            var tickets = await _serviceTicket.FindListAsync<Ticket>(t => t.ID_Customer == sellerId);
+            if (!tickets.Any())
+            {
+                return NotFound("No tickets found for this seller.");
+            }
+
+            // Lấy danh sách các yêu cầu dựa trên ID_Ticket của vé mà sellerId là người bán
+            var ticketIds = tickets.Select(t => t.ID_Ticket).ToList();
+            var requests = await _serviceRequest.FindListAsync<Request>(r => ticketIds.Contains(r.ID_Ticket));
+            var requestDtos = requests.Select(r => new RequestResponseDTO
+            {
+                ID_Request = r.ID_Request,
+                ID_Ticket = r.ID_Ticket,
+                ID_Customer = r.ID_Customer, // Người mua
+                Price_want = r.Price_want,
+                Quantity = r.Quantity,
+                History = r.History
+            }).ToList();
+            return Ok(requestDtos);
+        }
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestResponseDTO>> GetRequest(string id)
         {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
+using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
 using SWP_Ticket_ReSell_DAO.Models;
 
 namespace SWP_Ticket_ReSell_API.Controllers
@@ -118,6 +119,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             await _service.DeleteAsync(customer);
             return Ok("Delete customer successfull.");
+        }
+
+        [HttpGet("new-customer")]
+        public async Task<ActionResult<IList<DashboardCustomer>>> GetLastCustomers()
+        {
+            var entities = await _service.FindListAsync<DashboardCustomer>();
+            var result = entities.OrderByDescending(c => c.ID_Customer).Take(7).ToList();
+            return Ok(result);
         }
     }
 }

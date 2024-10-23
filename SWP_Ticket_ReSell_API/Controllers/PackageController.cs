@@ -2,6 +2,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Package;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
@@ -128,5 +129,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceCustomer.UpdateAsync(customer);
             return Ok(new { message = "Đăng ký package thành công." });
         }
+
     }
 }

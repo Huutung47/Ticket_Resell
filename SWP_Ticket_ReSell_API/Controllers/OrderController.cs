@@ -187,5 +187,23 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var totalPending = pendingOrders.Count();
             return Ok(totalPending);
         }
+
+        [HttpGet("count-all-order")]
+        public async Task<ActionResult<int>> GetOrderTotal()
+        {
+            var totalOrders = await _orderService.FindListAsync<Order>();
+            var total = totalOrders.Count();
+            return Ok(total);
+        }
+
+        [HttpGet("count-order-successfull-by-day")]
+        public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
+        {
+            // Lấy tất cả các order có trạng thái "COMPLETED" và Time 
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date,null, null);
+            var totalSuccess = successOrders.Count();
+            return Ok(totalSuccess);
+        }
+
     }
 }
