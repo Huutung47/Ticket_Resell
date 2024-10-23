@@ -74,9 +74,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpGet("filter")]
         [SwaggerOperation(Summary = "Get list ticket filter")]
-        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location)
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location, decimal price, string show_name)
         {
-            var tickets = await _serviceTicket.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location));
+            var tickets = await _serviceTicket.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location, price, show_name));
             return Ok(tickets);
         }
 
@@ -206,7 +206,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update ticket successfull.");
         }
 
-        private static Expression<Func<Ticket, bool>> GetTicketByQuery(string? ticketCategory, string? location)
+        private static Expression<Func<Ticket, bool>> GetTicketByQuery(string? ticketCategory, string? location, decimal? price, string? show_name)
         {
             Expression<Func<Ticket, bool>> filterQuery = x => true;
 
@@ -221,7 +221,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 var locations = location.ToLower().Split(',').Select(l => l.Trim().ToLower()).ToList();
                 filterQuery = filterQuery.AndAlso(p => locations.Any(loc => p.Location.Equals(loc)));
             }
-
+            if (price.HasValue)
+            {
+                filterQuery = filterQuery.AndAlso(p => p.Price <= price.Value);
+            }
+            if (!string.IsNullOrEmpty(show_name))
+            {
+                var shows = show_name.ToLower().Split(',').Select(s => s.Trim().ToLower()).ToList();
+                filterQuery = filterQuery.AndAlso(p => shows.Any(show => p.Show_Name.Equals(show)));
+            }
             return filterQuery;
         }
     }
