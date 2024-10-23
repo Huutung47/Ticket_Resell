@@ -21,6 +21,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _serviceReport = serviceReport;
         }
 
+
         [HttpGet]
         public async Task<ActionResult<IList<ReportResponseDTO[]>>> GetReport()
         {
