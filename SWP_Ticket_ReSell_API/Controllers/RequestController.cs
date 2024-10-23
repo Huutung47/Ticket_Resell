@@ -39,7 +39,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
 
-        [HttpGet("requests-by-seller/{sellerId}")]
+        [HttpGet("sellerId")]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
         {
             // Tìm tất cả các vé mà người bán là SellerId

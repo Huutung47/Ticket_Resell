@@ -126,6 +126,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
             var result = entities.OrderByDescending(c => c.ID_Customer).Take(7).ToList();
+            //var customer = result.OrderDescending();
             return Ok(result);
         }
     }

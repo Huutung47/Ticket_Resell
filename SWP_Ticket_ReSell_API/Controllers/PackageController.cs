@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository;
+using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
 using SWP_Ticket_ReSell_DAO.DTO.Package;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
@@ -129,6 +130,32 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceCustomer.UpdateAsync(customer);
             return Ok(new { message = "Đăng ký package thành công." });
         }
+
+        //[HttpGet("monthly")]
+        //public async Task<ActionResult<List<DashboardPackage>>> GetMonthlyRevenue(int month, int year)
+        //{
+        //    if (month < 1 || month > 12)
+        //        return BadRequest("Tháng phải nằm trong khoảng từ 1 đến 12.");
+
+        //    var startDate = new DateTime(year, month, 1);
+        //    var endDate = startDate.AddMonths(1);
+
+        //    var revenueData = await _serviceCustomer.ID_Customer
+        //        .Where(c => c.Package_registration_time >= startDate && c.Package_registration_time < endDate && c.ID_Package != null)
+        //        .GroupBy(c => c.ID_Package)
+        //        .Select(g => new MonthlyRevenueDTO
+        //        {
+        //            Name_Package = _context.Packages
+        //                .Where(p => p.ID_Package == g.Key)
+        //                .Select(p => p.Name_Package)
+        //                .FirstOrDefault(),
+        //            TotalRevenue = g.Count() * (_context.Packages.FirstOrDefault(p => p.ID_Package == g.Key).Price) // Giả sử bạn có thuộc tính Price trong Package
+        //        })
+        //        .ToListAsync();
+
+        //    return Ok(revenueData);
+        //}
+
 
     }
 }
