@@ -101,18 +101,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 entity.Status = ticketRequest.Status;
             }
-            if (ticketRequest.Image != null && ticketRequest.Image.Length > 0)
-            {
-                using (var stream = ticketRequest.Image.OpenReadStream())
-                {
-                    var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, ticketRequest.Image.FileName);
-                    entity.Image = imageUrl;  // Cập nhật đường dẫn ảnh
-                }
+                //ticketRequest.Adapt(entity);
+                await _serviceTicket.UpdateAsync(entity);
+                return Ok("Update ticket successfull.");
             }
-            //ticketRequest.Adapt(entity);
-            await _serviceTicket.UpdateAsync(entity);
-            return Ok("Update ticket successfull.");
-        }
 
         [HttpPost("{customerID}")]
         [SwaggerOperation(Summary = "Create Ticket ")]

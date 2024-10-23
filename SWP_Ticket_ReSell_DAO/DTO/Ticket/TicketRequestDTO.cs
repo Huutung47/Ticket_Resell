@@ -37,7 +37,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         //public int? Ticketsold { get; set; }
 
-        public FormFile Image { get; set; }
+        //public List<FormFile> Images { get; set; }
 
     }
 }
