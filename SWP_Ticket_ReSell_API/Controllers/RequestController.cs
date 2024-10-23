@@ -19,10 +19,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
     public class RequestController : ControllerBase
     {
         private readonly ServiceBase<Request> _serviceRequest;
+        private readonly ServiceBase<Customer> _serviceCustomer;
+        private readonly ServiceBase<Ticket> _serviceTicket;
+        private readonly ServiceBase<Notification> _serviceNotificate;
 
-        public RequestController(ServiceBase<Request> serviceRequest)
+
+        public RequestController(ServiceBase<Request> serviceRequest, ServiceBase<Customer> serviceCustomer, ServiceBase<Ticket> serviceTicket, ServiceBase<Notification> serviceNotificate)
         {
             _serviceRequest = serviceRequest;
+            _serviceCustomer = serviceCustomer;
+            _serviceTicket = serviceTicket;
+            _serviceNotificate = serviceNotificate;
         }
 
         [HttpGet]
@@ -68,6 +75,32 @@ namespace SWP_Ticket_ReSell_API.Controllers
             requests.Adapt(request); 
             await _serviceRequest.CreateAsync(request);
             return Ok("Create request successfull.");
+        }
+
+        [HttpPost("{SellerID}")]
+        public async Task<ActionResult<RequestResponseDTO>> PostRequestID(RequestRequestDTO requests)
+        {
+            // Lấy thông tin Ticket từ ID_Ticket để lấy thông tin người bán (SellerId)
+            var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == requests.ID_Ticket);
+            if (ticket == null)
+            {
+                return NotFound("Ticket not found.");
+            }
+            var request = new Request()
+            {
+                History = DateTime.Now,
+                ID_Customer = requests.ID_Customer, // Người mua 
+                ID_Ticket = requests.ID_Ticket, //Vé muon gui yeu cau 
+                Price_want = requests.Price_want
+            };
+            await _serviceRequest.CreateAsync(request); 
+            //var response = new
+            //{
+            //    SellerId = ticket.SellerId,
+            //    ID_Ticket = requests.ID_Ticket,
+            //    Price_want = requests.Price_want
+            //};
+            return Ok();
         }
 
         [HttpDelete("{id}")]

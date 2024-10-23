@@ -7,5 +7,4 @@ public class ServiceBase<T> : GenericRepository<T> where T : class
     public ServiceBase(swp1Context context) : base(context)
     {
     }
-
 }
