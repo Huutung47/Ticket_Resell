@@ -62,7 +62,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _orderService.UpdateAsync(entity);
             return Ok("Update Order successfull.");
         }
-        
+
 
         [HttpPost()]
         [SwaggerOperation(Summary = "Create order")]
@@ -145,14 +145,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
         {
             // Tìm tất cả các order của khách hàng thông qua ID_Customer
-            var orders = await _orderService.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer,null,null);
+            var orders = await _orderService.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer, null, null);
             if (orders == null || !orders.Any())
             {
                 return NotFound("No orders found for this customer.");
             }
             // Tìm tất cả các phản hồi liên quan đến các order đó
             var orderIds = orders.Select(o => o.ID_Order).ToList(); // Chuyển thành danh sách
-            var feedbacks = await _feedbackService.FindListAsync<Feedback>(f => orderIds.Contains(f.ID_Order),null,null);
+            var feedbacks = await _feedbackService.FindListAsync<Feedback>(f => orderIds.Contains((int)f.ID_Order), null, null);
             if (feedbacks == null || !feedbacks.Any())
             {
                 return NotFound("No feedback found for these orders.");
