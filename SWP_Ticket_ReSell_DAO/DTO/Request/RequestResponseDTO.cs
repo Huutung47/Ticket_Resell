@@ -1,4 +1,5 @@
-﻿    using System;
+﻿using SWP_Ticket_ReSell_DAO.DTO.Ticket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,9 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
         public decimal Price_want { get; set; }
         public int Quantity { get; set; }
         public DateTime? History { get; set; }
+
+        public virtual TicketNavigationDTO? TicketNavigation {get; set; }
+
+
     }
 }

@@ -41,9 +41,8 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 
         public string Image { get; set; }
         public virtual CustomerDTO ID_CustomerNavigation { get; set; }
-        
 
-        
+
 
 
 

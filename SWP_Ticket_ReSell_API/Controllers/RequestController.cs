@@ -33,11 +33,39 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<RequestResponseDTO[]>>> GetRequest()
+        public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequest()
         {
             var entities = await _serviceRequest.FindListAsync<RequestResponseDTO>();
-            return Ok(entities);
+
+            var result = new List<RequestResponseDTO>();
+            foreach (var request in entities)
+            {
+                if (request.ID_Ticket != 0) 
+                {
+                    var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
+                    if (ticket != null)
+                    {
+                        request.TicketNavigation = new TicketNavigationDTO
+                        {
+                            Price = ticket.Price,
+                            Ticket_category = ticket.Ticket_category,
+                            Ticket_History = ticket.Ticket_History,
+                            Ticket_type = ticket.Ticket_type,
+                            Seat = ticket.Seat,
+                            Status = ticket.Status,
+                            Event_Date = ticket.Event_Date,
+                            Show_Name = ticket.Show_Name,
+                            Location = ticket.Location,
+                            Description = ticket.Description,
+                        };
+                    }
+                }
+                result.Add(request);
+
+            }
+            return Ok(result);
         }
+
 
         [HttpGet("sellerId")]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
