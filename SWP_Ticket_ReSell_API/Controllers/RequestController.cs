@@ -10,6 +10,7 @@ using SWP_Ticket_ReSell_DAO.DTO.Request;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Sockets;
 using System.Security.Claims;
 
 namespace SWP_Ticket_ReSell_API.Controllers
@@ -70,27 +71,50 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("sellerId")]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
         {
-            // Tìm tất cả các vé mà người bán là SellerId
             var tickets = await _serviceTicket.FindListAsync<Ticket>(t => t.ID_Customer == sellerId);
             if (!tickets.Any())
             {
                 return NotFound("No tickets found for this seller.");
             }
-
-            // Lấy danh sách các yêu cầu dựa trên ID_Ticket của vé mà sellerId là người bán
             var ticketIds = tickets.Select(t => t.ID_Ticket).ToList();
             var requests = await _serviceRequest.FindListAsync<Request>(r => ticketIds.Contains(r.ID_Ticket));
-            var requestDtos = requests.Select(r => new RequestResponseDTO
+            var requestDtos = new List<RequestResponseDTO>();
+            foreach (var request in requests)
             {
-                ID_Request = r.ID_Request,
-                ID_Ticket = r.ID_Ticket,
-                ID_Customer = r.ID_Customer, // Người mua
-                Price_want = r.Price_want,
-                Quantity = r.Quantity,
-                History = r.History
-            }).ToList();
+                if (request.ID_Ticket != 0)
+                {
+                    var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
+                    if (ticket != null)
+                    {
+                        requestDtos.Add(new RequestResponseDTO
+                        {
+                            ID_Request = request.ID_Request,
+                            ID_Ticket = request.ID_Ticket,
+                            ID_Customer = request.ID_Customer, // Người mua
+                            Price_want = request.Price_want,
+                            Quantity = request.Quantity,
+                            History = request.History,
+                            TicketNavigation = new TicketNavigationDTO
+                            {
+                                Price = ticket.Price,
+                                Ticket_category = ticket.Ticket_category,
+                                Ticket_History = ticket.Ticket_History,
+                                Ticket_type = ticket.Ticket_type,
+                                Seat = ticket.Seat,
+                                Status = ticket.Status,
+                                Event_Date = ticket.Event_Date,
+                                Show_Name = ticket.Show_Name,
+                                Location = ticket.Location,
+                                Description = ticket.Description,
+                            }
+                        });
+                    }
+                }
+            }
+
             return Ok(requestDtos);
         }
+
 
 
         [HttpGet("{id}")]
@@ -144,7 +168,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Customer = requests.ID_Customer, // Người mua 
                 ID_Ticket = ticket, //Vé muon gui yeu cau 
                 Price_want = requests.Price_want,
-                Quantity = requests.Quantity,
+                Quantity = requests.Quantity, 
             };
             await _serviceRequest.CreateAsync(request);
             return Ok($"Send request successful to {tickets.ID_Customer} with {ticket}, {tickets.Quantity} ");

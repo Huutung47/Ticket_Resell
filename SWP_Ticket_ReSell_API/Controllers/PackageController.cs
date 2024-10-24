@@ -131,30 +131,41 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(new { message = "Đăng ký package thành công." });
         }
 
-        //[HttpGet("monthly")]
-        //public async Task<ActionResult<List<DashboardPackage>>> GetMonthlyRevenue(int month, int year)
+        //[HttpPost("dashboard/revenue/monthly")]
+        //public async Task<ActionResult<IEnumerable<DashboardPackage>>> GetMonthlyRevenue([FromBody] MonthRequestDTO monthRequest)
         //{
-        //    if (month < 1 || month > 12)
+        //    if (monthRequest.Month < 1 || monthRequest.Month > 12)
+        //    {
         //        return BadRequest("Tháng phải nằm trong khoảng từ 1 đến 12.");
+        //    }
 
-        //    var startDate = new DateTime(year, month, 1);
+        //    var startDate = new DateTime(monthRequest.Year, monthRequest.Month, 1);
         //    var endDate = startDate.AddMonths(1);
 
-        //    var revenueData = await _serviceCustomer.ID_Customer
-        //        .Where(c => c.Package_registration_time >= startDate && c.Package_registration_time < endDate && c.ID_Package != null)
-        //        .GroupBy(c => c.ID_Package)
-        //        .Select(g => new MonthlyRevenueDTO
+        //    // Lấy danh sách khách hàng đã đăng ký gói trong tháng này
+        //    var customers = await _serviceCustomer.FindListAsync<Customer>(c => c.Package_registration_time >= startDate && c.Package_registration_time < endDate);
+        //    var packages = await _servicePackage.FindListAsync<Package>();
+        //    if (customers != null) 
+        //    {
+        //        var customerPackage = customers.Select(c => c.ID_Package).Distinct().ToList();
+        //        foreach (var packageId in customerPackage)
         //        {
-        //            Name_Package = _context.Packages
-        //                .Where(p => p.ID_Package == g.Key)
-        //                .Select(p => p.Name_Package)
-        //                .FirstOrDefault(),
-        //            TotalRevenue = g.Count() * (_context.Packages.FirstOrDefault(p => p.ID_Package == g.Key).Price) // Giả sử bạn có thuộc tính Price trong Package
-        //        })
-        //        .ToListAsync();
+        //            var package = packages.FirstOrDefault(p => p.ID_Package == packageId);
+        //            if (package != null)
+        //            {
 
-        //    return Ok(revenueData);
+        //            }
+
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //    return Ok(); 
         //}
+
+
+
 
 
     }

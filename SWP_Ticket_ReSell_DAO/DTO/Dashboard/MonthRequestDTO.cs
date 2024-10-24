@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SWP_Ticket_ReSell_DAO.DTO.Dashboard
 {
-    public class DashboardPackage
+    public class MonthRequestDTO
     {
-        public int? ID_Package { get; set; }
-        public decimal TotalRevenue { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
 
     }
 }
