@@ -89,7 +89,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     if (ticket != null)
                     {
                         requestDtos.Add(new RequestResponseDTO
-                        {
+                        { 
                             ID_Request = request.ID_Request,
                             ID_Ticket = request.ID_Ticket,
                             ID_Customer = request.ID_Customer, // Người mua
