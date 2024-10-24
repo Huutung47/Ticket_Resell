@@ -19,6 +19,8 @@ public partial class Request
 
     public int Quantity { get; set; }
 
+    public string Status { get; set; }
+
     public virtual Customer ID_CustomerNavigation { get; set; }
 
     public virtual Ticket ID_TicketNavigation { get; set; }

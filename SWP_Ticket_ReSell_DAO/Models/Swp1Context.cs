@@ -223,6 +223,9 @@ public partial class swp1Context : DbContext
 
             entity.Property(e => e.History).HasColumnType("datetime");
             entity.Property(e => e.Price_want).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.ID_Customer)

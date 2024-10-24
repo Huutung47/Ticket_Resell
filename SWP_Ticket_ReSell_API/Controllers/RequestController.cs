@@ -78,6 +78,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             var ticketIds = tickets.Select(t => t.ID_Ticket).ToList();
             var requests = await _serviceRequest.FindListAsync<Request>(r => ticketIds.Contains(r.ID_Ticket));
+
+            // Lấy thông tin vé cho từng yêu cầu
             var requestDtos = new List<RequestResponseDTO>();
             foreach (var request in requests)
             {
@@ -94,6 +96,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                             Price_want = request.Price_want,
                             Quantity = request.Quantity,
                             History = request.History,
+                            Status = request.Status,
                             TicketNavigation = new TicketNavigationDTO
                             {
                                 Price = ticket.Price,
@@ -147,6 +150,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var request = new Request()
             {
                 History = DateTime.Now,
+                Status = "Pending"
             };
             requests.Adapt(request); 
             await _serviceRequest.CreateAsync(request);
@@ -169,6 +173,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Ticket = ticket, //Vé muon gui yeu cau 
                 Price_want = requests.Price_want,
                 Quantity = requests.Quantity, 
+                Status = "Pending"
             };
             await _serviceRequest.CreateAsync(request);
             return Ok($"Send request successful to {tickets.ID_Customer} with {ticket}, {tickets.Quantity} ");
