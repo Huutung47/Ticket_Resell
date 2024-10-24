@@ -90,24 +90,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Delete feedBack successfull.");
         }
 
-        [HttpGet("customer/{customerId}/received-feedbacks")]
+        [HttpGet("customer-received-feedbacks")]
         public async Task<ActionResult<IList<FeedbackReponseDTO>>> GetReceivedFeedbacksByCustomerId(int customerId)
         {
-            // Lấy tất cả phản hồi
-            var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => true); // Lấy tất cả phản hồi
+            var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => true);
 
             if (feedbacks == null || !feedbacks.Any())
             {
                 return NotFound("No feedbacks found.");
             }
-
-            // Lấy tất cả các ID_Order từ phản hồi
             var orderIds = feedbacks.Select(f => f.ID_Order).Distinct().ToList();
-
-            // Lấy tất cả các đơn hàng tương ứng với ID_Order
             var orders = await _serviceOrder.FindListAsync<Order>(o => orderIds.Contains(o.ID_Order));
-
-            // Lọc ra các phản hồi mà khách hàng nhận được
             var receivedFeedbacks = feedbacks
                 .Where(f => orders.Any(o => o.ID_Order == f.ID_Order && o.ID_Customer == customerId))
                 .ToList();
@@ -116,8 +109,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return NotFound("No feedbacks found for this customer.");
             }
-
-            // Chuyển đổi phản hồi thành DTO để trả về
             var feedbackDtos = receivedFeedbacks.Select(f => new FeedbackReponseDTO
             {
                 ID_Feedback = f.ID_Feedback,
