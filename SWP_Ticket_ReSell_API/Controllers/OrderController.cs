@@ -77,6 +77,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var order = new Order();
 
             TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            order.ID_Customer = orderRequest.ID_Customer;
+            order.Payment_method = orderRequest.Payment_method;
             order.Status = "PENDING";
             order.Create_At = TimeZoneInfo.ConvertTime(DateTime.Now, vietnamTimeZone);
             order.Shipping_time = TimeZoneInfo.ConvertTime(DateTime.Now.AddDays(3), vietnamTimeZone);
@@ -99,11 +101,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
                 totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
 
-                ticket.Quantity -= item.Quantity;
+                ticket.Quantity = ticket.Quantity - item.Quantity;
                 await _ticketService.UpdateAsync(ticket);
             }
+
             order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
-            orderRequest.Adapt(order);
+            order.Update_At = TimeZoneInfo.ConvertTime(DateTime.Now, vietnamTimeZone);
+            //orderRequest.Adapt(order);
             await _orderService.CreateAsync(order);
 
             foreach (var item in orderRequest.TicketItems)
@@ -200,7 +204,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
             // Lấy tất cả các order có trạng thái "COMPLETED" và Time 
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date,null, null);
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date, null, null);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
         }
