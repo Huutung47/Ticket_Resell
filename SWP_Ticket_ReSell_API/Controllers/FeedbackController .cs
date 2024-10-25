@@ -119,8 +119,5 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             return Ok(feedbackDtos);
         }
-
-
-
     }
 }

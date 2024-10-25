@@ -19,6 +19,8 @@ public partial class swp1Context : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
+    public virtual DbSet<Image> Images { get; set; }
+
     public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -112,6 +114,20 @@ public partial class swp1Context : DbContext
             entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.ID_Order)
                 .HasConstraintName("FK__Feedback__ID_Ord__5441852A");
+        });
+
+        modelBuilder.Entity<Image>(entity =>
+        {
+            entity.HasKey(e => e.ID_Image).HasName("PK__Image__31E45A2A96BF6776");
+
+            entity.ToTable("Image");
+
+            entity.Property(e => e.ID_Image).ValueGeneratedNever();
+            entity.Property(e => e.Image_URL).HasMaxLength(255);
+
+            entity.HasOne(d => d.ID_TicketNavigation).WithMany(p => p.Images)
+                .HasForeignKey(d => d.ID_Ticket)
+                .HasConstraintName("FK__Image__ID_Ticket__71D1E811");
         });
 
         modelBuilder.Entity<Notification>(entity =>
