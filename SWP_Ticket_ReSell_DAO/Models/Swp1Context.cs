@@ -128,6 +128,14 @@ public partial class swp1Context : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
+            entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Notifications)
+                .HasForeignKey(d => d.ID_Order)
+                .HasConstraintName("FK_Notification_Order");
+
+            entity.HasOne(d => d.ID_RequestNavigation).WithMany(p => p.Notifications)
+                .HasForeignKey(d => d.ID_Request)
+                .HasConstraintName("FK_Notification_Request");
+
             entity.HasOne(d => d.ID_TicketNavigation).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.ID_Ticket)
                 .HasConstraintName("FK__Notificat__ID_Ti__571DF1D5");

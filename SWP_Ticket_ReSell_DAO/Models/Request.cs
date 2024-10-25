@@ -13,15 +13,17 @@ public partial class Request
 
     public int ID_Customer { get; set; }
 
-    public decimal Price_want { get; set; }
+    public decimal? Price_want { get; set; }
 
     public DateTime? History { get; set; }
 
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     public string Status { get; set; }
 
     public virtual Customer ID_CustomerNavigation { get; set; }
 
     public virtual Ticket ID_TicketNavigation { get; set; }
+
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

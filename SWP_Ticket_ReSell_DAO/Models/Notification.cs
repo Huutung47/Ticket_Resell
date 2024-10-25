@@ -17,5 +17,13 @@ public partial class Notification
 
     public int? ID_Ticket { get; set; }
 
+    public int? ID_Order { get; set; }
+
+    public int? ID_Request { get; set; }
+
+    public virtual Order ID_OrderNavigation { get; set; }
+
+    public virtual Request ID_RequestNavigation { get; set; }
+
     public virtual Ticket ID_TicketNavigation { get; set; }
 }

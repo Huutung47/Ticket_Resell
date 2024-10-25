@@ -17,7 +17,7 @@ public partial class Order
 
     public DateTime? Shipping_time { get; set; }
 
-    public DateTime Create_At { get; set; }
+    public DateTime? Create_At { get; set; }
 
     public decimal? TotalPrice { get; set; }
 
@@ -26,6 +26,8 @@ public partial class Order
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     public virtual Customer ID_CustomerNavigation { get; set; }
+
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
