@@ -7,6 +7,7 @@ using SWP_Ticket_ReSell_DAO.DTO.Order;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -176,14 +177,44 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(total);
         }
 
-        [HttpGet("count-order-successfull-by-day")]
+        [HttpGet("count-order-successfull-by-daymonthyear")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
-            // Lấy tất cả các order có trạng thái "COMPLETED" with Time 
             var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
         }
+
+        [HttpGet("count-order-successful-by-month-year")]
+        public async Task<ActionResult<decimal>> GetOrderSuccessfulByMonthYear(int month, int year)
+        {
+            var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "COMPLETED" 
+            && o.Create_At.Month == month 
+            && o.Create_At.Year == year);
+            var customersTotal = customers.Count();
+            return Ok(customersTotal);
+        }
+
+        [HttpGet("count-order-processing-by-month-year")]
+        public async Task<ActionResult<decimal>> GetOrderProcessingByMonthYear(int month, int year)
+        {
+            var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "PROCESSING"
+            && o.Create_At.Month == month
+            && o.Create_At.Year == year);
+            var customersTotal = customers.Count();
+            return Ok(customersTotal);
+        }
+
+        [HttpGet("count-order-pending-by-month-year")]
+        public async Task<ActionResult<decimal>> GetOrderPendingByMonthYear(int month, int year)
+        {
+            var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "PENDING"
+            && o.Create_At.Month == month
+            && o.Create_At.Year == year);
+            var customersTotal = customers.Count();
+            return Ok(customersTotal);
+        }
+
 
     }
 }

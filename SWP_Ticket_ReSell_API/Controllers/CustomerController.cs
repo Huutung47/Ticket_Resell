@@ -51,17 +51,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
         //[Authorize]
         public async Task<IActionResult> PutCustomer(CustomerRequestDTO customerRequest)
         {
-            // Tìm kiếm entity khách hàng theo ID
             var entity = await _service.FindByAsync(p => p.ID_Customer == customerRequest.ID_Customer);
             if (entity == null)
             {
                 return Problem(detail: $"Customer_id {customerRequest.ID_Customer} cannot be found", statusCode: 404);
             }
-            // Kiểm tra xem package có tồn tại không
-            //if (!await _servicePackage.ExistsByAsync(p => p.ID_Package == customerRequest.ID_Package))
-            //{
-            //    return Problem(detail: $"Package_id {customerRequest.ID_Package} cannot be found", statusCode: 404);
-            //}
             if (customerRequest.Name != null) 
             {
                 entity.Name = customerRequest.Name;
@@ -127,7 +121,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
             var result = entities.OrderByDescending(c => c.ID_Customer).Take(7).ToList();
-            //var customer = result.OrderDescending();
             return Ok(result);
         }
 
@@ -166,7 +159,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     totalRevenue += packages.Price;
                 }
             }
-
             return Ok(totalRevenue);
         }
 

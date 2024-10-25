@@ -26,14 +26,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly IConfiguration _configuration;
         private readonly ServiceBase<Customer> _serviceCustomer;
         private readonly ServiceBase<Role> _serviceRole;
-        //private readonly ResetPassword _emailSender;
 
         public AuthController(IConfiguration configuration, ServiceBase<Customer> serviceCustomer, ServiceBase<Role> serviceRole)
         {
             _configuration = configuration;
             _serviceCustomer = serviceCustomer;
             _serviceRole = serviceRole;
-            // _emailSender = emailSender;
 
         }
         [HttpPost("Login")]
@@ -49,7 +47,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Unauthorized("Password wrong");
             }
-            //
             if (user.EmailConfirm != "True")
             {
                 await HttpContext.SignOutAsync("Cookies");
@@ -59,7 +56,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             List<Claim> claims = new List<Claim>
                 {
                     //ID_Customer 
-                    new Claim("ID_Customer", user.ID_Customer.ToString()),
+                    //new Claim("ID_Customer", user.ID_Customer.ToString()),
                     //Name
                     new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
                     //Email 
@@ -77,8 +74,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                  expires: DateTime.UtcNow.AddMinutes(expiredToken),
                  signingCredentials: creds);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            //return Ok(new TokenRequest(jwt, user.Role));
             return Ok(new AccessTokenResponse { ID = user.ID_Customer, AccessToken = jwt, ExpiresIn = expiredToken });
         }
 
@@ -101,20 +96,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     Password = hashedPassword,
-                    //Feed Back Avg
                     Average_feedback = 0,
-                    //Customer Role = 2
                     ID_Role = 2,
                     EmailConfirm = "False",
                     Number_of_tickets_can_posted = 0,
-                    //Basic Backet = 1 
                     Method_login = "Local"
                 };
-                //Email
-                //string code = await UserManager.GenerateEmailConfirmationTokenAsync(customer.ID_Customer);
-                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { customer.ID_Customer, code = code }, protocol: Request.Scheme);
-                //await UserManager.SendEmailAsync(customer.ID_Customer, "Confirm Email", "Please Confirm Email");
-                //request.Adapt(customer);
                 var customerId = customer.ID_Customer;
                 var frontendUrl = " http://localhost:3000/confirm-success";
                 var confirmationLink = $"{frontendUrl}/confirm?userId={customerId}";
@@ -131,7 +118,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
             {
-                RedirectUri = "https://localhost:7216/api/auth/google-response" //chuyen sang trang nay neu dang nhap thanh cong
+                RedirectUri = "https://localhost:7216/api/auth/google-response" 
             });
         }
 
@@ -178,12 +165,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             try
             {
                 await HttpContext.SignOutAsync();
-                // Nếu đăng xuất thành công
                 return Ok(new { message = "Logout successful" });
             }
             catch (Exception ex)
             {
-                // Nếu đăng xuất thất bại
                 return StatusCode(500, new { message = "Logout failed ", error = ex.Message });
             }
         }
@@ -191,11 +176,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(int userId)
         {
-            // Kiểm tra người dùng có tồn tại không
             var user = await _serviceCustomer.FindByAsync(x => x.ID_Customer == userId);
             if (user == null)
                 return BadRequest("Invalid user");
-            // Nếu người dùng tồn tại, cập nhật trạng thái email xác nhận
             user.EmailConfirm = "True";
             await _serviceCustomer.UpdateAsync(user);
             return Ok("Email confirmed successfully. Thank you.");

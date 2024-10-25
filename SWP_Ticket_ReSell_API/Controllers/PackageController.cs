@@ -27,8 +27,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _servicePackage = servicePackage;
         }
 
-        //Done 
-        //Get all package
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IList<PackageResponseDTO>>> GetPackage()
@@ -36,8 +34,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var entities = await _servicePackage.FindListAsync<PackageResponseDTO>();
             return Ok(entities);
         }
-        //Done 
-        //Get package = id 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PackageResponseDTO>> GetPackage(string id)
         {
@@ -49,7 +46,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entity.Adapt<PackageResponseDTO>());
         }
 
-        //Update package
         [HttpPut("id")]
         public async Task<IActionResult> PutTicket(PackageResponseDTO packageRequest)
         {
@@ -62,8 +58,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _servicePackage.UpdateAsync(entity);
             return Ok("Update ticket successfull.");
         }
-        //Done
-        //Create package 
+
         [HttpPost]
         public async Task<ActionResult<PackageResponseDTO>> PostTicket(PackageRequestDTO packageRequest)
         {
@@ -72,8 +67,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _servicePackage.CreateAsync(package);
             return Ok("Create package successfull.");
         }
-        //Done 
-        //Delete package 
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePackage(int id)
         {
@@ -86,8 +80,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Delete package successfull.");
         }
 
-
-        //Cho nguoi dung chon Package
         [HttpPost("registerPackage")]
         [Authorize]
         public async Task<IActionResult> RegisterPackage(PackageChoose request)
@@ -111,62 +103,18 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             if (customer.Package_expiration_date.HasValue && customer.Package_expiration_date > DateTime.Now)
             {
-                // Cộng thêm thời gian của package mới vào thời gian hết hạn hiện tại
-                customer.Package_expiration_date = customer.Package_expiration_date.Value.AddMonths((int)package.Time_package); // Cộng số tháng
+                customer.Package_expiration_date = customer.Package_expiration_date.Value.AddMonths((int)package.Time_package); 
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
-                //customer.Package_registration_time = DateTime.Now;
             }
             else
             {
-                // Nếu người dùng không có package hoặc đã hết hạn, đăng ký package mới
                 customer.ID_Package = package.ID_Package;
                 customer.Package_expiration_date = DateTime.Now.AddMonths((int)package.Time_package);
                 customer.Number_of_tickets_can_posted += package.Ticket_can_post;
-                //customer.Package_registration_time = DateTime.Now;
             }
-            // Cập nhật thời gian đăng ký package
             customer.Package_registration_time = DateTime.Now;
-            // Lưu thông tin vào cơ sở dữ liệu
             await _serviceCustomer.UpdateAsync(customer);
             return Ok(new { message = "Đăng ký package thành công." });
         }
-
-        //[HttpPost("dashboard/revenue/monthly")]
-        //public async Task<ActionResult<IEnumerable<DashboardPackage>>> GetMonthlyRevenue([FromBody] MonthRequestDTO monthRequest)
-        //{
-        //    if (monthRequest.Month < 1 || monthRequest.Month > 12)
-        //    {
-        //        return BadRequest("Tháng phải nằm trong khoảng từ 1 đến 12.");
-        //    }
-
-        //    var startDate = new DateTime(monthRequest.Year, monthRequest.Month, 1);
-        //    var endDate = startDate.AddMonths(1);
-
-        //    // Lấy danh sách khách hàng đã đăng ký gói trong tháng này
-        //    var customers = await _serviceCustomer.FindListAsync<Customer>(c => c.Package_registration_time >= startDate && c.Package_registration_time < endDate);
-        //    var packages = await _servicePackage.FindListAsync<Package>();
-        //    if (customers != null) 
-        //    {
-        //        var customerPackage = customers.Select(c => c.ID_Package).Distinct().ToList();
-        //        foreach (var packageId in customerPackage)
-        //        {
-        //            var package = packages.FirstOrDefault(p => p.ID_Package == packageId);
-        //            if (package != null)
-        //            {
-
-        //            }
-
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(); 
-        //}
-
-
-
-
-
     }
 }

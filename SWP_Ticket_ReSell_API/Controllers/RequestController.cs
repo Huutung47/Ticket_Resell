@@ -114,7 +114,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     }
                 }
             }
-
             return Ok(requestDtos);
         }
 
@@ -174,7 +173,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost("TicketID")]
         public async Task<ActionResult<RequestResponseDTO>> PostRequestID(int ticket,RequestRequestDTO requests)
         {
-            // Lấy thông tin Ticket từ ID_Ticket để lấy thông tin người bán (SellerId)
             var tickets = await _serviceTicket.FindByAsync(t => t.ID_Ticket == ticket);
             if (tickets == null)
             {
