@@ -144,6 +144,20 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update request successfull.");
         }
 
+        [HttpPut("change-status-request")]
+        public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
+        {
+            var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
+            if (request == null)
+            {
+                return Problem(detail: $"Request id {request.ID_Request} cannot found", statusCode: 404);
+            }
+            request.Status = status;
+            await _serviceRequest.UpdateAsync(request);
+            return Ok("Update status request successfull");
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<RequestResponseDTO>> PostRequest(RequestRequestDTO requests)
         {

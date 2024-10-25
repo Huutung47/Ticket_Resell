@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Castle.Core.Resource;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -130,14 +131,44 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("price-package-one-month")]
-        public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
+        [HttpGet("Count-buy-package-by-month-year")]
+        public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
-            // Lấy tất cả các order có trạng thái "COMPLETED" with Time 
-            //var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date);
-            //var totalSuccess = successOrders.Count();
-            //return Ok(totalSuccess);
-            return Ok();
+            var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 
+            && o.Package_registration_time.HasValue 
+            && o.Package_registration_time.Value.Month == month
+            && o.Package_registration_time.Value.Year == year);
+            var package = _servicePackage.FindListAsync<Package>();
+            if (customer == null || !customer.Any())
+            {
+                return BadRequest($"Khong co ai mua goi trong thang {month} nam {year}");
+            }
+            return Ok(customer.Count());
         }
+
+        [HttpGet("Total-price-package-by-month-year")]
+        public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
+        {
+            var customers = await _service.FindListAsync<Customer>(o => o.ID_Package != null
+            && o.Package_registration_time.HasValue
+            && o.Package_registration_time.Value.Month == month
+            && o.Package_registration_time.Value.Year == year);
+            if (customers == null || !customers.Any())
+            {
+                return BadRequest($"Khong co ai mua goi trong thang {month}, nam {year}");
+            }
+            decimal? totalRevenue = 0;
+            foreach (var customer in customers)
+            {
+                var packages = await _servicePackage.FindByAsync(o => o.ID_Package == customer.ID_Package );
+                if (packages != null)
+                {
+                    totalRevenue += packages.Price;
+                }
+            }
+
+            return Ok(totalRevenue);
+        }
+
     }
 }
