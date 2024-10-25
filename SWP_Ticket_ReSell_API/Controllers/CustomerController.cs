@@ -129,5 +129,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
             //var customer = result.OrderDescending();
             return Ok(result);
         }
+
+        [HttpGet("price-package-one-month")]
+        public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
+        {
+            // Lấy tất cả các order có trạng thái "COMPLETED" with Time 
+            //var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date);
+            //var totalSuccess = successOrders.Count();
+            //return Ok(totalSuccess);
+            return Ok();
+        }
     }
 }

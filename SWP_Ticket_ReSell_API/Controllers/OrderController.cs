@@ -144,35 +144,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
 
-        [HttpPost("average-feedback")]
-        //[Authorize]
-        public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
-        {
-            // Tìm tất cả các order của khách hàng thông qua ID_Customer
-            var orders = await _orderService.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer, null, null);
-            if (orders == null || !orders.Any())
-            {
-                return NotFound("No orders found for this customer.");
-            }
-            // Tìm tất cả các phản hồi liên quan đến các order đó
-            var orderIds = orders.Select(o => o.ID_Order).ToList(); // Chuyển thành danh sách
-            var feedbacks = await _feedbackService.FindListAsync<Feedback>(f => orderIds.Contains((int)f.ID_Order), null, null);
-            if (feedbacks == null || !feedbacks.Any())
-            {
-                return NotFound("No feedback found for these orders.");
-            }
-            var averageFeedback = feedbacks.Average(f => f.Stars ?? 0);
-
-            return Ok(averageFeedback);
-        }
-
-
-
         [HttpGet("count-order-successfull")]
         public async Task<ActionResult<DashboardOrder>> GetOrderCompleted()
         {
-            // Lấy tất cả các order có trạng thái "COMPLETED"
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED", null, null);
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED");
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
         }
@@ -180,8 +155,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("count-order-processing")]
         public async Task<ActionResult<DashboardOrder>> GetOrderProcessing()
         {
-            // Lấy tất cả các order có trạng thái "PROCESSING"
-            var processingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING", null, null);
+            var processingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING");
             var totalProcessing = processingOrders.Count();
             return Ok(totalProcessing);
         }
@@ -189,7 +163,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("count-order-pending")]
         public async Task<ActionResult<DashboardOrder>> GetOrderPending()
         {
-            var pendingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING", null, null);
+            var pendingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING");
             var totalPending = pendingOrders.Count();
             return Ok(totalPending);
         }
@@ -205,8 +179,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("count-order-successfull-by-day")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
-            // Lấy tất cả các order có trạng thái "COMPLETED" và Time 
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date, null, null);
+            // Lấy tất cả các order có trạng thái "COMPLETED" with Time 
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
         }

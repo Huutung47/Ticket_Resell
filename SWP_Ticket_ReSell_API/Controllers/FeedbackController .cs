@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Feedback;
+using SWP_Ticket_ReSell_DAO.DTO.Order;
 using SWP_Ticket_ReSell_DAO.DTO.Package;
 using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.Models;
@@ -119,5 +120,29 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             return Ok(feedbackDtos);
         }
+
+
+
+        [HttpPost("average-feedback")]
+        //[Authorize]
+        public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
+        {
+            var orders = await _serviceOrder.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer, null, null);
+            if (orders == null || !orders.Any())
+            {
+                return NotFound("No orders found for this customer.");
+            }
+            // Tìm tất cả các phản hồi liên quan đến các order đó
+            var orderIds = orders.Select(o => o.ID_Order).ToList(); // Chuyển thành danh sách
+            var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => orderIds.Contains((int)f.ID_Order), null, null);
+            if (feedbacks == null || !feedbacks.Any())
+            {
+                return NotFound("No feedback found for these orders.");
+            }
+            var averageFeedback = feedbacks.Average(f => f.Stars ?? 0);
+
+            return Ok(averageFeedback);
+        }
+
     }
 }
