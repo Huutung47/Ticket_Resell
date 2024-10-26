@@ -191,5 +191,29 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             return filterQuery;
         }
+
+        [HttpGet("total-ticket")]
+        public async Task<ActionResult<IList<int>>> CountTicket()
+        {
+            var entities = await _serviceTicket.FindListAsync<Ticket>();
+            var countTicket = entities.Count();
+            return Ok(countTicket);
+        }
+
+        [HttpGet("total-ticket-available")]
+        public async Task<ActionResult<IList<int>>> CountTicketAvailable()
+        {
+            var entities = await _serviceTicket.FindListAsync<Ticket>(t => t.Status == "Available");
+            var countTicketAvailable = entities.Count();
+            return Ok(countTicketAvailable);
+        }
+
+        [HttpGet("total-ticket-unavaliable")]
+        public async Task<ActionResult<IList<int>>> CountTicketUnavaliable()
+        {
+            var entities = await _serviceTicket.FindListAsync<Ticket>(t => t.Status == "Unavailable");
+            var countTicketUnavaliable = entities.Count();
+            return Ok(countTicketUnavaliable);
+        }
     }
 }

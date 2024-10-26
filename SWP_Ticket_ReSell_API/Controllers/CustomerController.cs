@@ -116,7 +116,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Delete customer successfull.");
         }
 
-        [HttpGet("new-customer")]
+        [HttpGet("new-7-customer")]
         public async Task<ActionResult<IList<DashboardCustomer>>> GetLastCustomers()
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
@@ -124,7 +124,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Count-buy-package-by-month-year")]
+        [HttpGet("total-customer")]
+        public async Task<ActionResult<IList<int>>> CountCustomer()
+        {
+            var entities = await _service.FindListAsync<Customer>();
+            var countCustomer = entities.Count();
+            return Ok(countCustomer);
+        }
+
+        [HttpGet("Count-customer-buy-package-by-month-year")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
             var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 

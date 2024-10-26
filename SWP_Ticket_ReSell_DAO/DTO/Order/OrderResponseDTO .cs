@@ -1,5 +1,7 @@
 ﻿using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
+using SWP_Ticket_ReSell_DAO.DTO.Ticket;
+using SWP_Ticket_ReSell_DAO.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Order
 
         public virtual CustomerDTO ID_CustomerNavigation { get; set; }
 
-
+        public virtual TicketRequestDTO ID_TicketNavigation { get; set; }
     }
 }

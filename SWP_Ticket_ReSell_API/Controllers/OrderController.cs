@@ -136,14 +136,21 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(new { message = $"Order [" + $"{order.ID_Order}" + "] create successfully.", orderId = order.ID_Order });
         }
 
-        [HttpGet("all-order/{sellerId}")]
-
+        [HttpGet("all-order-sellerId")]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersBySellerId(int sellerId)
         {
-            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == sellerId);           
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_TicketNavigation.ID_Customer == sellerId);           
             return Ok(entities);
-
         }
+
+
+        [HttpGet("all-order-customerid")]
+        public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersByCustomerId(int customerid)
+        {
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
+            return Ok(entities);
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)

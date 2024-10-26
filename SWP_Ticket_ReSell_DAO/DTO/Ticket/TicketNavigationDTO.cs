@@ -33,5 +33,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
         public int? Ticketsold { get; set; }
 
         public string Image { get; set; }
+ 
     }
 }

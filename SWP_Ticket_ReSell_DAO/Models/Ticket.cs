@@ -41,8 +41,6 @@ public partial class Ticket
 
     public virtual Customer ID_CustomerNavigation { get; set; }
 
-    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
-
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
