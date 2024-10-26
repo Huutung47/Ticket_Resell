@@ -11,7 +11,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
     {
         public int ID_Ticket { get; set; }
 
-        //public int? ID_Customer { get; set; }
+        public int? ID_Customer { get; set; }
 
         public decimal Price { get; set; }
 

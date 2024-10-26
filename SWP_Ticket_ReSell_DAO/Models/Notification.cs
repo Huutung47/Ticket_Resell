@@ -21,6 +21,8 @@ public partial class Notification
 
     public int? ID_Request { get; set; }
 
+    public int? ID_Customer { get; set; }
+
     public virtual Order ID_OrderNavigation { get; set; }
 
     public virtual Request ID_RequestNavigation { get; set; }

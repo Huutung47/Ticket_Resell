@@ -9,7 +9,7 @@ public partial class Ticket
 {
     public int ID_Ticket { get; set; }
 
-    public int ID_Customer { get; set; }
+    public int? ID_Customer { get; set; }
 
     public decimal Price { get; set; }
 
@@ -40,8 +40,6 @@ public partial class Ticket
     public virtual ICollection<Boxchat> Boxchats { get; set; } = new List<Boxchat>();
 
     public virtual Customer ID_CustomerNavigation { get; set; }
-
-    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

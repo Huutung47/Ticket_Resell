@@ -27,10 +27,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Image]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Notification]",
          "ObjectType": 0
       },
