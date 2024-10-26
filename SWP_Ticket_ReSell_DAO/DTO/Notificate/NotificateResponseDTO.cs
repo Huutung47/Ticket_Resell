@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SWP_Ticket_ReSell_DAO.DTO.Notificate
 {
-    public class NotificateDTO
+    public class NotificateResponseDTO
     {
-        //public int ID_Notification { get; set; }
+        public int ID_Notification { get; set; }
 
         public string Title { get; set; }
 

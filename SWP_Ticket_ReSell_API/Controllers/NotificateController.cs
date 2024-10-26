@@ -42,7 +42,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutNotificate(NotificateDTO notificate)
+        public async Task<IActionResult> PutNotificate(NotificateResponseDTO notificate)
         {
             var entity = await _serviceNotification.FindByAsync(p => p.ID_Notification == notificate.ID_Notification);
             if (entity == null)
@@ -55,7 +55,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TicketResponseDTO>> PostNotificate(NotificateDTO notificate)
+        public async Task<ActionResult<NotificateResponseDTO>> PostNotificate(NotificateDTO notificate)
         {
             var notificates = new Notification();
             notificate.Adapt(notificates);
