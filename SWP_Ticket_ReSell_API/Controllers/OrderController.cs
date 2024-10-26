@@ -177,16 +177,34 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(total);
         }
 
-        [HttpGet("count-order-successfull-by-daymonthyear")]
+        [HttpGet("count-order-successfull-by-day-month-year")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" && o.Create_At.Date == date.Date);
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 
+            && o.Create_At.Date == date.Date);
+            var totalSuccess = successOrders.Count();
+            return Ok(totalSuccess);
+        }
+        [HttpGet("count-order-processing-by-day-month-year")]
+        public async Task<ActionResult<int>> GetOrderProcessingByDate(DateTime date)
+        {
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING" 
+            && o.Create_At.Date == date.Date);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
         }
 
-        [HttpGet("count-order-successful-by-month-year")]
-        public async Task<ActionResult<decimal>> GetOrderSuccessfulByMonthYear(int month, int year)
+        [HttpGet("count-order-pending-by-day-month-year")]
+        public async Task<ActionResult<int>> GetOrderPendingByDate(DateTime date)
+        {
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING"
+            && o.Create_At.Date == date.Date);
+            var total = successOrders.Count();
+            return Ok(total);
+        }
+
+        [HttpGet("count-order-completed-by-month-year")]
+        public async Task<ActionResult<decimal>> GetOrderCompletedByMonthYear(int month, int year)
         {
             var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "COMPLETED" 
             && o.Create_At.Month == month 
@@ -215,6 +233,18 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(customersTotal);
         }
 
-
+        [HttpGet("Total-price-order-completed-by-month-year")]
+        public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
+        {
+            var orders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 
+            && o.Create_At.Date.Month == month
+            && o.Create_At.Date.Year == year);
+            if (orders == null || !orders.Any())
+            {
+                return BadRequest($"Khong co ai order trong thang {month}, nam {year}");
+            }
+            decimal totalRevenue = orders.Where(o => o.TotalPrice.HasValue).Sum(o => o.TotalPrice.Value);
+            return Ok(totalRevenue);
+        }
     }
 }
