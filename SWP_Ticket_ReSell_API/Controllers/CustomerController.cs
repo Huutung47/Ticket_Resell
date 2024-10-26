@@ -132,7 +132,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(countCustomer);
         }
 
-        [HttpGet("Count-buy-package-by-month-year")]
+        [HttpGet("Count-customer-buy-package-by-month-year")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
             var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 
