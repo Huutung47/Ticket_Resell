@@ -3,6 +3,7 @@ using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Role;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 {
     public class TicketResponseDTO
     {
+     [Key]
         public int ID_Ticket { get; set; }
 
         public int? ID_Customer { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
 {
     public class CustomerDTO
     {
+        [Key]
         public int ID_Customer { get; set; }
 
         public string? Name { get; set; }
