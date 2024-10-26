@@ -109,6 +109,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     ticket.Status = "Unavailable";
                 }
                 await _ticketService.UpdateAsync(ticket);
+                if (ticket.Quantity < 1)
+                {
+                    ticket.Status = "Unavailable";
+                }
+                await _ticketService.UpdateAsync(ticket);
             }
 
             order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
