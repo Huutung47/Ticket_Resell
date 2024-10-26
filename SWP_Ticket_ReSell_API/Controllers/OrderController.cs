@@ -129,7 +129,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 await _orderDetailService.CreateAsync(orderDetail);
             }
 
-            return Ok("Order [" + $"{order.ID_Order}" + "] create successfully.");
+            return Ok(new { message = $"Order [" + $"{order.ID_Order}" + "] create successfully.", orderId = order.ID_Order });
         }
 
         //[HttpGet("all-order-sellerid")]
