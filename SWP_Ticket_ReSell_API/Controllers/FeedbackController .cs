@@ -120,8 +120,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(feedbackDtos);
         }
 
-
-
         [HttpPost("average-feedback")]
         //[Authorize]
         public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
