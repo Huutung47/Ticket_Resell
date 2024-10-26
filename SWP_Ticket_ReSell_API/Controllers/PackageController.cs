@@ -116,5 +116,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceCustomer.UpdateAsync(customer);
             return Ok(new { message = "Đăng ký package thành công." });
         }
+
+        [HttpGet("total-package")]
+        public async Task<ActionResult<IList<int>>> CountPackage()
+        {
+            var entities = await _servicePackage.FindListAsync<Package>();
+            var countPackage = entities.Count();
+            return Ok(countPackage);
+        }
     }
 }
