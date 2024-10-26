@@ -19,11 +19,12 @@ public class FirebaseController : ControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<ActionResult<List<string>>> UploadImages([FromForm] List<IFormFile> images)
+    public async Task<ActionResult<List<string>>> UploadImages(List<IFormFile> images)
     {
         if (images != null && images.Count > 0)
         {
-            var imageUrls = new List<string>();
+            var imageUrls = new List<(string Url, int DisplayOrder)>();
+            int displayOrder = 1; 
 
             foreach (var image in images)
             {
@@ -31,17 +32,26 @@ public class FirebaseController : ControllerBase
                 {
                     using (var stream = image.OpenReadStream())
                     {
-                        // Tải file lên Firebase và nhận URL của ảnh
                         var imageUrl = await _firebaseStorageService.UploadFileAsync(stream, image.FileName);
-                        imageUrls.Add(imageUrl);
+                        imageUrls.Add((imageUrl, displayOrder)); 
                     }
+                    displayOrder++; 
                 }
             }
-            return Ok(imageUrls);
+            var sortedImageUrls = imageUrls.OrderBy(i => i.DisplayOrder).Select(i => i.Url).ToList();
+            if (sortedImageUrls.Count > 0)
+            {
+                return Ok(sortedImageUrls); 
+            }
+            else
+            {
+                return BadRequest("No images were uploaded successfully."); 
+            }
         }
         else
         {
-            return BadRequest("Please add at least one image.");
+            return BadRequest("Please add at least one image."); 
         }
+
     }
 }
