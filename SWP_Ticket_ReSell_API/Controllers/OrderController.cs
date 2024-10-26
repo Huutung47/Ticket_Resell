@@ -104,6 +104,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
 
                 ticket.Quantity = ticket.Quantity - item.Quantity;
+                if (ticket.Quantity < 1)
+                {
+                    ticket.Status = "Unavailable";
+                }
                 await _ticketService.UpdateAsync(ticket);
             }
 
