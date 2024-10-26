@@ -138,7 +138,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == sellerId);           
             return Ok(entities);
-
         }
 
         [HttpDelete("{id}")]

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SWP_Ticket_ReSell_DAO.DTO.Order;
+using SWP_Ticket_ReSell_DAO.DTO.Package;
+using SWP_Ticket_ReSell_DAO.DTO.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +24,10 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Notificate
         public int? ID_Order { get; set; }
 
         public int? ID_Request { get; set; }
+
+        public virtual RequestRequestDTO? ID_RequestNavigation { get; set; }
+
+        public virtual OrderDTO? ID_OrderNavigation { get; set; }
 
     }
 }

@@ -24,21 +24,21 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<NotificateDTO>>> GetNotificate()
+        public async Task<ActionResult<IList<NotificateResponseDTO>>> GetNotificate()
         {
-            var entities = await _serviceNotification.FindListAsync<NotificateDTO>();
+            var entities = await _serviceNotification.FindListAsync<NotificateResponseDTO>();
             return Ok(entities);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<NotificateDTO>> GetNotificate(string id)
+        public async Task<ActionResult<NotificateResponseDTO>> GetNotificate(string id)
         {
             var entity = await _serviceNotification.FindByAsync(p => p.ID_Notification.ToString() == id);
             if (entity == null)
             {
                 return Problem(detail: $"Notificate id {id} cannot found", statusCode: 404);
             }
-            return Ok(entity.Adapt<NotificateDTO>());
+            return Ok(entity.Adapt<NotificateResponseDTO>());
         }
 
         [HttpPut]

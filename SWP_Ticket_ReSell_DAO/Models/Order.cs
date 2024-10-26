@@ -9,7 +9,7 @@ public partial class Order
 {
     public int ID_Order { get; set; }
 
-    public int? ID_Customer { get; set; }
+    public int? ID_Customer { get; set; } //người mua 
 
     public string Payment_method { get; set; }
 
