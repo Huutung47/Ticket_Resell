@@ -132,24 +132,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(new { message = $"Order [" + $"{order.ID_Order}" + "] create successfully.", orderId = order.ID_Order });
         }
 
-        //[HttpGet("all-order-sellerid")]
-        //public async Task<ActionResult<List<Order>>> GetOrdersBySellerId(int sellerId)
-        //{
-        //    var orders = await _orderService.Orders // Sử dụng DbContext trực tiếp
-        //        .Include(o => o.OrderDetails)
-        //        .ThenInclude(od => od.Ticket) // Tải Ticket từ OrderDetail
-        //        .Where(o => o.OrderDetails.Any(od => od.Ticket.SellerId == sellerId))
-        //        .ToListAsync();
+        [HttpGet("all-order/{sellerId}")]
 
-        //    if (orders == null || orders.Count == 0)
-        //    {
-        //        return NotFound("No orders found for this seller.");
-        //    }
+        public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersBySellerId(int sellerId)
+        {
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == sellerId);           
+            return Ok(entities);
 
-        //    return Ok(orders);
-        //}
-
-
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
