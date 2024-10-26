@@ -57,7 +57,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost]
         public async Task<ActionResult<NotificateResponseDTO>> PostNotificate(NotificateDTO notificate)
         {
-            var notificates = new Notification();
+            var notificates = new Notification()
+            {
+                ID_Request = notificate.ID_Request,
+                Title = notificate.Title,
+                ID_Order = notificate.ID_Order,
+                Event = notificate.Event,
+                ID_Ticket = notificate.ID_Ticket,
+                Organizing_time = DateTime.Now
+            };
             notificate.Adapt(notificates);
             await _serviceNotification.CreateAsync(notificates);
             return Ok("Create notificate successfull.");

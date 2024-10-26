@@ -30,7 +30,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
         //[RegularExpression(@"^\d{2}-\d{2}-\d{4}$", ErrorMessage = "Ngày phải có định dạng dd-MM-yyyy.")]
         //public DateTime? PackageExpirationDate { get; set; }
         //public int? ID_Role { get; set; }
-        //public int? ID_Package { get; set; }
+        public int? ID_Package { get; set; }
         public IFormFile? Avatar { get; set; }
     }
 }

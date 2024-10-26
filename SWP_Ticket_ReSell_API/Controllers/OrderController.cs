@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Repository;
 using Swashbuckle.AspNetCore.Annotations;
 using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
@@ -130,6 +131,25 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             return Ok("Order [" + $"{order.ID_Order}" + "] create successfully.");
         }
+
+        //[HttpGet("all-order-sellerid")]
+        //public async Task<ActionResult<List<Order>>> GetOrdersBySellerId(int sellerId)
+        //{
+        //    var orders = await _orderService.Orders // Sử dụng DbContext trực tiếp
+        //        .Include(o => o.OrderDetails)
+        //        .ThenInclude(od => od.Ticket) // Tải Ticket từ OrderDetail
+        //        .Where(o => o.OrderDetails.Any(od => od.Ticket.SellerId == sellerId))
+        //        .ToListAsync();
+
+        //    if (orders == null || orders.Count == 0)
+        //    {
+        //        return NotFound("No orders found for this seller.");
+        //    }
+
+        //    return Ok(orders);
+        //}
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
