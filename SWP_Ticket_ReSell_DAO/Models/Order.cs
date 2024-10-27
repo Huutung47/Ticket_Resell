@@ -9,7 +9,7 @@ public partial class Order
 {
     public int ID_Order { get; set; }
 
-    public int? ID_Customer { get; set; }
+    public int? ID_Customer { get; set; } //nguoi mua
 
     public string Payment_method { get; set; }
 
@@ -27,8 +27,7 @@ public partial class Order
 
     public virtual Customer ID_CustomerNavigation { get; set; }
 
-    public virtual Ticket ID_TicketNavigation { get; set; }
-
+    //public virtual Ticket ID_TicketNavigation { get; set; }
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

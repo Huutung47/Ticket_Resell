@@ -46,7 +46,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entity.Adapt<FeedbackReponseDTO>());
         }
 
-        [HttpPut] 
+        [HttpPut]
+        //[Authorize]
         public async Task<IActionResult> PutFeedBack(FeedbackReponseDTO feedbackRequest)
         {
             var feedback = await _serviceFeedback.FindByAsync(p => p.ID_Feedback == feedbackRequest.ID_Feedback);
@@ -79,6 +80,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        //[Authorize]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
             var feedBack = await _serviceFeedback.FindByAsync(p => p.ID_Feedback == id);
@@ -91,6 +93,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("customer-received-feedbacks")]
+        //[Authorize]
         public async Task<ActionResult<IList<FeedbackReponseDTO>>> GetReceivedFeedbacksByCustomerId(int customerId)
         {
             var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => true);

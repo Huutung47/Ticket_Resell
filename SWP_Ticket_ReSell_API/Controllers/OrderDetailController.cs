@@ -61,5 +61,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _service.DeleteAsync(orderDetail);
             return Ok("Delete order successfull.");
         }
+
+        [HttpGet("all-order-sellerId")]
+        public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersBySellerId(int sellerId)
+        {
+            var entities = await _service.FindListAsync<OrderResponseDTO>(t => t.ID_TicketNavigation.ID_Customer == sellerId);
+            return Ok(entities);
+        }
     }
 }

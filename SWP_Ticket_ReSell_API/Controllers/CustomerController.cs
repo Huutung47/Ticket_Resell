@@ -30,6 +30,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public async Task<ActionResult<IList<CustomerResponseDTO>>> GetCustomer()
         {
             var entities = await _service.FindListAsync<CustomerResponseDTO>();
@@ -37,6 +38,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        //[Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> GetCustomer(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_Customer.ToString() == id);
@@ -56,11 +58,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Customer_id {customerRequest.ID_Customer} cannot be found", statusCode: 404);
             }
-            if (customerRequest.Name != null) 
+            if (customerRequest.Name != null)
             {
                 entity.Name = customerRequest.Name;
             }
-            if (customerRequest.Contact != null) 
+            if (customerRequest.Contact != null)
             {
                 entity.Contact = customerRequest.Contact;
             }
@@ -81,6 +83,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
+        //[Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> PostCustomer(CustomerCreateDTO customerRequest)
         {
             if (await _service.ExistsByAsync(p => p.Email.Equals(customerRequest.Email)))
@@ -98,12 +101,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
             customer.Method_login = "Local";
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);
             customer.Password = hashedPassword;
-            customerRequest.Adapt(customer); 
+            customerRequest.Adapt(customer);
             await _service.CreateAsync(customer);
             return Ok("Create customer successfull.");
         }
 
         [HttpDelete("{id}")]
+        //[Authorize]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customer = await _service.FindByAsync(p => p.ID_Customer == id);
@@ -117,6 +121,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("new-7-customer")]
+        //[Authorize(Roles = "1")]
         public async Task<ActionResult<IList<DashboardCustomer>>> GetLastCustomers()
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
@@ -125,6 +130,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-customer")]
+        //[Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountCustomer()
         {
             var entities = await _service.FindListAsync<Customer>();
@@ -133,6 +139,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Count-customer-buy-package-by-month-year")]
+        //[Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
             var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 
@@ -148,6 +155,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Total-price-package-by-month-year")]
+        //[Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
         {
             var customers = await _service.FindListAsync<Customer>(o => o.ID_Package != null
