@@ -27,8 +27,6 @@ public partial class Order
 
     public virtual Customer ID_CustomerNavigation { get; set; }
 
-    //public virtual Ticket ID_TicketNavigation { get; set; }
-
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
