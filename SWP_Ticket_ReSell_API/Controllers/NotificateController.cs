@@ -65,6 +65,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 Event = notificate.Event,
                 ID_Ticket = notificate.ID_Ticket,
                 Organizing_time = notificate.Organizing_time,
+                ID_Customer = notificate.ID_Customer,
                 Time_create = DateTime.Now
             };
             //notificate.Adapt(notificates);
