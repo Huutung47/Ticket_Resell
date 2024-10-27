@@ -64,7 +64,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Order = notificate.ID_Order,
                 Event = notificate.Event,
                 ID_Ticket = notificate.ID_Ticket,
-                Organizing_time = DateTime.Now
+                Organizing_time = notificate.Organizing_time,
+                Time_create = DateTime.Now
             };
             //notificate.Adapt(notificates);
             await _serviceNotification.CreateAsync(notificates);

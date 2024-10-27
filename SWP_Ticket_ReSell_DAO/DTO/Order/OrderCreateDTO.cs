@@ -13,7 +13,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Order
         public int? ID_Customer { get; set; }
 
         public string Payment_method { get; set; }
-
+        public decimal TotalPrice { get; set; }
         public List<CreateTicketOrderDTO> TicketItems { get; set; }
 
     }

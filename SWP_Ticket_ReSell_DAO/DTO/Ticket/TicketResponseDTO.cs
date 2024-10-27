@@ -12,7 +12,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Ticket
 {
     public class TicketResponseDTO
     {
-     [Key]
+        [Key]
         public int ID_Ticket { get; set; }
 
         public int? ID_Customer { get; set; }

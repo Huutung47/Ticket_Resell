@@ -124,6 +124,7 @@ public partial class swp1Context : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.Organizing_time).HasColumnType("datetime");
+            entity.Property(e => e.Time_create).HasColumnType("datetime");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .IsUnicode(false);

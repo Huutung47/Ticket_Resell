@@ -13,11 +13,11 @@ public partial class Request
 
     public int ID_Customer { get; set; }
 
-    public decimal? Price_want { get; set; }
+    public decimal Price_want { get; set; }
 
-    public DateTime? History { get; set; }
+    public DateTime History { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
     public string Status { get; set; }
 
