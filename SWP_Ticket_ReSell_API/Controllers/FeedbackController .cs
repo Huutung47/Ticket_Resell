@@ -76,7 +76,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var feedback = new Feedback();
             feedbackRequest.Adapt(feedback);
             await _serviceFeedback.CreateAsync(feedback);
-            return Ok("Thank you for your feedback.");
+            return Ok(feedbackRequest);
         }
 
         [HttpDelete("{id}")]
