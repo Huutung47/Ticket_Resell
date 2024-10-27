@@ -22,5 +22,8 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Notificate
 
         public int? ID_Request { get; set; }
 
+        public int? ID_Customer { get; set; }
+
+
     }
 }
