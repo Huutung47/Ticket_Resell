@@ -14,10 +14,9 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Order
     {
         public int ID_Order { get; set; }
 
-
         public string Payment_method { get; set; }
 
-        public decimal? TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         public string Status { get; set; }
 
