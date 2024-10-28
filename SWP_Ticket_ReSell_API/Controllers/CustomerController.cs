@@ -141,7 +141,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                return BadRequest("Lỗi xóa đơn hàng: có thể đơn hàng đã bị xóa hoặc thay đổi.");
+                return BadRequest("Wrong delete order");
             }
 
             var reports = await _serviceReport.FindListAsync<Order>(o => o.ID_Customer == id);
