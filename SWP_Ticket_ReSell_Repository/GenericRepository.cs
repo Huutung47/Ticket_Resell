@@ -14,6 +14,11 @@ public class GenericRepository<T> where T : class
         _context = context;
         dbSet = context.Set<T>();
     }
+    public async Task DeleteRangeAsync(IList<T> entities)
+    {
+        _context.Set<T>().RemoveRange(entities);
+        await _context.SaveChangesAsync();
+    }
 
     public async Task CreateAsync(T entity)
     {

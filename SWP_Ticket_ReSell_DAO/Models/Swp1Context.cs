@@ -307,9 +307,11 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.Transaction_Type).HasMaxLength(50);
             entity.Property(e => e.Updated_At).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.ID_Customer)
-                .HasConstraintName("FK__Transacti__ID_Cu__5070F446");
+           entity.HasOne(d => d.ID_CustomerNavigation)
+      .WithMany(p => p.Transactions)
+      .HasForeignKey(d => d.ID_Customer)
+      .OnDelete(DeleteBehavior.SetNull)
+      .HasConstraintName("FK__Transacti__ID_Cu__5070F446");
 
             entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.ID_Order)

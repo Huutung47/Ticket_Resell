@@ -3,6 +3,7 @@ using Castle.Core.Resource;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
@@ -20,13 +21,23 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Role> _serviceRole;
         private readonly ServiceBase<Package> _servicePackage;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly ServiceBase<Transaction> _serviceTransaction;
+        private readonly ServiceBase<Order> _serviceOrder;
+        private readonly ServiceBase<Report> _serviceReport;
+        //private readonly ServiceBase<Request> _serviceRequest;
 
-        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService)
+        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService, ServiceBase<Transaction> serviceTransaction, ServiceBase<Order> serviceOrder, ServiceBase<Report> serviceReport
+            //, ServiceBase<Request> serviceRequest
+            )
         {
             _service = service;
             _serviceRole = serviceRole;
             _servicePackage = servicePackage;
             _firebaseStorageService = firebaseStorageService;
+            _serviceTransaction = serviceTransaction;
+            _serviceOrder = serviceOrder;
+            _serviceReport = serviceReport;
+            //_serviceRequest = serviceRequest;
         }
 
         [HttpGet]
@@ -113,12 +124,43 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var customer = await _service.FindByAsync(p => p.ID_Customer == id);
             if (customer == null)
             {
-                return Problem(detail: $"customer_id {id} cannot found", statusCode: 404);
+                return Problem(detail: $"customer_id {id} cannot be found", statusCode: 404);
+            }
+            var transactions = await _serviceTransaction.FindListAsync<Transaction>(t => t.ID_Customer == id);
+            if (transactions != null && transactions.Any()) 
+            {
+                await _serviceTransaction.DeleteRangeAsync(transactions);
+            }
+            try
+            {
+                var orders = await _serviceOrder.FindListAsync<Order>(o => o.ID_Customer == id);
+                if (orders != null && orders.Any())
+                {
+                    await _serviceOrder.DeleteRangeAsync(orders);
+                }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return BadRequest("Lỗi xóa đơn hàng: có thể đơn hàng đã bị xóa hoặc thay đổi.");
             }
 
+            var reports = await _serviceReport.FindListAsync<Order>(o => o.ID_Customer == id);
+            if (reports != null && reports.Any())
+            {
+                await _serviceOrder.DeleteRangeAsync(reports);
+            }
+            //var requests = await _serviceRequest.FindListAsync<Order>(o => o.ID_Customer == id);
+            //if (orders != null && orders.Any())
+            //{
+            //    await _serviceOrder.DeleteRangeAsync(orders);
+            //}
             await _service.DeleteAsync(customer);
-            return Ok("Delete customer successfull.");
+            return Ok("Delete customer successfully.");
+
         }
+
+
+
 
         [HttpGet("new-7-customer")]
         //[Authorize(Roles = "1")]
