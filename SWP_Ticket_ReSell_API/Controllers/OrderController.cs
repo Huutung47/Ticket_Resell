@@ -101,7 +101,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     return Problem(detail: "Ticket is not enough. " + $"[{ticket.Quantity}] tickets left", statusCode: 400);
                 }
 
-                totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
+                //totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
 
                 ticket.Quantity = ticket.Quantity - item.Quantity;
                 if (ticket.Quantity < 1)
@@ -116,7 +116,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 await _ticketService.UpdateAsync(ticket);
             }
 
-            order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
+            //order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
+            order.TotalPrice = orderRequest.TotalPrice;
             order.Update_At = TimeZoneInfo.ConvertTime(DateTime.Now, vietnamTimeZone);
             //orderRequest.Adapt(order);
             await _orderService.CreateAsync(order);
