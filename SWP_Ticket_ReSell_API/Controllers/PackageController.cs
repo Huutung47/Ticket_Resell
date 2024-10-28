@@ -81,17 +81,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("registerPackage")]
-        [Authorize]
-        public async Task<IActionResult> RegisterPackage(PackageChoose request)
+        //[Authorize]
+        public async Task<IActionResult> RegisterPackage(int customerId, PackageChoose request)
         {
-            // Lấy CustomerId từ token đã xác thực
-            var customerEmailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-            if (customerEmailClaim == null)
-            {
-                return Unauthorized(new { message = "Không tìm thấy thông tin người dùng." });
-            }
-            string customerEmail = customerEmailClaim.Value;
-            var customer = await _serviceCustomer.FindByAsync(x => x.Email == customerEmail);
+            var customer = await _serviceCustomer.FindByAsync(x => x.ID_Customer == customerId);
             if (customer == null)
             {
                 return BadRequest(new { message = "Người dùng không tồn tại." });
