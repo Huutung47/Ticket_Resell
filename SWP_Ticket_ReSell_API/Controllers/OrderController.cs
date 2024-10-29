@@ -149,11 +149,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("all-order-customerid")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersByCustomerId(int customerid)
         {
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
-            if (entities != null)
+            if (entities == null)
             {
                 return Problem(detail: $"CustomerID {customerid} doesn't have any order", statusCode: 404);
             }
@@ -161,12 +161,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-all-order-customerid")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<int>> GetTotal(int customerid)
         {
             int? totalPrice=0;
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
-            if(entities != null)
+            if(entities == null)
             {
                 return Problem(detail: $"CustomerID {customerid} doesn't have any order", statusCode: 404);
             }
