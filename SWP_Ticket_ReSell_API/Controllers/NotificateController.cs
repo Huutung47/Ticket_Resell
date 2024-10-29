@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -24,6 +25,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IList<NotificateResponseDTO>>> GetNotificate()
         {
             var entities = await _serviceNotification.FindListAsync<NotificateResponseDTO>();
@@ -31,6 +33,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<NotificateResponseDTO>> GetNotificate(string id)
         {
             var entity = await _serviceNotification.FindByAsync(p => p.ID_Notification.ToString() == id);
@@ -42,6 +45,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> PutNotificate(NotificateResponseDTO notificate)
         {
             var entity = await _serviceNotification.FindByAsync(p => p.ID_Notification == notificate.ID_Notification);
@@ -55,6 +59,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<NotificateResponseDTO>> PostNotificate(NotificateDTO notificate)
         {
             var notificates = new Notification()
@@ -74,6 +79,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteNotificate(int id)
         {
             var notificate = await _serviceNotification.FindByAsync(p => p.ID_Notification == id);

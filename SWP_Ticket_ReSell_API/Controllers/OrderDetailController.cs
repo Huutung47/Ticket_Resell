@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Order;
@@ -18,6 +19,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _service = service;
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IList<OrderDetailResponseDTO>>> GetOrderDetail()
         {
             var entities = await _service.FindListAsync<OrderDetailResponseDTO>();
@@ -25,6 +27,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<OrderDetailResponseDTO>> GetOrderDetail(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_OrderDetail.ToString() == id);
@@ -36,6 +39,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> PutOrder(OrderDetailResponseDTO orderDetailRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_OrderDetail == orderDetailRequest.ID_OrderDetail);
@@ -50,6 +54,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteOrderDetail(int id)
         {
             var orderDetail = await _service.FindByAsync(p => p.ID_OrderDetail == id);
@@ -62,7 +67,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Delete order successfull.");
         }
 
-        [HttpGet("all-order-sellerId")]
+        [HttpGet("all-order-detail-sellerId")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersBySellerId(int sellerId)
         {
             var entities = await _service.FindListAsync<OrderResponseDTO>(t => t.ID_TicketNavigation.ID_Customer == sellerId);

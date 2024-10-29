@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -22,6 +23,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IList<ReportResponseDTO[]>>> GetReport()
         {
             var entities = await _serviceReport.FindListAsync<ReportResponseDTO>();
@@ -29,6 +31,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ReportResponseDTO>> GetReport(string id)
         {
             var entity = await _serviceReport.FindByAsync(p => p.ID_Report.ToString() == id);
@@ -40,6 +43,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> PutReport(ReportResponseDTO ticketRequest)
         {
             var entity = await _serviceReport.FindByAsync(p => p.ID_Report == ticketRequest.ID_Report);
@@ -53,6 +57,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<TicketResponseDTO>> PostReport(ReportRequestDTO reportRequest)
         {
             var ticket = new Report()
@@ -65,6 +70,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReport(int id)
         {
             var ticket = await _serviceReport.FindByAsync(p => p.ID_Report == id);

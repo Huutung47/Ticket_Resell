@@ -73,8 +73,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpPost]
         public async Task<ActionResult<TransactionResponseDTO>> PostRequest(TransactionRequestDTO requests)
         {
-            //Validation
-
             var transaction = new Transaction()
             {
                 ID_Order = requests.ID_Order,

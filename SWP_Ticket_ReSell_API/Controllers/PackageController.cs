@@ -36,6 +36,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<PackageResponseDTO>> GetPackage(string id)
         {
             var entity = await _servicePackage.FindByAsync(p => p.ID_Package.ToString() == id);
@@ -47,7 +48,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut("id")]
-        public async Task<IActionResult> PutTicket(PackageResponseDTO packageRequest)
+        [Authorize(Roles = "1")]
+        public async Task<IActionResult> PutPackage(PackageResponseDTO packageRequest)
         {
             var entity = await _servicePackage.FindByAsync(p => p.ID_Package == packageRequest.ID_Package);
             if (entity == null)
@@ -60,7 +62,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PackageResponseDTO>> PostTicket(PackageRequestDTO packageRequest)
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult<PackageResponseDTO>> PostPackage(PackageRequestDTO packageRequest)
         {
             var package = new Package();
             packageRequest.Adapt(package);
@@ -69,6 +72,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> DeletePackage(int id)
         {
             var package = await _servicePackage.FindByAsync(p => p.ID_Package == id);
@@ -81,7 +85,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("registerPackage")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> RegisterPackage(int customerId, PackageChoose request)
         {
             var customer = await _serviceCustomer.FindByAsync(x => x.ID_Customer == customerId);
@@ -111,6 +115,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-package")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountPackage()
         {
             var entities = await _servicePackage.FindListAsync<Package>();

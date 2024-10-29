@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -34,6 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequest()
         {
             var entities = await _serviceRequest.FindListAsync<RequestResponseDTO>();
@@ -69,6 +71,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("sellerId")]
+        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
         {
             var tickets = await _serviceTicket.FindListAsync<Ticket>(t => t.ID_Customer == sellerId);
@@ -120,6 +124,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<RequestResponseDTO>> GetRequest(string id)
         {
             var entity = await _serviceRequest.FindByAsync(p => p.ID_Request.ToString() == id);
@@ -131,6 +136,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> PutRequest(RequestResponseDTO request)
         {
             var entity = await _serviceRequest.FindByAsync(p => p.ID_Request == request.ID_Request);
@@ -144,6 +150,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut("change-status-request")]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
         {
             var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
@@ -158,6 +165,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<RequestResponseDTO>> PostRequest(RequestRequestDTO requests)
         {
             var request = new Request()
@@ -171,6 +179,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("TicketID")]
+        [Authorize]
         public async Task<ActionResult<RequestResponseDTO>> PostRequestID(int ticket,RequestRequestDTO requests)
         {
             var tickets = await _serviceTicket.FindByAsync(t => t.ID_Ticket == ticket);
@@ -192,6 +201,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteReport(int id)
         {
             var ticket = await _serviceRequest.FindByAsync(p => p.ID_Request == id);

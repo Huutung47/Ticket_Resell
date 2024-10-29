@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Resource;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -35,6 +36,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrder()
         {
             var entities = await _orderService.FindListAsync<OrderResponseDTO>();
@@ -42,6 +44,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<OrderResponseDTO>> GetOrderDetail(string id)
         {
             var entity = await _orderService.FindByAsync(p => p.ID_Order.ToString() == id);
@@ -53,6 +56,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [SwaggerOperation(Summary = "Update order")]
         public async Task<IActionResult> PutOrder(OrderResponseDTO orderRequest)
         {
@@ -68,6 +72,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpPost()]
+        [Authorize]
         [SwaggerOperation(Summary = "Create order")]
         public async Task<ActionResult<OrderResponseDTO>> PostOrder(OrderCreateDTO orderRequest)
         {
@@ -144,6 +149,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("all-order-customerid")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersByCustomerId(int customerid)
         {
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
@@ -155,6 +161,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-all-order-customerid")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetTotal(int customerid)
         {
             int? totalPrice=0;
@@ -172,6 +179,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var order = await _orderService.FindByAsync(p => p.ID_Order == id);
@@ -186,6 +194,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("count-order-successfull")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<DashboardOrder>> GetOrderCompleted()
         {
             var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED");
@@ -194,6 +203,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-processing")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<DashboardOrder>> GetOrderProcessing()
         {
             var processingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING");
@@ -202,6 +212,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-pending")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<DashboardOrder>> GetOrderPending()
         {
             var pendingOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING");
@@ -210,6 +221,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-all-order")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderTotal()
         {
             var totalOrders = await _orderService.FindListAsync<Order>();
@@ -218,6 +230,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-successfull-by-day-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
             var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 
@@ -226,6 +239,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(totalSuccess);
         }
         [HttpGet("count-order-processing-by-day-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderProcessingByDate(DateTime date)
         {
             var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING" 
@@ -235,6 +249,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-pending-by-day-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderPendingByDate(DateTime date)
         {
             var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PENDING"
@@ -244,6 +259,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-completed-by-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetOrderCompletedByMonthYear(int month, int year)
         {
             var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "COMPLETED" 
@@ -254,6 +270,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-processing-by-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetOrderProcessingByMonthYear(int month, int year)
         {
             var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "PROCESSING"
@@ -264,6 +281,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("count-order-pending-by-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetOrderPendingByMonthYear(int month, int year)
         {
             var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "PENDING"
@@ -274,6 +292,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Total-price-order-completed-by-month-year")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
         {
             var orders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 

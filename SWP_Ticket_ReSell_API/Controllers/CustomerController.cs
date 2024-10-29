@@ -24,10 +24,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Transaction> _serviceTransaction;
         private readonly ServiceBase<Order> _serviceOrder;
         private readonly ServiceBase<Report> _serviceReport;
-        //private readonly ServiceBase<Request> _serviceRequest;
 
         public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService, ServiceBase<Transaction> serviceTransaction, ServiceBase<Order> serviceOrder, ServiceBase<Report> serviceReport
-            //, ServiceBase<Request> serviceRequest
             )
         {
             _service = service;
@@ -37,11 +35,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _serviceTransaction = serviceTransaction;
             _serviceOrder = serviceOrder;
             _serviceReport = serviceReport;
-            //_serviceRequest = serviceRequest;
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<IList<CustomerResponseDTO>>> GetCustomer()
         {
             var entities = await _service.FindListAsync<CustomerResponseDTO>();
@@ -49,7 +46,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> GetCustomer(string id)
         {
             var entity = await _service.FindByAsync(p => p.ID_Customer.ToString() == id);
@@ -61,7 +58,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PutCustomer(CustomerRequestDTO customerRequest)
         {
             var entity = await _service.FindByAsync(p => p.ID_Customer == customerRequest.ID_Customer);
@@ -94,7 +91,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> PostCustomer(CustomerCreateDTO customerRequest)
         {
             if (await _service.ExistsByAsync(p => p.Email.Equals(customerRequest.Email)))
@@ -118,7 +115,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customer = await _service.FindByAsync(p => p.ID_Customer == id);
@@ -149,21 +146,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 await _serviceOrder.DeleteRangeAsync(reports);
             }
-            //var requests = await _serviceRequest.FindListAsync<Order>(o => o.ID_Customer == id);
-            //if (orders != null && orders.Any())
-            //{
-            //    await _serviceOrder.DeleteRangeAsync(orders);
-            //}
             await _service.DeleteAsync(customer);
             return Ok("Delete customer successfully.");
-
         }
 
 
 
 
         [HttpGet("new-7-customer")]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<DashboardCustomer>>> GetLastCustomers()
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
@@ -172,7 +163,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-customer")]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountCustomer()
         {
             var entities = await _service.FindListAsync<Customer>();
@@ -181,7 +172,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Count-customer-buy-package-by-month-year")]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
             var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 
@@ -197,7 +188,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Total-price-package-by-month-year")]
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
         {
             var customers = await _service.FindListAsync<Customer>(o => o.ID_Package != null

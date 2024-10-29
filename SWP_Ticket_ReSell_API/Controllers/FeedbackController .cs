@@ -28,6 +28,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IList<FeedbackRequestDTO>>> GetFeedback()
         {
             var entities = await _serviceFeedback.FindListAsync<FeedbackRequestDTO>();
@@ -36,6 +37,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<FeedbackReponseDTO>> GetFeedback(string id)
         {
             var entity = await _serviceFeedback.FindByAsync(p => p.ID_Feedback.ToString() == id);
@@ -47,7 +49,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> PutFeedBack(FeedbackReponseDTO feedbackRequest)
         {
             var feedback = await _serviceFeedback.FindByAsync(p => p.ID_Feedback == feedbackRequest.ID_Feedback);
@@ -61,7 +63,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<FeedbackReponseDTO>> PostFeedback(FeedbackRequestDTO feedbackRequest)
         {
             var order = await _serviceOrder.FindByAsync(o => o.ID_Order == feedbackRequest.ID_Order);
@@ -80,7 +82,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
             var feedBack = await _serviceFeedback.FindByAsync(p => p.ID_Feedback == id);
@@ -93,7 +95,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("customer-received-feedbacks")]
-        //[Authorize]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<FeedbackReponseDTO>>> GetReceivedFeedbacksByCustomerId(int customerId)
         {
             var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => true);
@@ -124,7 +126,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("average-feedback")]
-        //[Authorize]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
         {
             var orders = await _serviceOrder.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer, null, null);

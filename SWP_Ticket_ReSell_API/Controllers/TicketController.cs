@@ -1,5 +1,6 @@
 using Castle.Core.Resource;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
@@ -34,6 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicket()
         {
             var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>();
@@ -41,6 +43,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TicketResponseDTO>> GetTicket(string id)
         {
             var entity = await _serviceTicket.FindByAsync(p => p.ID_Ticket.ToString() == id);
@@ -57,6 +60,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("ticket/{sellerId:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsBySellerId(int sellerId)
         {
             var tickets = await _serviceTicket.FindListAsync<TicketResponseDTO>();
@@ -72,6 +76,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("filter")]
+        [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list ticket filter")]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location, decimal price, string show_name)
         {
@@ -80,6 +85,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [SwaggerOperation(Summary = "Update Ticket ")]
         public async Task<IActionResult> PutTicket(TicketRequestDTO ticketRequest)
         {
@@ -106,6 +112,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
 
         [HttpPost("{customerID}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Create Ticket ")]
         public async Task<ActionResult<TicketResponseDTO>> PostTicket(TicketCreateDTO ticketRequest, int customerID)
         {
@@ -138,6 +145,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [SwaggerOperation(Summary = "Delete Ticket ")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
@@ -152,6 +160,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut("customer")]
+        [Authorize]
         [SwaggerOperation(Summary = "Update Customer On Ticket ")]
         public async Task<IActionResult> PutTicketByCustomer(TicketUpdateCustomerDTO ticketUpdate)
         {
@@ -193,6 +202,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-ticket")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountTicket()
         {
             var entities = await _serviceTicket.FindListAsync<Ticket>();
@@ -201,6 +211,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-ticket-available")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountTicketAvailable()
         {
             var entities = await _serviceTicket.FindListAsync<Ticket>(t => t.Status == "Available");
@@ -209,6 +220,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-ticket-unavaliable")]
+        [Authorize(Roles = "1")]
         public async Task<ActionResult<IList<int>>> CountTicketUnavaliable()
         {
             var entities = await _serviceTicket.FindListAsync<Ticket>(t => t.Status == "Unavailable");
