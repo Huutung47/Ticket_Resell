@@ -78,7 +78,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [HttpGet("filter")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Get list ticket filter")]
-        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location, decimal price, string show_name)
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketsByLocation(string? ticketCategory, string? location, decimal? price, string? show_name)
         {
             var tickets = await _serviceTicket.FindListAsync<TicketResponseDTO>(expression: GetTicketByQuery(ticketCategory, location, price, show_name));
             return Ok(tickets);
