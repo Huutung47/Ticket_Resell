@@ -178,6 +178,35 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
 
+        [HttpGet("all-order-sellerid")]
+        [Authorize]
+        public async Task<ActionResult<IList<OrderResponseDTO>>> GetOrdersBySellerId(int sellerid)
+        {
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.OrderDetails.Any(od => od.ID_TicketNavigation.ID_Customer == sellerid));
+            if (entities == null)
+            {
+                return Problem(detail: $"CustomerID {sellerid} doesn't have any order", statusCode: 404);
+            }
+            return Ok(entities);
+        }
+
+        [HttpGet("total-all-order-sellerid")]
+        [Authorize]
+        public async Task<ActionResult<int>> GetTotalSeller(int sellerid)
+        {
+            int? totalPrice = 0;
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.OrderDetails.Any(od => od.ID_TicketNavigation.ID_Customer == sellerid));
+            if (entities == null)
+            {
+                return Problem(detail: $"CustomerID {sellerid} doesn't have any order", statusCode: 404);
+            }
+            foreach (var item in entities)
+            {
+                totalPrice = totalPrice + (int)item.TotalPrice;
+            }
+            return Ok($"Total: {totalPrice}");
+        }
+
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteOrder(int id)
