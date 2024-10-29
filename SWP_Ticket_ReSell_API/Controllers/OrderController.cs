@@ -195,14 +195,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<int>> GetTotalSeller(int sellerid)
         {
             decimal? totalPrice = 0;
-            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.OrderDetails.Any(od => od.ID_TicketNavigation.ID_Customer == sellerid));
+            var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.OrderDetails.Any(od => od.ID_TicketNavigation.ID_Customer == sellerid)&&st);
             if (entities == null)
             {
                 return Problem(detail: $"CustomerID {sellerid} doesn't have any order", statusCode: 404);
             }
             foreach (var item in entities)
             {
-                totalPrice = totalPrice + item.TotalPrice;
+                totalPrice = totalPrice + item.TotalPrice;  
             }
             return Ok($"Total: {totalPrice}");
         }
