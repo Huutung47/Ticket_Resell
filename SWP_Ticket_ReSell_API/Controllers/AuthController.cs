@@ -55,8 +55,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             List<Claim> claims = new List<Claim>
                 {
-                    //ID_Customer 
-                    //new Claim("ID_Customer", user.ID_Customer.ToString()),
                     //Name
                     new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
                     //Email 
@@ -70,6 +68,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
             long expiredToken = 30;
             var token = new JwtSecurityToken(
+                _configuration["JwtIssuer"],
+                _configuration["JwtAudience"],
                  claims: claims,
                  expires: DateTime.UtcNow.AddMinutes(expiredToken),
                  signingCredentials: creds);

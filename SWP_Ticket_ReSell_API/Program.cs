@@ -41,8 +41,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 builder.Configuration.GetSection("AppSettings:SerectKey").Value!)),
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero,
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JwtIssuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JwtAudience"],
         };
         options.RequireHttpsMetadata = false;
     })

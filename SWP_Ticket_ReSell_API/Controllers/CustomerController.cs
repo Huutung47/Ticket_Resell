@@ -38,8 +38,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<IList<CustomerResponseDTO>>> GetCustomer()
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult<IList<CustomerResponseDTO>>> GetAllCustomer()
         {
             var entities = await _service.FindListAsync<CustomerResponseDTO>();
             return Ok(entities);
