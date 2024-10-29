@@ -102,12 +102,13 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Number_of_tickets_can_posted = 0,
                     Method_login = "Local"
                 };
+                await _serviceCustomer.CreateAsync(customer);
                 var customerId = customer.ID_Customer;
-                var frontendUrl = " http://localhost:3000/confirm-success";
-                var confirmationLink = $"{frontendUrl}/confirm?userId={customerId}";
+                var frontendUrl = "https://localhost:7216/api/Auth";
+                //                var frontendUrl = " http://localhost:3000/confirm-success";
+                var confirmationLink = $"{frontendUrl}/confirm-email?userId={customerId}";
                 var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
-                await _serviceCustomer.CreateAsync(customer);
             }
             return Ok("Create customer successfull.");
         }
@@ -174,7 +175,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(int userId)
         {
             var user = await _serviceCustomer.FindByAsync(x => x.ID_Customer == userId);
