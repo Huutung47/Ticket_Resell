@@ -35,7 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequest()
         {
             var entities = await _serviceRequest.FindListAsync<RequestResponseDTO>();
@@ -71,7 +71,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("sellerId")]
-        [Authorize(Roles = "1")]
         [Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
         {
@@ -136,7 +135,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<IActionResult> PutRequest(RequestResponseDTO request)
         {
             var entity = await _serviceRequest.FindByAsync(p => p.ID_Request == request.ID_Request);
@@ -150,7 +149,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPut("change-status-request")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
         {
             var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
