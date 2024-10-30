@@ -66,12 +66,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:SerectKey").Value!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-            long expiredToken = 30;
+            long expiredToken = 12;
             var token = new JwtSecurityToken(
                 _configuration["AppSettings:JwtIssuer"],
                 _configuration["AppSettings:JwtAudience"],
                  claims: claims,
-                 expires: DateTime.UtcNow.AddMinutes(expiredToken),
+                 expires: DateTime.UtcNow.AddHours(expiredToken),
                  signingCredentials: creds);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new AccessTokenResponse { ID = user.ID_Customer, AccessToken = jwt, ExpiresIn = expiredToken });
