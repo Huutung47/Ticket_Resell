@@ -53,6 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
         options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+        options.CallbackPath = new PathString("/signin-google");
         options.BackchannelTimeout = TimeSpan.FromSeconds(120);
     });
 
@@ -93,11 +94,11 @@ var app = builder.Build();
 // Enable Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseRouting();
 app.UseCors("AllowAll");
 // Enable HTTPS redirection
 app.UseHttpsRedirection();
 // Apply CORS policy before Authentication and Authorization middleware
+app.UseRouting();
 // Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
