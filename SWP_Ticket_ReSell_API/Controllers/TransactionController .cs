@@ -52,6 +52,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>();
             return Ok(entities);
         }
+        [HttpGet("customerId")]
+        public async Task<ActionResult<IList<TransactionResponseDTO>>> GetTransactionByType(int customerId,string transactionType)
+        {
+            var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>(p=>p.Transaction_Type.Equals(transactionType)&&(p.ID_Customer==customerId));
+            return Ok(entities);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionResponseDTO>> GetTransaction(string id)
