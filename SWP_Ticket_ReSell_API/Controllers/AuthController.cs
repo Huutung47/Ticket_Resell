@@ -104,7 +104,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 };
                 await _serviceCustomer.CreateAsync(customer);
                 var customerId = customer.ID_Customer;
-                var frontendUrl = "https://localhost:7216/api/Auth";
+                //var frontendUrl = "https://localhost:7216/api/Auth";
+                var frontendUrl = "https://swp.vinhuser.one/api/Auth";
                 //                var frontendUrl = " http://localhost:3000/confirm-success";
                 var confirmationLink = $"{frontendUrl}/confirm-email?userId={customerId}";
                 var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
