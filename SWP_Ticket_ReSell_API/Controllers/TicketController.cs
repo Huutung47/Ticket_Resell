@@ -38,7 +38,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicket()
         {
-            var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>();
+            var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>(t => t.Status == "Available" && t.Event_Date > DateTime.Now);
             return Ok(entities);
         }
 
@@ -50,10 +50,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             if (entity == null)
             {
                 return Problem(detail: $"Ticket id {id} cannot found", statusCode: 404);
-            }
-            if (entity.Status == "Avaiable")
-            {
-                return NoContent();
             }
             return Ok(entity.Adapt<TicketResponseDTO>());
         }
