@@ -68,8 +68,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
             long expiredToken = 30;
             var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtAudience"],
+                _configuration["AppSettings:JwtIssuer"],
+                _configuration["AppSettings:JwtAudience"],
                  claims: claims,
                  expires: DateTime.UtcNow.AddMinutes(expiredToken),
                  signingCredentials: creds);

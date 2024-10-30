@@ -39,12 +39,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 builder.Configuration.GetSection("AppSettings:SerectKey").Value!)),
-            ValidateIssuerSigningKey = false,
+            ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero,
-            ValidateIssuer = false,
-            ValidIssuer = builder.Configuration["JwtIssuer"],
-            ValidateAudience = false,
-            ValidAudience = builder.Configuration["JwtAudience"],
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:JwtIssuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:JwtAudience"],
         };
         options.RequireHttpsMetadata = false;
     })
