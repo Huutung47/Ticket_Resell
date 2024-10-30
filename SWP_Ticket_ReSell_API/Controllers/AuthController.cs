@@ -120,8 +120,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
             {
-                //RedirectUri = "https://localhost:7216/api/auth/google-response"
-                RedirectUri = "https://swp.vinhuser.one/api/auth/google-response"
+                RedirectUri = "https://localhost:7216/api/auth/google-response"
+                //RedirectUri = "https://swp.vinhuser.one/api/auth/google-response"
             });
         }
 

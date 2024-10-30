@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
         options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-        options.CallbackPath = new PathString("/signin-google");
+        //options.CallbackPath = new PathString("/signin-google");
         options.BackchannelTimeout = TimeSpan.FromSeconds(120);
     });
 
