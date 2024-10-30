@@ -59,7 +59,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     new Claim(ClaimTypes.NameIdentifier, user.Name.ToString()),
                     //Email 
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
-                    //role 
+                    //Role 
                     new Claim(ClaimTypes.Role, user.ID_Role.ToString()!)
                 };
             var key = new SymmetricSecurityKey(
@@ -153,7 +153,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 EmailConfirm = "True",
                 Average_feedback = 0,
                 Number_of_tickets_can_posted = 0,
-                ID_Role = 2
+                ID_Role = 2 //Customer 
             };
             await _serviceCustomer.CreateAsync(customer);
             return Ok("Create customer successfull.");
