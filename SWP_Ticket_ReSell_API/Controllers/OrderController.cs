@@ -70,6 +70,23 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Update Order successfull.");
         }
 
+        [HttpPut("/cancel/{orderId}")]
+        [Authorize]
+        [SwaggerOperation(Summary = "Cancel order")]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var order = await _orderService.FindByAsync(p => p.ID_Order == orderId);
+            if (order == null)
+            {
+                return Problem(detail: $"Order_id {orderId} cannot found", statusCode: 404);
+            }
+
+            order.Status = "CANCELLED";
+
+            await _orderService.UpdateAsync(order);
+            return Ok("Cancel order successfull.");
+        }
+
 
         [HttpPost()]
         [Authorize]
@@ -109,17 +126,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
                 //totalPriceOrder += (decimal)ticket.Price * (decimal)item.Quantity;
 
-                ticket.Quantity = ticket.Quantity - item.Quantity;
+                //ticket.Quantity = ticket.Quantity - item.Quantity;
+
                 if (ticket.Quantity < 1)
                 {
                     ticket.Status = "Unavailable";
                 }
+
                 await _ticketService.UpdateAsync(ticket);
-                if (ticket.Quantity < 1)
-                {
-                    ticket.Status = "Unavailable";
-                }
-                await _ticketService.UpdateAsync(ticket);
+
             }
 
             //order.TotalPrice = Convert.ToDecimal(totalPriceOrder);
@@ -164,15 +179,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize]
         public async Task<ActionResult<int>> GetTotal(int customerid)
         {
-            int? totalPrice=0;
+            int? totalPrice = 0;
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
-            if(entities == null)
+            if (entities == null)
             {
                 return Problem(detail: $"CustomerID {customerid} doesn't have any order", statusCode: 404);
             }
-            foreach(var item in entities)
+            foreach (var item in entities)
             {
-                totalPrice = totalPrice +(int)item.TotalPrice;
+                totalPrice = totalPrice + (int)item.TotalPrice;
             }
             return Ok($"Total: {totalPrice}");
         }
@@ -202,7 +217,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             foreach (var item in entities)
             {
-                totalPrice = totalPrice + item.TotalPrice;  
+                totalPrice = totalPrice + item.TotalPrice;
             }
             return Ok($"Total: {totalPrice}");
         }
@@ -262,7 +277,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(DateTime date)
         {
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED"
             && o.Create_At.Date == date.Date);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
@@ -271,7 +286,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize(Roles = "1")]
         public async Task<ActionResult<int>> GetOrderProcessingByDate(DateTime date)
         {
-            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING" 
+            var successOrders = await _orderService.FindListAsync<Order>(o => o.Status == "PROCESSING"
             && o.Create_At.Date == date.Date);
             var totalSuccess = successOrders.Count();
             return Ok(totalSuccess);
@@ -291,8 +306,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetOrderCompletedByMonthYear(int month, int year)
         {
-            var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "COMPLETED" 
-            && o.Create_At.Month == month 
+            var customers = await _orderService.FindListAsync<Customer>(o => o.Status == "COMPLETED"
+            && o.Create_At.Month == month
             && o.Create_At.Year == year);
             var customersTotal = customers.Count();
             return Ok(customersTotal);
@@ -324,7 +339,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize(Roles = "1")]
         public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
         {
-            var orders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED" 
+            var orders = await _orderService.FindListAsync<Order>(o => o.Status == "COMPLETED"
             && o.Create_At.Date.Month == month
             && o.Create_At.Date.Year == year);
             if (orders == null || !orders.Any())
