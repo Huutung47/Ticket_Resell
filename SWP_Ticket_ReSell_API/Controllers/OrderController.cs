@@ -179,7 +179,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         [Authorize]
         public async Task<ActionResult<int>> GetTotal(int customerid)
         {
-            int? totalPrice = 0;
+            decimal? totalPrice = 0;
             var entities = await _orderService.FindListAsync<OrderResponseDTO>(t => t.ID_CustomerNavigation.ID_Customer == customerid);
             if (entities == null)
             {
@@ -187,9 +187,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             foreach (var item in entities)
             {
-                totalPrice = totalPrice + (int)item.TotalPrice;
+                totalPrice = totalPrice + item.TotalPrice;
             }
-            return Ok($"Total: {totalPrice}");
+            return Ok(totalPrice);
         }
 
 
@@ -219,7 +219,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 totalPrice = totalPrice + item.TotalPrice;
             }
-            return Ok($"Total: {totalPrice}");
+            return Ok(totalPrice);
         }
 
         [HttpDelete("{id}")]
