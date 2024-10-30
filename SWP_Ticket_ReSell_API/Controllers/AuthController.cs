@@ -104,9 +104,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 };
                 await _serviceCustomer.CreateAsync(customer);
                 var customerId = customer.ID_Customer;
-                //var frontendUrl = "https://localhost:7216/api/Auth";
                 var frontendUrl = "https://swp.vinhuser.one/api/Auth";
-                //                var frontendUrl = " http://localhost:3000/confirm-success";
                 var confirmationLink = $"{frontendUrl}/confirm-email?userId={customerId}";
                 var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
@@ -121,7 +119,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
             {
                 RedirectUri = "https://localhost:7216/api/auth/google-response"
-                //RedirectUri = "https://swp.vinhuser.one/api/auth/google-response"
             });
         }
 
@@ -185,7 +182,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return BadRequest("Invalid user");
             user.EmailConfirm = "True";
             await _serviceCustomer.UpdateAsync(user);
-            return Ok("Email confirmed successfully. Thank you.");
+            //return Ok("Email confirmed successfully. Thank you.");
+            return Redirect("https://resell-ticket-fe.vercel.app");
         }
     }
 }

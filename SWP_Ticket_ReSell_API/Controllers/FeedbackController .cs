@@ -95,11 +95,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("customer-received-feedbacks")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<IList<FeedbackReponseDTO>>> GetReceivedFeedbacksByCustomerId(int customerId)
         {
-            var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => true);
-
+            var feedbacks = await _serviceFeedback.FindListAsync<Feedback>();
             if (feedbacks == null || !feedbacks.Any())
             {
                 return NotFound("No feedbacks found.");
@@ -126,7 +125,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("average-feedback")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<double>> GetAverageFeedbackByCustomer(AverageOrderFeedback request)
         {
             var orders = await _serviceOrder.FindListAsync<Order>(o => o.ID_Customer == request.ID_Customer, null, null);

@@ -34,11 +34,11 @@ public class FirebaseStorageService
             });
 
             var uploadTask = firebaseStorage
-                .Child("customers") // Thay đổi tên folder nếu cần
+                .Child("customers") 
                 .Child($"{Guid.NewGuid()}_{fileName}")
                 .PutAsync(fileStream);
 
-            // Trả về URL của ảnh sau khi upload thành công
+            // Trả về URL ảnh 
             return await uploadTask;
         }
         catch (Exception ex)
