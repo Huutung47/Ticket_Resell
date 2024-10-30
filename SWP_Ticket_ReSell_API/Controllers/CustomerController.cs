@@ -163,7 +163,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("total-customer")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<IList<int>>> CountCustomer()
         {
             var entities = await _service.FindListAsync<Customer>();
@@ -172,7 +172,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Count-customer-buy-package-by-month-year")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<int>> GetOrderCompletedByDate(int month, int year)
         {
             var customer = await _service.FindListAsync<Customer>(o => o.ID_Package != null 
@@ -188,7 +188,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("Total-price-package-by-month-year")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
         {
             var customers = await _service.FindListAsync<Customer>(o => o.ID_Package != null
