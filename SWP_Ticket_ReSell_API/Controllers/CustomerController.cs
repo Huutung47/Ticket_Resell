@@ -154,7 +154,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("new-7-customer")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public async Task<ActionResult<IList<DashboardCustomer>>> GetLastCustomers()
         {
             var entities = await _service.FindListAsync<DashboardCustomer>();
