@@ -19,7 +19,5 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Package
         public int? Ticket_can_post { get; set; }
 
         public string Description { get; set; }
-
-
     }
 }
