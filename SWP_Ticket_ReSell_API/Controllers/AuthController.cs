@@ -183,7 +183,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             user.EmailConfirm = "True";
             await _serviceCustomer.UpdateAsync(user);
             //return Ok("Email confirmed successfully. Thank you.");
-            return Redirect("https://resell-ticket-fe.vercel.app");
+            //return Redirect("https://resell-ticket-fe.vercel.app");
+            return Redirect("http://localhost:3000/confirm-success");
         }
     }
 }
