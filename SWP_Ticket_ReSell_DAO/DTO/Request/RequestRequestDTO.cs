@@ -18,7 +18,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
 
         public DateTime History { get; set; }
 
-        public int Quantity { get; set; }
+        //public int Quantity { get; set; }
 
         public string Status { get; set; }
     }

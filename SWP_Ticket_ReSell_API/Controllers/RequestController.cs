@@ -192,7 +192,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Customer = requests.ID_Customer, // Người mua 
                 ID_Ticket = ticket, //Vé muon gui yeu cau 
                 Price_want = requests.Price_want,
-                Quantity = requests.Quantity, 
+                //Quantity = requests.Quantity, 
                 Status = "Pending"
             };
             await _serviceRequest.CreateAsync(request);
