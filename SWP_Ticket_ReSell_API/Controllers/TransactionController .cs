@@ -11,6 +11,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Net.Sockets;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Mvc.Routing;
+using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -22,11 +24,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Order> _orderService;
         private readonly ServiceBase<Customer> _customerService;
         private readonly ServiceBase<Package> _packageService;
+        private readonly ServiceBase<Ticket> _ticketService;
+        private readonly ServiceBase<OrderDetail> _orderDetailService;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public TransactionController(ServiceBase<Transaction> serviceTransaction,
-            ServiceBase<Package> packageService, ServiceBase<Order> orderService, ServiceBase<Customer> customerService,
+            ServiceBase<Package> packageService, ServiceBase<Order> orderService,
+            ServiceBase<Customer> customerService,
+            ServiceBase<Ticket> ticketService,
+            ServiceBase<OrderDetail> orderDetailService,
             IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
@@ -34,6 +41,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _orderService = orderService;
             _customerService = customerService;
             _packageService = packageService;
+            _ticketService = ticketService;
+            _orderDetailService = orderDetailService;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
@@ -201,6 +210,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var order = await _orderService.FindByAsync(x => x.ID_Order == transaction.ID_Order);
             var package = await _packageService.FindByAsync(p => p.ID_Package == transaction.ID_Package);
             var customer = await _customerService.FindByAsync(x => x.ID_Customer == transaction.ID_Customer);
+            var orderDetail = await _orderDetailService.FindListAsync<OrderDetailResponseDTO>(expression: e => e.ID_Order == order.ID_Order);
 
             if (vnp_ResponseCode.Equals("00"))
             {
@@ -211,6 +221,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 {
                     order.Status = "COMPLETED";
                     order.Update_At = currentTime;
+
+                    foreach (var item in orderDetail)
+                    {
+                        var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
+                        ticket.Quantity = ticket.Quantity - item.Quantity;
+                    }
                 }
 
                 if (transaction.Transaction_Type.Equals("Package"))
