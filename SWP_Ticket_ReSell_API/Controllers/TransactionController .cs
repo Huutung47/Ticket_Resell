@@ -210,7 +210,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var order = await _orderService.FindByAsync(x => x.ID_Order == transaction.ID_Order);
             var package = await _packageService.FindByAsync(p => p.ID_Package == transaction.ID_Package);
             var customer = await _customerService.FindByAsync(x => x.ID_Customer == transaction.ID_Customer);
-            var orderDetail = await _orderDetailService.FindListAsync<OrderDetailResponseDTO>(expression: e => e.ID_Order == order.ID_Order);
+
 
             if (vnp_ResponseCode.Equals("00"))
             {
@@ -222,6 +222,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     order.Status = "COMPLETED";
                     order.Update_At = currentTime;
 
+                    var orderDetail = await _orderDetailService.FindListAsync<OrderDetailResponseDTO>(expression: e => e.ID_Order == order.ID_Order);
                     foreach (var item in orderDetail)
                     {
                         var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
@@ -265,9 +266,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             }
 
+            if (order != null)
+            {
+                await _orderService.UpdateAsync(order);
+            }
+
             await _serviceTransaction.UpdateAsync(transaction);
             await _customerService.UpdateAsync(customer);
-            await _orderService.UpdateAsync(order);
+
 
             return !false;
         }
