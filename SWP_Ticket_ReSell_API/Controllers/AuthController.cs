@@ -52,6 +52,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 await HttpContext.SignOutAsync("Cookies");
                 return StatusCode(403, "You need to confirm your email address.");
             }
+            if(user.IsActive == "Inactive")
+            {
+                return BadRequest("Your account has been locked");
+            }
 
             List<Claim> claims = new List<Claim>
                 {
@@ -100,11 +104,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     ID_Role = 2,
                     EmailConfirm = "False",
                     Number_of_tickets_can_posted = 0,
-                    Method_login = "Local"
+                    Method_login = "Local",
+                    IsActive = "Active"
                 };
                 await _serviceCustomer.CreateAsync(customer);
                 var customerId = customer.ID_Customer;
-                var frontendUrl = "https://swp.vinhuser.one/api/Auth";
+                var frontendUrl = "https://localhost:7216/api/Auth";
                 var confirmationLink = $"{frontendUrl}/confirm-email?userId={customerId}";
                 var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
@@ -153,7 +158,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 EmailConfirm = "True",
                 Average_feedback = 0,
                 Number_of_tickets_can_posted = 0,
-                ID_Role = 2 //Customer 
+                ID_Role = 2, //Customer 
+                IsActive = "Active"
             };
             await _serviceCustomer.CreateAsync(customer);
             return Ok("Create customer successfull.");
@@ -182,9 +188,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return BadRequest("Invalid user");
             user.EmailConfirm = "True";
             await _serviceCustomer.UpdateAsync(user);
-            //return Ok("Email confirmed successfully. Thank you.");
-            //return Redirect("https://resell-ticket-fe.vercel.app");
-            return Redirect("http://localhost:3000/confirm-success");
+            var rediectUrl = _configuration["RedirectUrls:EmailConfirmationSuccess"];
+            return Redirect(rediectUrl);
         }
     }
 }

@@ -9,21 +9,21 @@ public partial class Ticket
 {
     public int ID_Ticket { get; set; }
 
-    public int ID_Customer { get; set; } //ng ban 
+    public int? ID_Customer { get; set; }
 
-    public decimal Price { get; set; }
+    public decimal? Price { get; set; }
 
     public string Ticket_category { get; set; }
 
-    public bool Ticket_type { get; set; }
+    public bool? Ticket_type { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
     public DateTime Ticket_History { get; set; }
 
     public string Status { get; set; }
 
-    public DateTime Event_Date { get; set; }
+    public DateTime? Event_Date { get; set; }
 
     public string Show_Name { get; set; }
 

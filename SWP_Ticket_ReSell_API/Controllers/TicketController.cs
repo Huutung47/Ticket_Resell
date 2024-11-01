@@ -101,7 +101,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             if (ticketRequest.Status != null)
             {
                 entity.Status = ticketRequest.Status;
-            }
+            } 
                 //ticketRequest.Adapt(entity);
                 await _serviceTicket.UpdateAsync(entity);
                 return Ok("Update ticket successfull.");

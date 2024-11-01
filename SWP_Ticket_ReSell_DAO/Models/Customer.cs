@@ -35,6 +35,8 @@ public partial class Customer
 
     public string EmailConfirm { get; set; }
 
+    public string IsActive { get; set; }
+
     public virtual ICollection<Boxchat> BoxchatBuyers { get; set; } = new List<Boxchat>();
 
     public virtual ICollection<Boxchat> BoxchatSellers { get; set; } = new List<Boxchat>();
