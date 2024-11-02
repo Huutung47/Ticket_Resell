@@ -45,6 +45,14 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
 
+        [HttpGet("get-customer-have-package")]
+        [Authorize(Roles = "1")]
+        public async Task<ActionResult<IList<CustomerResponseDTO>>> GetAllCustomerHavePackage()
+        {
+            var entities = await _service.FindListAsync<CustomerResponseDTO>(o => o.ID_Package != null);
+            return Ok(entities);
+        }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> GetCustomer(string id)
@@ -123,35 +131,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"customer_id {id} cannot be found", statusCode: 404);
             }
-            var transactions = await _serviceTransaction.FindListAsync<Transaction>(t => t.ID_Customer == id);
-            if (transactions != null && transactions.Any()) 
-            {
-                await _serviceTransaction.DeleteRangeAsync(transactions);
-            }
-            try
-            {
-                var orders = await _serviceOrder.FindListAsync<Order>(o => o.ID_Customer == id);
-                if (orders != null && orders.Any())
-                {
-                    await _serviceOrder.DeleteRangeAsync(orders);
-                }
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return BadRequest("Wrong delete order");
-            }
-
-            var reports = await _serviceReport.FindListAsync<Order>(o => o.ID_Customer == id);
-            if (reports != null && reports.Any())
-            {
-                await _serviceOrder.DeleteRangeAsync(reports);
-            }
             await _service.DeleteAsync(customer);
             return Ok("Delete customer successfully.");
         }
-
-
-
 
         [HttpGet("new-7-customer")]
         [Authorize]

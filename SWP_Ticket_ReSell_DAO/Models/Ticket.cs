@@ -17,9 +17,9 @@ public partial class Ticket
 
     public bool? Ticket_type { get; set; }
 
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
-    public DateTime Ticket_History { get; set; }
+    public DateTime? Ticket_History { get; set; }
 
     public string Status { get; set; }
 

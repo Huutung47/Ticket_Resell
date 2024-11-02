@@ -85,6 +85,4 @@ public class GenericRepository<T> where T : class
 
         return await query.AnyAsync();
     }
-
-    
 }

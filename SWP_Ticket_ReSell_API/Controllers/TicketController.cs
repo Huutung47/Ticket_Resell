@@ -33,10 +33,17 @@ namespace SWP_Ticket_ReSell_API.Controllers
             _servicePackage = servicePackage;
             _firebaseStorageService = firebaseStorageService;
         }
+        [HttpGet("get-all-ticket")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetAllTicket()
+        {
+            var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>();
+            return Ok(entities);
+        }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicket()
+        public async Task<ActionResult<IList<TicketResponseDTO>>> GetTicketCanBuy()
         {
             var entities = await _serviceTicket.FindListAsync<TicketResponseDTO>(t => t.Status == "Available" && t.Event_Date > DateTime.Now);
             return Ok(entities);

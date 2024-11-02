@@ -35,6 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         }
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginRequestDTO login)
         {
             var user = await _serviceCustomer.FindByAsync(x => x.Email == login.Email); 
@@ -82,6 +83,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO request)
         {
             if (ModelState.IsValid)
@@ -101,7 +103,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Email = request.Email,
                     Password = hashedPassword,
                     Average_feedback = 0,
-                    ID_Role = 2,
+                    ID_Role = 2, //Customer
                     EmailConfirm = "False",
                     Number_of_tickets_can_posted = 0,
                     Method_login = "Local",
@@ -119,6 +121,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         //Login Google
         [HttpGet("login-google")]
+        [AllowAnonymous]
         public async Task Login()
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
@@ -181,6 +184,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("confirm-email")]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(int userId)
         {
             var user = await _serviceCustomer.FindByAsync(x => x.ID_Customer == userId);
