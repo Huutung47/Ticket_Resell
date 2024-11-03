@@ -150,16 +150,35 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut("change-status-request")]
         [Authorize]
-        public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
+        public async Task<IActionResult> UpdateRequestStatus(int requestId)
         {
             var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
             if (request == null)
             {
-                return Problem(detail: $"Request id {request.ID_Request} cannot found", statusCode: 404);
+                return Problem(detail: $"Request id {requestId} cannot found", statusCode: 404);
             }
-            request.Status = status;
-            await _serviceRequest.UpdateAsync(request);
-            return Ok("Update status request successfull");
+            var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
+            if (ticket.Quantity > 0)
+            {
+                ticket.Quantity -= request.Quantity;
+                await _serviceTicket.UpdateAsync(ticket);
+                request.Status = "Completed";
+                await _serviceRequest.UpdateAsync(request);
+                if(ticket.Quantity == 0)
+                {
+                    var requestPending = await _serviceRequest.FindListAsync<Request>(p => p.ID_Ticket == request.ID_Ticket && p.Status == "Pending");
+                    foreach (var reqPen in requestPending)
+                    {
+                        reqPen.Status = "Rejected";
+                        await _serviceRequest.UpdateAsync(reqPen);
+                    }
+                }
+                return Ok("Request accepted successful");
+            }
+            else
+            {
+                return BadRequest("Ticket is unavailable");
+            }
         }
 
 
@@ -192,7 +211,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 ID_Customer = requests.ID_Customer, // Người mua 
                 ID_Ticket = ticket, //Vé muon gui yeu cau 
                 Price_want = requests.Price_want,
-                //Quantity = requests.Quantity, 
+                Quantity = requests.Quantity,
                 Status = "Pending"
             };
             await _serviceRequest.CreateAsync(request);
@@ -208,10 +227,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Request id {id} cannot found", statusCode: 404);
             }
-
             await _serviceRequest.DeleteAsync(ticket);
             return Ok("Delete request successfull.");
         }
+
+
+        
     }
 }
 

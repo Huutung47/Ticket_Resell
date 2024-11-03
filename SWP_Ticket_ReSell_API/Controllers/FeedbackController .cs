@@ -133,8 +133,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return NotFound("No orders found for this customer.");
             }
-            // Tìm tất cả các phản hồi liên quan đến các order đó
-            var orderIds = orders.Select(o => o.ID_Order).ToList(); // Chuyển thành danh sách
+            var orderIds = orders.Select(o => o.ID_Order).ToList(); 
             var feedbacks = await _serviceFeedback.FindListAsync<Feedback>(f => orderIds.Contains((int)f.ID_Order), null, null);
             if (feedbacks == null || !feedbacks.Any())
             {

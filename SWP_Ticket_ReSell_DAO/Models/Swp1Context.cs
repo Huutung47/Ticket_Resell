@@ -221,10 +221,9 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.Comment).HasColumnType("text");
             entity.Property(e => e.History).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Reports)
-                .HasForeignKey(d => d.ID_Customer)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Report__ID_Custo__59FA5E80");
+            entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Reports)
+                .HasForeignKey(d => d.ID_Order)
+                .HasConstraintName("FK_Report_Order");
         });
 
         modelBuilder.Entity<Request>(entity =>

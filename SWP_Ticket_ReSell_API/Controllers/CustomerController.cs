@@ -8,7 +8,9 @@ using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
+using SWP_Ticket_ReSell_DAO.DTO.Transaction;
 using SWP_Ticket_ReSell_DAO.Models;
+using System.Transactions;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -21,18 +23,16 @@ namespace SWP_Ticket_ReSell_API.Controllers
         private readonly ServiceBase<Role> _serviceRole;
         private readonly ServiceBase<Package> _servicePackage;
         private readonly FirebaseStorageService _firebaseStorageService;
-        private readonly ServiceBase<Transaction> _serviceTransaction;
         private readonly ServiceBase<Order> _serviceOrder;
         private readonly ServiceBase<Report> _serviceReport;
 
-        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService, ServiceBase<Transaction> serviceTransaction, ServiceBase<Order> serviceOrder, ServiceBase<Report> serviceReport
+        public CustomerController(ServiceBase<Customer> service, ServiceBase<Role> serviceRole, ServiceBase<Package> servicePackage, FirebaseStorageService firebaseStorageService, ServiceBase<Order> serviceOrder, ServiceBase<Report> serviceReport
             )
         {
             _service = service;
             _serviceRole = serviceRole;
             _servicePackage = servicePackage;
             _firebaseStorageService = firebaseStorageService;
-            _serviceTransaction = serviceTransaction;
             _serviceOrder = serviceOrder;
             _serviceReport = serviceReport;
         }
@@ -168,30 +168,5 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             return Ok(customer.Count());
         }
-
-        [HttpGet("Total-price-package-by-month-year")]
-        [Authorize]
-        public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
-        {
-            var customers = await _service.FindListAsync<Customer>(o => o.ID_Package != null
-            && o.Package_registration_time.HasValue
-            && o.Package_registration_time.Value.Month == month
-            && o.Package_registration_time.Value.Year == year);
-            if (customers == null || !customers.Any())
-            {
-                return BadRequest($"Khong co ai mua goi trong thang {month}, nam {year}");
-            }
-            decimal? totalRevenue = 0;
-            foreach (var customer in customers)
-            {
-                var packages = await _servicePackage.FindByAsync(o => o.ID_Package == customer.ID_Package );
-                if (packages != null)
-                {
-                    totalRevenue += packages.Price;
-                }
-            }
-            return Ok(totalRevenue);
-        }
-
     }
 }

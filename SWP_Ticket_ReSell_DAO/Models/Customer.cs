@@ -47,8 +47,6 @@ public partial class Customer
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
-
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
