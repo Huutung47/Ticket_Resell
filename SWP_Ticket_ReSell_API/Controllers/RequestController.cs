@@ -35,7 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+       [Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequest()
         {
             var entities = await _serviceRequest.FindListAsync<RequestResponseDTO>();
@@ -209,7 +209,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 History = DateTime.Now,
                 ID_Customer = requests.ID_Customer, // Người mua 
-                ID_Ticket = ticket, //Vé muon gui yeu cau 
+                ID_Ticket = ticket, //Vé gui yeu cau 
                 Price_want = requests.Price_want,
                 Quantity = requests.Quantity,
                 Status = "Pending"
