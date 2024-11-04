@@ -25,6 +25,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
 
         public string Status { get; set; }
         public virtual TicketNavigationDTO? TicketNavigation {get; set; }
-        public virtual CustomerNavigationDTO? ID_CustomerNavigation { get; set; }
+        public virtual CustomerResponseDTO? ID_CustomerNavigation { get; set; }
     }
 }
