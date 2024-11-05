@@ -201,6 +201,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 var shows = show_name.ToLower().Split(',').Select(s => s.Trim().ToLower()).ToList();
                 filterQuery = filterQuery.AndAlso(p => shows.Any(show => p.Show_Name.Equals(show)));
             }
+            filterQuery = filterQuery.AndAlso(p => p.Event_Date > DateTime.Now);
             return filterQuery;
         }
 
