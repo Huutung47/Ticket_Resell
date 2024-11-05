@@ -165,36 +165,63 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut("change-status-request")]
         [Authorize]
-        public async Task<IActionResult> UpdateRequestStatus(int requestId)
+        public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
         {
             var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
             if (request == null)
             {
-                return Problem(detail: $"Request id {requestId} cannot found", statusCode: 404);
+                return Problem(detail: $"Request id {requestId} cannot be found");
             }
-            var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
-            if (ticket.Quantity > 0)
+            var updatedRequests = new List<Request>(); 
+            if (status == "Rejected")
             {
+                request.Status = "Rejected";
+                await _serviceRequest.UpdateAsync(request);
+                updatedRequests.Add(request);
+                return Ok(updatedRequests); 
+            }
+            else if (status == "Completed")
+            {
+                var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
+                if (ticket == null)
+                {
+                    return BadRequest("Ticket not found");
+                }
+                if (ticket.Quantity <= 0 || ticket.Quantity < request.Quantity)
+                {
+                    return BadRequest("Ticket is unavailable quantity");
+                }
                 ticket.Quantity -= request.Quantity;
                 await _serviceTicket.UpdateAsync(ticket);
                 request.Status = "Completed";
                 await _serviceRequest.UpdateAsync(request);
-                if(ticket.Quantity == 0 || request.Quantity > ticket.Quantity)
+                updatedRequests.Add(request);
+                var pendingRequests = await _serviceRequest.FindListAsync<Request>(p => p.ID_Ticket == request.ID_Ticket && p.Status == "Pending");
+                foreach (var pendingRequest in pendingRequests)
                 {
-                    var requestPending = await _serviceRequest.FindListAsync<Request>(p => p.ID_Ticket == request.ID_Ticket && p.Status == "Pending");
-                    foreach (var reqPen in requestPending)
+                    if (ticket.Quantity >= pendingRequest.Quantity)
                     {
-                        reqPen.Status = "Rejected";
-                        await _serviceRequest.UpdateAsync(reqPen);
+                        ticket.Quantity -= pendingRequest.Quantity;
+                        pendingRequest.Status = "Completed";
+                        await _serviceRequest.UpdateAsync(pendingRequest);
+                        updatedRequests.Add(pendingRequest);
+                        await _serviceTicket.UpdateAsync(ticket);
+                    }
+                    else
+                    {
+                        pendingRequest.Status = "Rejected";
+                        await _serviceRequest.UpdateAsync(pendingRequest);
+                        updatedRequests.Add(pendingRequest);
                     }
                 }
-                return Ok("Request accepted successful");
+                return Ok(updatedRequests); 
             }
             else
             {
-                return BadRequest("Ticket is unavailable");
+                return BadRequest("You need rejected or completed ");
             }
         }
+
 
 
         [HttpPost]
