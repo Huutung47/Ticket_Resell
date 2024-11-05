@@ -1,4 +1,6 @@
-﻿using SWP_Ticket_ReSell_DAO.DTO.Ticket;
+﻿
+using SWP_Ticket_ReSell_DAO.DTO.Customer;
+using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Request
 
         public string Status { get; set; }
         public virtual TicketNavigationDTO? TicketNavigation {get; set; }
-
-
+        public virtual CustomerResponseDTO? ID_CustomerNavigation { get; set; }
     }
 }

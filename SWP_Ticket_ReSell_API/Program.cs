@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OfficeOpenXml;
 using Repository;
 using Swashbuckle.AspNetCore.Filters;
 using SWP_Ticket_ReSell_API.Constant;
@@ -56,7 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         //options.CallbackPath = new PathString("/signin-google");
         options.BackchannelTimeout = TimeSpan.FromSeconds(120);
     });
-
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial; 
 // Add CORS policy to allow all origins, headers, and methods
 builder.Services.AddCors(options =>
 {

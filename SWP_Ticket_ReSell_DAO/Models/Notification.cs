@@ -24,6 +24,7 @@ public partial class Notification
     public int? ID_Customer { get; set; }
 
     public DateTime? Time_create { get; set; }
+
     public virtual Order ID_OrderNavigation { get; set; }
 
     public virtual Request ID_RequestNavigation { get; set; }

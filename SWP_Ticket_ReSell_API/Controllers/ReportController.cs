@@ -16,10 +16,11 @@ namespace SWP_Ticket_ReSell_API.Controllers
     public class ReportController : ControllerBase
     {
         private readonly ServiceBase<Report> _serviceReport;
-
-        public ReportController(ServiceBase<Report> serviceReport)
+        private readonly ServiceBase<Order> _serviceOrder;
+        public ReportController(ServiceBase<Report> serviceReport, ServiceBase<Order> serviceOrder)
         {
             _serviceReport = serviceReport;
+            _serviceOrder = serviceOrder;
         }
 
         [HttpGet]
@@ -82,5 +83,28 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceReport.DeleteAsync(ticket);
             return Ok("Delete Report successfull.");
         }
+
+        [HttpGet("report-order-refund-total-price")]
+        [Authorize]
+        public async Task<ActionResult<decimal>> GetMoneyTicketReport(int orderid)
+        {
+            var reports = await _serviceReport.FindListAsync<Report>(r => r.ID_Order == orderid);
+            if (reports == null || !reports.Any())
+            {
+                return Ok();
+            }
+            var orderIds = reports.Select(r => r.ID_Order).Distinct().ToList();
+            decimal? totalPrice = 0;
+            foreach (var id in orderIds)
+            {
+                var order = await _serviceOrder.FindByAsync(o => o.ID_Order == id);
+                if (order != null)
+                {
+                    totalPrice += order.TotalPrice; 
+                }
+            }
+            return Ok(totalPrice);
+        }
+
     }
 }

@@ -35,6 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         }
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginRequestDTO login)
         {
             var user = await _serviceCustomer.FindByAsync(x => x.Email == login.Email); 
@@ -51,6 +52,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 await HttpContext.SignOutAsync("Cookies");
                 return StatusCode(403, "You need to confirm your email address.");
+            }
+            if(user.IsActive == "Inactive")
+            {
+                return BadRequest("Your account has been locked");
             }
 
             List<Claim> claims = new List<Claim>
@@ -78,6 +83,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO request)
         {
             if (ModelState.IsValid)
@@ -97,14 +103,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     Email = request.Email,
                     Password = hashedPassword,
                     Average_feedback = 0,
-                    ID_Role = 2,
+                    ID_Role = 2, //Customer
                     EmailConfirm = "False",
                     Number_of_tickets_can_posted = 0,
-                    Method_login = "Local"
+                    Method_login = "Local",
+                    IsActive = "Active"
                 };
                 await _serviceCustomer.CreateAsync(customer);
                 var customerId = customer.ID_Customer;
-                var frontendUrl = "https://swp.vinhuser.one/api/Auth";
+                var frontendUrl = "https://localhost:7216/api/Auth";
                 var confirmationLink = $"{frontendUrl}/confirm-email?userId={customerId}";
                 var emailBody = $"Please verify your account by clicking this link: <a href='{confirmationLink}'>Verify your account</a>";
                 SendMail.SendEMail(request.Email, "Confirm your account", emailBody, "");
@@ -114,6 +121,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         //Login Google
         [HttpGet("login-google")]
+        [AllowAnonymous]
         public async Task Login()
         {
             await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
@@ -153,7 +161,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 EmailConfirm = "True",
                 Average_feedback = 0,
                 Number_of_tickets_can_posted = 0,
-                ID_Role = 2 //Customer 
+                ID_Role = 2, //Customer 
+                IsActive = "Active"
             };
             await _serviceCustomer.CreateAsync(customer);
             return Ok("Create customer successfull.");
@@ -175,6 +184,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet("confirm-email")]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(int userId)
         {
             var user = await _serviceCustomer.FindByAsync(x => x.ID_Customer == userId);
@@ -182,9 +192,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return BadRequest("Invalid user");
             user.EmailConfirm = "True";
             await _serviceCustomer.UpdateAsync(user);
-            //return Ok("Email confirmed successfully. Thank you.");
-            //return Redirect("https://resell-ticket-fe.vercel.app");
-            return Redirect("http://localhost:3000/confirm-success");
+            var rediectUrl = _configuration["RedirectUrls:EmailConfirmationSuccess"];
+            return Redirect(rediectUrl);
         }
     }
 }

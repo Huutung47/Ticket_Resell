@@ -79,6 +79,9 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.EmailConfirm)
                 .HasMaxLength(5)
                 .IsUnicode(false);
+            entity.Property(e => e.IsActive)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.Method_login)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -218,10 +221,9 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.Comment).HasColumnType("text");
             entity.Property(e => e.History).HasColumnType("datetime");
 
-            entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Reports)
-                .HasForeignKey(d => d.ID_Customer)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Report__ID_Custo__59FA5E80");
+            entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Reports)
+                .HasForeignKey(d => d.ID_Order)
+                .HasConstraintName("FK_Report_Order");
         });
 
         modelBuilder.Entity<Request>(entity =>
@@ -307,11 +309,9 @@ public partial class swp1Context : DbContext
             entity.Property(e => e.Transaction_Type).HasMaxLength(50);
             entity.Property(e => e.Updated_At).HasColumnType("datetime");
 
-           entity.HasOne(d => d.ID_CustomerNavigation)
-      .WithMany(p => p.Transactions)
-      .HasForeignKey(d => d.ID_Customer)
-      .OnDelete(DeleteBehavior.SetNull)
-      .HasConstraintName("FK__Transacti__ID_Cu__5070F446");
+            entity.HasOne(d => d.ID_CustomerNavigation).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.ID_Customer)
+                .HasConstraintName("FK__Transacti__ID_Cu__5070F446");
 
             entity.HasOne(d => d.ID_OrderNavigation).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.ID_Order)

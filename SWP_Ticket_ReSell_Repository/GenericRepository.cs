@@ -37,8 +37,7 @@ public class GenericRepository<T> where T : class
         dbSet.Remove(entity);
         await _context.SaveChangesAsync();
     }
-    // Cách sử dụng : Nó Sẽ Tìm object Entity Theo điều kiện ví dụ :
-    // p => p.customerID == id Nó sẽ lấy id của object trong db sau đó so sánh với id của người dùng và trả về object
+
     public async Task<T?> FindByAsync(
         Expression<Func<T, bool>> expression,
         Func<IQueryable<T>, IQueryable<T>>? includeFunc = null)
@@ -53,9 +52,6 @@ public class GenericRepository<T> where T : class
         return await query.FirstOrDefaultAsync(expression);
     }
 
-    // Cái này cũng giống như cái trên nhưng trả về 1 List Object 
-    // expression là điều kiện lọc : ví dụ p => p.Name == name 
-    // orderBy cũng là điệu kiện lọc nếu sử dụng cái này  _ => _.OrderByDescending(p => p.CreatedDate) Thì nó sẽ xắp xếp giảm dần (còn nếu k sài thì nó sẽ bỏ qua)
     public async Task<IList<TDTO>> FindListAsync<TDTO>(
         Expression<Func<T, bool>>? expression = null,
         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
@@ -76,7 +72,7 @@ public class GenericRepository<T> where T : class
         }
         return await query.ProjectToType<TDTO>().ToListAsync();
     }
-    // Cái này sẽ kiểm tra xem điệu kiện đúng hay không trả về True False
+
     public async Task<bool> ExistsByAsync(
         Expression<Func<T, bool>>? expression = null)
     {
@@ -89,6 +85,4 @@ public class GenericRepository<T> where T : class
 
         return await query.AnyAsync();
     }
-
-    
 }

@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Mvc.Routing;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SWP_Ticket_ReSell_API.Controllers
 {
@@ -282,6 +283,85 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
             return !false;
+        }
+
+        [HttpGet("get-transaction-buy-package")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TransactionInfoPackage>>> GetTransactionBuyPackage(int customerid)
+        {
+            var customers = await _serviceTransaction.FindListAsync<TransactionInfoPackage>(
+                o => o.ID_Customer == customerid && o.Transaction_Type == "Package" );
+            if (customers == null || !customers.Any())
+            {
+                return NotFound("Người dùng chưa đăng ký Package nào");
+            }
+            return Ok(customers);
+        }
+
+        [HttpGet("get-transaction-buy-package-successful")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TransactionInfoPackage>>> GetTransactionBuyPackageSuccess(int customerid)
+        {
+            var customers = await _serviceTransaction.FindListAsync<TransactionInfoPackage>(
+                o => o.ID_Customer == customerid && o.Transaction_Type == "Package" && o.Status == "SUCCESS"
+            );
+            if (customers == null || !customers.Any())
+            {
+                return NotFound("Người dùng chưa đăng ký Package nào");
+            }
+            return Ok(customers);
+        }
+
+        [HttpGet("get-transaction-buy-ticket-successful")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TransactionInfoPackage>>> GetTransactionBuyTicket(int customerid)
+        {
+            var customers = await _serviceTransaction.FindListAsync<TransactionInfoPackage>(
+                o => o.ID_Customer == customerid && o.Transaction_Type == "Ticket" && o.Status == "SUCCESS"
+            );
+            if (customers == null || !customers.Any())
+            {
+                return NotFound("Người dùng chưa đăng ký Ticket nào");
+            }
+            return Ok(customers);
+        }
+
+        [HttpGet("get-transaction-buy-all-successful")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<TransactionInfoPackage>>> GetTransactionBuyAll(int customerid)
+        {
+            var customers = await _serviceTransaction.FindListAsync<TransactionInfoPackage>(
+                o => o.ID_Customer == customerid && o.Status == "SUCCESS"
+            );
+            if (customers == null || !customers.Any())
+            {
+                return NotFound("Người dùng chưa thanh toan gi ca");
+            }
+            return Ok(customers);
+        }
+
+        [HttpGet("Total-price-package-by-month-year")]
+        //[Authorize]
+        public async Task<ActionResult<decimal>> GetRevenueByDate(int month, int year)
+        {
+            var transactionPackage = await _serviceTransaction.FindListAsync<Transaction>(o => o.ID_Package != null
+            && o.Created_At.HasValue
+            && o.Created_At.Value.Month == month
+            && o.Created_At.Value.Year == year && o.Status == "SUCCESS" && o.Transaction_Type == "Package");
+            if (transactionPackage == null || !transactionPackage.Any())
+            {
+                return BadRequest($"Khong co ai mua goi thanh cong trong thang {month}, nam {year}");
+            }
+            decimal? totalRevenue = 0;
+            foreach (var transaction in transactionPackage)
+            {
+                var packages = await _packageService.FindByAsync(o => o.ID_Package == transaction.ID_Package);
+                if (packages != null)
+                {
+                    totalRevenue += packages.Price;
+                }
+            }
+            return Ok(totalRevenue);
         }
     }
 }

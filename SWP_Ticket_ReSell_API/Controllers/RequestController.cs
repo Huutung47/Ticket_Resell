@@ -35,7 +35,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+       //[Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequest()
         {
             var entities = await _serviceRequest.FindListAsync<RequestResponseDTO>();
@@ -71,7 +71,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
 
         [HttpGet("sellerId")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<IList<RequestResponseDTO>>> GetRequestBySellerId(int sellerId)
         {
             var tickets = await _serviceTicket.FindListAsync<Ticket>(t => t.ID_Customer == sellerId);
@@ -80,6 +80,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return NotFound("No tickets found for this seller.");
             }
             var ticketIds = tickets.Select(t => t.ID_Ticket).ToList();
+            var customerId = await _serviceCustomer.FindByAsync(c => c.ID_Customer == sellerId);
             var requests = await _serviceRequest.FindListAsync<Request>(r => ticketIds.Contains(r.ID_Ticket));
 
             // Lấy thông tin vé cho từng yêu cầu
@@ -112,8 +113,22 @@ namespace SWP_Ticket_ReSell_API.Controllers
                                 Show_Name = ticket.Show_Name,
                                 Location = ticket.Location,
                                 Description = ticket.Description,
-                            }
-                        });
+                            },ID_CustomerNavigation = new CustomerResponseDTO 
+                            {
+                                ID_Customer = customerId.ID_Customer,
+                                Name = customerId.Name,
+                                Password = customerId.Password,
+                                Email = customerId.Email,
+                                Contact = customerId.Contact,
+                                Average_feedback = customerId.Average_feedback,
+                                ID_Role = customerId.ID_Role,
+                                ID_Package = customerId.ID_Package,
+                                Package_expiration_date = customerId.Package_expiration_date,
+                                Package_registration_time = customerId.Package_registration_time,
+                                Number_of_tickets_can_posted = customerId.Number_of_tickets_can_posted,
+                                Avatar = customerId.Avatar,
+                            },
+    });
                     }
                 }
             }
@@ -150,16 +165,35 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpPut("change-status-request")]
         [Authorize]
-        public async Task<IActionResult> UpdateRequestStatus(int requestId, string status)
+        public async Task<IActionResult> UpdateRequestStatus(int requestId)
         {
             var request = await _serviceRequest.FindByAsync(p => p.ID_Request == requestId);
             if (request == null)
             {
-                return Problem(detail: $"Request id {request.ID_Request} cannot found", statusCode: 404);
+                return Problem(detail: $"Request id {requestId} cannot found", statusCode: 404);
             }
-            request.Status = status;
-            await _serviceRequest.UpdateAsync(request);
-            return Ok("Update status request successfull");
+            var ticket = await _serviceTicket.FindByAsync(t => t.ID_Ticket == request.ID_Ticket);
+            if (ticket.Quantity > 0)
+            {
+                ticket.Quantity -= request.Quantity;
+                await _serviceTicket.UpdateAsync(ticket);
+                request.Status = "Completed";
+                await _serviceRequest.UpdateAsync(request);
+                if(ticket.Quantity == 0 || request.Quantity > ticket.Quantity)
+                {
+                    var requestPending = await _serviceRequest.FindListAsync<Request>(p => p.ID_Ticket == request.ID_Ticket && p.Status == "Pending");
+                    foreach (var reqPen in requestPending)
+                    {
+                        reqPen.Status = "Rejected";
+                        await _serviceRequest.UpdateAsync(reqPen);
+                    }
+                }
+                return Ok("Request accepted successful");
+            }
+            else
+            {
+                return BadRequest("Ticket is unavailable");
+            }
         }
 
 
@@ -169,6 +203,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         {
             var request = new Request()
             {
+                
                 History = DateTime.Now,
                 Status = "Pending"
             };
@@ -190,9 +225,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 History = DateTime.Now,
                 ID_Customer = requests.ID_Customer, // Người mua 
-                ID_Ticket = ticket, //Vé muon gui yeu cau 
+                ID_Ticket = ticket, //Vé gui yeu cau 
                 Price_want = requests.Price_want,
-                //Quantity = requests.Quantity, 
+                Quantity = requests.Quantity,
                 Status = "Pending"
             };
             await _serviceRequest.CreateAsync(request);
@@ -208,10 +243,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 return Problem(detail: $"Request id {id} cannot found", statusCode: 404);
             }
-
             await _serviceRequest.DeleteAsync(ticket);
             return Ok("Delete request successfull.");
         }
+
+
+        
     }
 }
 
