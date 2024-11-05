@@ -3,18 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SWP_Ticket_ReSell_API.Utils;
 using SWP_Ticket_ReSell_DAO.DTO.Payment;
-using SWP_Ticket_ReSell_DAO.DTO.Request;
-using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 using SWP_Ticket_ReSell_DAO.DTO.Transaction;
 using SWP_Ticket_ReSell_DAO.Models;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using System.Net.Sockets;
 using Swashbuckle.AspNetCore.Annotations;
-using Microsoft.AspNetCore.Mvc.Routing;
 using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
 using Microsoft.AspNetCore.Authorization;
-
+using Net.payOS;
+using Net.payOS.Types;
+using Transaction = SWP_Ticket_ReSell_DAO.Models.Transaction;
 namespace SWP_Ticket_ReSell_API.Controllers
 {
     [Route("api/[controller]")]
@@ -114,6 +110,75 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
             await _serviceTransaction.DeleteAsync(ticket);
             return Ok("Delete transaction successfull.");
+        }
+
+        [HttpPost("create-payment-link")]
+        public async Task<IActionResult> CreatePaymentLink(TransactionRequestDTO transactionRequest)
+        {
+            var currentTime = TimeUtils.GetCurrentSEATime();
+            var currentTimeStamp = TimeUtils.GetTimestamp(currentTime);
+            var txnRef = currentTime.ToString("yyMMdd") + "_" + currentTimeStamp;
+            long orderCode = (long)transactionRequest.ID_Order;
+            String cancelUrl, returnUrl; 
+            var clientId = "97ee8ef8-41a4-448d-a974-45cc15edc286";
+            var apiKey = "d9a66651-3e1f-4711-822e-5bed2c4140be";
+            var checksumKey = "3e8ea19201b774d77e6a58466884bcae8431d13a62fbbeb94bbdd95c015bef89";
+
+            var transaction = new Transaction();
+ 
+            switch (transactionRequest.Transaction_Type)
+            {
+                case "Ticket":
+                    if (transactionRequest.ID_Order == null)
+                    {
+                        return Problem(detail: "Order id cannot found", statusCode: 404);
+                    }
+                    transaction.ID_Order = transactionRequest.ID_Order;
+                    transaction.ID_Customer = transactionRequest.ID_Customer;
+                    transaction.ID_Payment = transactionRequest.ID_Payment;
+                    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
+                    transaction.Created_At = TimeUtils.GetCurrentSEATime();
+                    transaction.Status = "PENDING";
+                    transaction.TransactionCode = txnRef;
+                    transaction.Transaction_Type = "Ticket";
+                    transaction.ID_Package = null;
+
+                    break;
+                case "Package":
+                    transaction.ID_Order = null;
+                    transaction.ID_Customer = transactionRequest.ID_Customer;
+                    transaction.ID_Payment = transactionRequest.ID_Payment;
+                    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
+                    transaction.Created_At = TimeUtils.GetCurrentSEATime();
+                    transaction.Status = "PENDING";
+                    transaction.TransactionCode = txnRef;
+                    transaction.Transaction_Type = "Package";
+                    transaction.ID_Package = transactionRequest.ID_Package;
+
+                    break;
+            }
+
+            await _serviceTransaction.CreateAsync(transaction);
+            PayOS payOS = new PayOS(clientId, apiKey, checksumKey);
+            ItemData item = new ItemData(transaction.Transaction_Type, 1,(int) transaction.FinalPrice);
+            List<ItemData> items = new List<ItemData>();
+            items.Add(item);
+            PaymentData paymentData = new PaymentData(orderCode,(int)transactionRequest.FinalPrice, "Thanh toan don hang",
+                 items,
+                 cancelUrl = "http://localhost:3000/fail-payment",
+                 returnUrl = "http://localhost:3000/success-payment");
+
+            CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
+            PaymentLinkInformation paymentLinkInformation = await payOS.getPaymentLinkInformation(orderCode);
+            payOS.confirmWebhook("https://payos.vn/docs/du-lieu-tra-ve/webhook/");
+            var paymentUrl = createPayment.checkoutUrl;
+            var paymentResponse = new CreatePaymentResponse()
+            {
+                Message = "Đang tiến hành thanh toán payOS",
+                Url = paymentUrl,
+                DisplayType = "URL"
+            };
+            return Ok(paymentResponse);
         }
 
         [HttpPost("/create/payment")]
@@ -363,5 +428,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             }
             return Ok(totalRevenue);
         }
+
+     
+
     }
 }
