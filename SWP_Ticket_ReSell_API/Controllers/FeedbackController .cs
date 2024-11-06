@@ -29,9 +29,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IList<FeedbackRequestDTO>>> GetFeedback()
+        public async Task<ActionResult<IList<FeedbackReponseDTO>>> GetFeedback()
         {
-            var entities = await _serviceFeedback.FindListAsync<FeedbackRequestDTO>();
+            var entities = await _serviceFeedback.FindListAsync<FeedbackReponseDTO>();
             return Ok(entities);
         }
 

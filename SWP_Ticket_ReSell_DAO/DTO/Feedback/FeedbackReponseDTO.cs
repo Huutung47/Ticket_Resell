@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SWP_Ticket_ReSell_DAO.DTO.Order;
+using SWP_Ticket_ReSell_DAO.DTO.OrderDetail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +17,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Feedback
         public string Comment { get; set; }
 
         public int? Stars { get; set; }
+        public virtual OrderNavigationDTO ID_OrderNavigation { get; set; }
     }
 }
