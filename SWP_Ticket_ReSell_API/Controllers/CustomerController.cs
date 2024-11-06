@@ -81,6 +81,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
             if (customerRequest.Contact != null)
             {
                 entity.Contact = customerRequest.Contact;
+            }if (customerRequest.IsActive != null) 
+            {
+                entity.IsActive = customerRequest.IsActive;
             }
             if (!string.IsNullOrWhiteSpace(customerRequest.Password))
             {
