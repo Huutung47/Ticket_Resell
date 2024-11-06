@@ -17,6 +17,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Feedback
         public string Comment { get; set; }
 
         public int? Stars { get; set; }
-        public virtual OrderNavigationDTO ID_OrderNavigation { get; set; }
+        public virtual OrderDTO ID_OrderNavigation { get; set; }
     }
 }
