@@ -85,6 +85,10 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 entity.IsActive = customerRequest.IsActive;
             }
+            if(customerRequest.ID_Role != null)
+            {
+                entity.ID_Role = customerRequest.ID_Role;
+            }
             if (!string.IsNullOrWhiteSpace(customerRequest.Password))
             {
                 entity.Password = BCrypt.Net.BCrypt.HashPassword(customerRequest.Password);

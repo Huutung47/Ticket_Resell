@@ -33,6 +33,7 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Customer
         public int? ID_Package { get; set; }
         public IFormFile? Avatar { get; set; }
 
-        public string IsActive { get; set; }
+        public string? IsActive { get; set; }
+        public int? ID_Role { get; set; }
     }
 }
