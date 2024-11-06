@@ -178,7 +178,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 request.Status = "Rejected";
                 await _serviceRequest.UpdateAsync(request);
                 updatedRequests.Add(request);
-                return Ok(updatedRequests); 
+                return Ok(updatedRequests.Adapt<List<RequestResponseDTO>>()); 
             }
             else if (status == "Completed")
             {
@@ -214,7 +214,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
                         updatedRequests.Add(pendingRequest);
                     }
                 }
-                return Ok(updatedRequests); 
+                return Ok(updatedRequests.Adapt<List<RequestResponseDTO>>());
             }
             else
             {
