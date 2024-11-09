@@ -4,10 +4,12 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Net.payOS;
 using Repository;
 using SWP_Ticket_ReSell_DAO.DTO.Authentication;
 using SWP_Ticket_ReSell_DAO.DTO.Customer;
 using SWP_Ticket_ReSell_DAO.DTO.Dashboard;
+using SWP_Ticket_ReSell_DAO.DTO.Payment;
 using SWP_Ticket_ReSell_DAO.DTO.Transaction;
 using SWP_Ticket_ReSell_DAO.Models;
 using System.Transactions;
@@ -129,6 +131,18 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Create customer successfull.");
         }
 
+        [HttpPost("post-customer-payOS")]
+        [Authorize]
+        public async Task<ActionResult<CustomerResponseDTO>> PostPayOS(string clientId, string apiKey, string checksumKey)
+        {
+            var customer = new Customer();
+            //customer.clientId = clientId;
+            //customer.apiKey = apiKey;
+            //customer.checksumKey = checksumKey;
+
+            await _service.CreateAsync(customer);
+            return Ok("Create successfull.");
+        }
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteCustomer(int id)
