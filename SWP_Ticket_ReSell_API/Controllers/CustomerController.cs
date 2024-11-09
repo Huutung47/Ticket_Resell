@@ -136,10 +136,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<CustomerResponseDTO>> PostPayOS(string clientId, string apiKey, string checksumKey)
         {
             var customer = new Customer();
-            //customer.clientId = clientId;
-            //customer.apiKey = apiKey;
-            //customer.checksumKey = checksumKey;
-
+            customer.clientId = clientId;
+            customer.apiKey = apiKey;
+            customer.checksumKey = checksumKey;
             await _service.CreateAsync(customer);
             return Ok("Create successfull.");
         }

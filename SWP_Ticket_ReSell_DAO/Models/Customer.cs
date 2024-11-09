@@ -37,6 +37,12 @@ public partial class Customer
 
     public string IsActive { get; set; }
 
+    public string clientId { get; set; }
+
+    public string apiKey { get; set; }
+
+    public string checksumKey { get; set; }
+
     public virtual ICollection<Boxchat> BoxchatBuyers { get; set; } = new List<Boxchat>();
 
     public virtual ICollection<Boxchat> BoxchatSellers { get; set; } = new List<Boxchat>();
