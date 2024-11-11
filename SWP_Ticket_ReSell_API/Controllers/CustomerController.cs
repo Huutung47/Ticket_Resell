@@ -131,7 +131,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok("Create customer successfull.");
         }
 
-        [HttpPost("post-customer-payOS")]
+        [HttpPost("payOS")]
         [Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> PostPayOS(string clientId, string apiKey, string checksumKey)
         {

@@ -124,9 +124,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var clientId = customer.clientId;
             var apiKey = customer.apiKey;
             var checksumKey = customer.checksumKey;
-            clientId = "97ee8ef8-41a4-448d-a974-45cc15edc286";
-            apiKey = "d9a66651-3e1f-4711-822e-5bed2c4140be";
-            checksumKey = "3e8ea19201b774d77e6a58466884bcae8431d13a62fbbeb94bbdd95c015bef89";
+           
 
             var transaction = new Transaction();
  
