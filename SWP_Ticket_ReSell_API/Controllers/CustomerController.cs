@@ -130,6 +130,31 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _service.CreateAsync(customer);
             return Ok("Create customer successfull.");
         }
+        [HttpPut("PayOS")]
+        [Authorize]
+        public async Task<IActionResult> PutCustomerPayOS(int id,string clientId, string apiKey, string checksumKey)
+        {
+            var entity = await _service.FindByAsync(p => p.ID_Customer == id);
+            if (entity == null)
+            {
+                return Problem(detail: $"Customer_id {id} cannot be found", statusCode: 404);
+            }
+            if (clientId != null)
+            {
+                entity.clientId = clientId;
+            }
+            if (apiKey != null)
+            {
+                entity.apiKey = apiKey;
+            }
+            if (checksumKey != null)
+            {
+                entity.checksumKey = checksumKey;
+            }
+            
+            await _service.UpdateAsync(entity);
+            return Ok("Update customer successful.");
+        }
 
         [HttpPost("payOS")]
         [Authorize]
