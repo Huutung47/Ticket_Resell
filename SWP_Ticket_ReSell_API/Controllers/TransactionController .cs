@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Net.payOS;
 using Net.payOS.Types;
 using Transaction = SWP_Ticket_ReSell_DAO.Models.Transaction;
+using SWP_Ticket_ReSell_DAO.DTO.Package;
+using SWP_Ticket_ReSell_DAO.DTO.Ticket;
 namespace SWP_Ticket_ReSell_API.Controllers
 {
     [Route("api/[controller]")]
@@ -53,7 +55,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<IList<TransactionResponseDTO>>> GetTransactionByType(int customerId, string transactionType)
         {
             var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>(p => p.Transaction_Type.Equals(transactionType) && (p.ID_Customer == customerId));
-            return Ok(entities);
+            
+
+            return Ok(entities.Adapt<IList<TransactionResponseDTO>>());
         }
 
         [HttpGet("{id}")]
@@ -316,6 +320,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     {
                         var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
                         ticket.Quantity = ticket.Quantity - item.Quantity;
+                        var customer1 = await _customerService.FindByAsync(t => t.ID_Customer == item.ID_TicketNavigation.ID_Customer);
+                        customer1.Number_of_tickets_can_posted = customer1.Number_of_tickets_can_posted - item.Quantity;
                     }
                 }
 
