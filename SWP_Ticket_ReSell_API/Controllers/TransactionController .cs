@@ -84,6 +84,26 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceTransaction.UpdateAsync(entity);
             return Ok("Update transaction successfull.");
         }
+        [HttpPut("customerId")]
+        [SwaggerOperation(Summary = "Update transaction to payment")]
+        public async Task<IActionResult> PutOrder(int customerId)
+        {
+            var entity = await _serviceTransaction.FindByAsync(p => p.ID_Customer == customerId);
+            var order = await _orderService.FindByAsync(p => p.ID_Order == entity.ID_Order);
+            if (entity == null)
+            {
+                return Problem(detail: $"Ticket_id {customerId} cannot found", statusCode: 404);
+            }
+            entity.Updated_At = TimeUtils.GetCurrentSEATime();
+            if (order == null)
+            {
+                return Problem(detail: $"Order_id cannot found", statusCode: 404);
+            }
+            order.Update_At = TimeUtils.GetCurrentSEATime();
+            await _orderService.UpdateAsync(order);
+            await _serviceTransaction.UpdateAsync(entity);
+            return Ok("Update transaction successfull.");
+        }
 
 
         [HttpPost]
