@@ -120,7 +120,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             var txnRef = currentTime.ToString("yyMMdd") + "_" + currentTimeStamp;
             long orderCode = (long)transactionRequest.ID_Order;
             String cancelUrl, returnUrl;
-            var customer = await _customerService.FindByAsync(p => p.ID_Customer == transactionRequest.ID_Customer);
+            var customer = await _customerService.FindByAsync(p => p.Orders.Any(od => od.ID_CustomerNavigation.ID_Customer == transactionRequest.ID_Customer));
             var clientId = customer.clientId;
             var apiKey = customer.apiKey;
             var checksumKey = customer.checksumKey;
