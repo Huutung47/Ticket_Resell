@@ -199,20 +199,12 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 var pendingRequests = await _serviceRequest.FindListAsync<Request>(p => p.ID_Ticket == request.ID_Ticket && p.Status == "Pending");
                 foreach (var pendingRequest in pendingRequests)
                 {
-                    if (ticket.Quantity >= pendingRequest.Quantity)
-                    {
-                        ticket.Quantity -= pendingRequest.Quantity;
-                        pendingRequest.Status = "Completed";
-                        await _serviceRequest.UpdateAsync(pendingRequest);
-                        updatedRequests.Add(pendingRequest);
-                        await _serviceTicket.UpdateAsync(ticket);
-                    }
-                    else
+                    if (ticket.Quantity < pendingRequest.Quantity)
                     {
                         pendingRequest.Status = "Rejected";
                         await _serviceRequest.UpdateAsync(pendingRequest);
                         updatedRequests.Add(pendingRequest);
-                    }
+                    }  
                 }
                 return Ok(updatedRequests.Adapt<List<RequestResponseDTO>>());
             }
@@ -221,8 +213,6 @@ namespace SWP_Ticket_ReSell_API.Controllers
                 return BadRequest("You need rejected or completed ");
             }
         }
-
-
 
         [HttpPost]
         [Authorize]
