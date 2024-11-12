@@ -113,14 +113,15 @@ namespace SWP_Ticket_ReSell_API.Controllers
         }
 
         [HttpPost("create-payment-link")]
-        public async Task<IActionResult> CreatePaymentLink(TransactionRequestDTO transactionRequest)
+        public async Task<IActionResult> CreatePaymentLink(TransactionRequest2DTO transactionRequest)
         {
             var currentTime = TimeUtils.GetCurrentSEATime();
             var currentTimeStamp = TimeUtils.GetTimestamp(currentTime);
             var txnRef = currentTime.ToString("yyMMdd") + "_" + currentTimeStamp;
             long orderCode = (long)transactionRequest.ID_Order;
             String cancelUrl, returnUrl;
-            var customer = await _customerService.FindByAsync(p => p.Orders.Any(od => od.ID_CustomerNavigation.ID_Customer == transactionRequest.ID_Customer));
+
+            var customer = await _customerService.FindByAsync(p => p.ID_Customer==transactionRequest.ID_Seller);
             var clientId = customer.clientId;
             var apiKey = customer.apiKey;
             var checksumKey = customer.checksumKey;
