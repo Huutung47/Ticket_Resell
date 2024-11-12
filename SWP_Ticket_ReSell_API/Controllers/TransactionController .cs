@@ -55,7 +55,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<IList<TransactionResponseDTO>>> GetTransactionByType(int customerId, string transactionType)
         {
             var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>(p => p.Transaction_Type.Equals(transactionType) && (p.ID_Customer == customerId));
-            
+
 
             return Ok(entities.Adapt<IList<TransactionResponseDTO>>());
         }
@@ -104,6 +104,61 @@ namespace SWP_Ticket_ReSell_API.Controllers
             await _serviceTransaction.UpdateAsync(entity);
             return Ok("Update transaction successfull.");
         }
+
+        [HttpPut("PayOSTransaction")]
+        [SwaggerOperation(Summary = "Update order Transaction to payment")]
+        public async Task<IActionResult> PutOrderByOrderId(int orderId, string responseCode)
+        {
+            var currentTime = TimeUtils.GetCurrentSEATime();
+
+            var transaction = await _serviceTransaction.FindByAsync(x => x.ID_Order.Equals(orderId));
+            var order = await _orderService.FindByAsync(x => x.ID_Order == transaction.ID_Order);
+            var package = await _packageService.FindByAsync(p => p.ID_Package == transaction.ID_Package);
+            var customer = await _customerService.FindByAsync(x => x.ID_Customer == transaction.ID_Customer);
+
+            if (responseCode.Equals("00"))
+            {
+                transaction.Status = "SUCCESS";
+                transaction.Updated_At = currentTime;
+
+                if (transaction.Transaction_Type.Equals("Ticket"))
+                {
+                    order.Status = "COMPLETED";
+                    order.Update_At = currentTime;
+
+                    var orderDetail = await _orderDetailService.FindListAsync<OrderDetailResponseDTO>(expression: e => e.ID_Order == order.ID_Order);
+                    foreach (var item in orderDetail)
+                    {
+                        var ticket = await _ticketService.FindByAsync(t => t.ID_Ticket == item.ID_Ticket);
+                        ticket.Quantity = ticket.Quantity - item.Quantity;
+                        var customer1 = await _customerService.FindByAsync(t => t.ID_Customer == item.ID_TicketNavigation.ID_Customer);
+                        customer1.Number_of_tickets_can_posted = customer1.Number_of_tickets_can_posted - item.Quantity;
+                    }
+                }
+            }
+            else
+            {
+                transaction.Status = "FAILED";
+                transaction.Updated_At = currentTime;
+
+                if (order != null)
+                {
+                    order.Status = "FAILED";
+                    order.Update_At = currentTime;
+                }
+
+            }
+
+            if (order != null)
+            {
+                await _orderService.UpdateAsync(order);
+            }
+
+            await _serviceTransaction.UpdateAsync(transaction);
+            await _customerService.UpdateAsync(customer);
+            return Ok("Update transaction successfull.");
+        }
+
 
 
         [HttpPost]
@@ -385,11 +440,8 @@ namespace SWP_Ticket_ReSell_API.Controllers
             {
                 await _orderService.UpdateAsync(order);
             }
-
             await _serviceTransaction.UpdateAsync(transaction);
             await _customerService.UpdateAsync(customer);
-
-
             return !false;
         }
 
