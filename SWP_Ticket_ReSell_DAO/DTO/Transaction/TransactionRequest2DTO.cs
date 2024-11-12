@@ -10,8 +10,6 @@ namespace SWP_Ticket_ReSell_DAO.DTO.Transaction
     public class TransactionRequest2DTO
     {
         public int? ID_Order { get; set; }
-        public int? ID_Seller { get; set; }
-        public int? ID_Package { get; set; }
 
         [Required(ErrorMessage = "ID_Customer không được để trống")]
         public int? ID_Customer { get; set; }

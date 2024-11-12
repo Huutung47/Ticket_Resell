@@ -50,9 +50,9 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(entities);
         }
         [HttpGet("customerId")]
-        public async Task<ActionResult<IList<TransactionResponseDTO>>> GetTransactionByType(int customerId,string transactionType)
+        public async Task<ActionResult<IList<TransactionResponseDTO>>> GetTransactionByType(int customerId, string transactionType)
         {
-            var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>(p=>p.Transaction_Type.Equals(transactionType)&&(p.ID_Customer==customerId));
+            var entities = await _serviceTransaction.FindListAsync<TransactionResponseDTO>(p => p.Transaction_Type.Equals(transactionType) && (p.ID_Customer == customerId));
             return Ok(entities);
         }
 
@@ -121,14 +121,19 @@ namespace SWP_Ticket_ReSell_API.Controllers
             long orderCode = (long)transactionRequest.ID_Order;
             String cancelUrl, returnUrl;
 
-            var customer = await _customerService.FindByAsync(p => p.ID_Customer==transactionRequest.ID_Seller);
-            var clientId = customer.clientId;
-            var apiKey = customer.apiKey;
-            var checksumKey = customer.checksumKey;
-           
+            var order = await _orderService.FindByAsync(x => x.ID_Order == transactionRequest.ID_Order);
+            var orderDetail = await _orderDetailService.FindByAsync(x => x.ID_Order.ToString() == transactionRequest.ID_Order.ToString());
+            var ticket = await _ticketService.FindByAsync(p => p.ID_Ticket == orderDetail.ID_Ticket);
+            var customer = await _customerService.FindByAsync(x => x.ID_Customer == transactionRequest.ID_Customer);
+            var seller = await _customerService.FindByAsync(x => x.ID_Customer == ticket.ID_CustomerNavigation.ID_Customer);
+
+            var clientId = seller.clientId;
+            var apiKey = seller.apiKey;
+            var checksumKey = seller.checksumKey;
+
 
             var transaction = new Transaction();
- 
+
             switch (transactionRequest.Transaction_Type)
             {
                 case "Ticket":
@@ -147,41 +152,50 @@ namespace SWP_Ticket_ReSell_API.Controllers
                     transaction.ID_Package = null;
 
                     break;
-                case "Package":
-                    transaction.ID_Order = null;
-                    transaction.ID_Customer = transactionRequest.ID_Customer;
-                    transaction.ID_Payment = transactionRequest.ID_Payment;
-                    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
-                    transaction.Created_At = TimeUtils.GetCurrentSEATime();
-                    transaction.Status = "PENDING";
-                    transaction.TransactionCode = txnRef;
-                    transaction.Transaction_Type = "Package";
-                    transaction.ID_Package = transactionRequest.ID_Package;
+                    //case "Package":
+                    //    transaction.ID_Order = null;
+                    //    transaction.ID_Customer = transactionRequest.ID_Customer;
+                    //    transaction.ID_Payment = transactionRequest.ID_Payment;
+                    //    transaction.FinalPrice = Convert.ToDecimal(transactionRequest.FinalPrice);
+                    //    transaction.Created_At = TimeUtils.GetCurrentSEATime();
+                    //    transaction.Status = "PENDING";
+                    //    transaction.TransactionCode = txnRef;
+                    //    transaction.Transaction_Type = "Package";
+                    //    transaction.ID_Package = transactionRequest.ID_Package;
 
-                    break;
+                    //    break;
             }
 
             await _serviceTransaction.CreateAsync(transaction);
-            PayOS payOS = new PayOS(clientId, apiKey, checksumKey);
-            ItemData item = new ItemData(transaction.Transaction_Type, 1,(int) transaction.FinalPrice);
-            List<ItemData> items = new List<ItemData>();
-            items.Add(item);
-            PaymentData paymentData = new PaymentData(orderCode,(int)transactionRequest.FinalPrice, "Thanh toan don hang",
-                 items,
-                 cancelUrl = "http://localhost:3000/fail-payment",
-                 returnUrl = "http://localhost:3000/success-payment");
-
-            CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
-            PaymentLinkInformation paymentLinkInformation = await payOS.getPaymentLinkInformation(orderCode);
-            payOS.confirmWebhook("https://payos.vn/docs/du-lieu-tra-ve/webhook/");
-            var paymentUrl = createPayment.checkoutUrl;
-            var paymentResponse = new CreatePaymentResponse()
+            if (clientId == null || apiKey == null || checksumKey == null)
             {
-                Message = "Đang tiến hành thanh toán payOS",
-                Url = paymentUrl,
-                DisplayType = "URL"
-            };
-            return Ok(paymentResponse);
+                return NotFound("Người dùng chưa đăng ký Transaction");
+            }
+            else
+            {
+
+
+                PayOS payOS = new PayOS(clientId, apiKey, checksumKey);
+                ItemData item = new ItemData(transaction.Transaction_Type, 1, (int)transaction.FinalPrice);
+                List<ItemData> items = new List<ItemData>();
+                items.Add(item);
+                PaymentData paymentData = new PaymentData(orderCode, (int)transactionRequest.FinalPrice, "Thanh toan don hang",
+                     items,
+                     cancelUrl = "http://localhost:3000/fail-payment",
+                     returnUrl = "http://localhost:3000/success-payment");
+
+                CreatePaymentResult createPayment = await payOS.createPaymentLink(paymentData);
+                PaymentLinkInformation paymentLinkInformation = await payOS.getPaymentLinkInformation(orderCode);
+                payOS.confirmWebhook("https://payos.vn/docs/du-lieu-tra-ve/webhook/");
+                var paymentUrl = createPayment.checkoutUrl;
+                var paymentResponse = new CreatePaymentResponse()
+                {
+                    Message = "Đang tiến hành thanh toán payOS",
+                    Url = paymentUrl,
+                    DisplayType = "URL"
+                };
+                return Ok(paymentResponse);
+            }
         }
 
         [HttpPost("/create/payment")]
@@ -358,7 +372,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
         public async Task<ActionResult<IEnumerable<TransactionInfoPackage>>> GetTransactionBuyPackage(int customerid)
         {
             var customers = await _serviceTransaction.FindListAsync<TransactionInfoPackage>(
-                o => o.ID_Customer == customerid && o.Transaction_Type == "Package" );
+                o => o.ID_Customer == customerid && o.Transaction_Type == "Package");
             if (customers == null || !customers.Any())
             {
                 return NotFound("Người dùng chưa đăng ký Package nào");
@@ -432,7 +446,7 @@ namespace SWP_Ticket_ReSell_API.Controllers
             return Ok(totalRevenue);
         }
 
-     
+
 
     }
 }
